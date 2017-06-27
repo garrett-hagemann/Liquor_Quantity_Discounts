@@ -1,0 +1,32 @@
+WARNING: New definition 
+    +(AbstractArray{T<:Any, 2}, WoodburyMatrices.SymWoodbury) at /home/gh8728/.julia/v0.4/WoodburyMatrices/src/SymWoodburyMatrices.jl:106
+is ambiguous with: 
+    +(DataArrays.DataArray, AbstractArray) at /home/gh8728/.julia/v0.4/DataArrays/src/operators.jl:276.
+To fix, define 
+    +(DataArrays.DataArray{T<:Any, 2}, WoodburyMatrices.SymWoodbury)
+before the new definition.
+WARNING: New definition 
+    +(AbstractArray{T<:Any, 2}, WoodburyMatrices.SymWoodbury) at /home/gh8728/.julia/v0.4/WoodburyMatrices/src/SymWoodburyMatrices.jl:106
+is ambiguous with: 
+    +(DataArrays.AbstractDataArray, AbstractArray) at /home/gh8728/.julia/v0.4/DataArrays/src/operators.jl:300.
+To fix, define 
+    +(DataArrays.AbstractDataArray{T<:Any, 2}, WoodburyMatrices.SymWoodbury)
+before the new definition.
+ 13.740736 seconds (9.33 M allocations: 408.659 MB, 1.84% gc time)
+  0.004317 seconds (10.92 k allocations: 301.938 KB)
+  0.004100 seconds (10.92 k allocations: 301.938 KB)
+  0.004087 seconds (10.92 k allocations: 301.938 KB)
+Results of Optimization Algorithm
+ * Algorithm: Newton's Method with Trust Region
+ * Starting Point: [0.5,0.3333333333333333,0.5]
+ * Minimizer: [0.7500000000000412,0.25000000000004263, ...]
+ * Minimum: -1.562500e-01
+ * Iterations: 5
+ * Convergence: true
+   * |x - x'| < 1.0e-32: false
+   * |f(x) - f(x')| / |f(x)| < 1.0e-32: false
+   * |g(x)| < 1.0e-08: true
+   * Reached Maximum Number of Iterations: false
+ * Objective Function Calls: 6
+ * Gradient Calls: 6
+[0.7500000000000412,0.25000000000004263,0.4999999999999797]

@@ -1,0 +1,39 @@
+-------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/gh8728/Projects/Liquor/supply_side/product_focused/retailer_graphs.txt
+  log type:  text
+ opened on:   8 Sep 2016, 12:03:44
+
+. 
+. import delimited using retailer_types.csv
+(3 vars, 9066 obs)
+
+. 
+. /* Figuring out how many times you observe a given product */
+. egen count = count(product), by(product)
+
+. 
+. // reversing so most observed are on top
+. sort count
+
+. gen rev = -_n
+
+. sort rev
+
+. 
+. // doing just one product for now
+. hist lambda if product == 638, width(1) kden kdenopts(bw(1)) normal normopts(lcolor(cranberry))
+(bin=13, start=-60.231552, width=1)
+
+. return list
+
+. graph export "prod638.pdf", as(pdf) replace
+(file prod638.pdf written in PDF format)
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/gh8728/Projects/Liquor/supply_side/product_focused/retailer_graphs.txt
+  log type:  text
+ closed on:   8 Sep 2016, 12:03:46
+-------------------------------------------------------------------------------------------------------

@@ -1,0 +1,241 @@
+--------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/gh8728/Liquor/Data/NY_liquor_licenses/data_explore_licenses.txt
+  log type:  text
+ opened on:  24 Jun 2016, 11:52:46
+
+. 
+. local files: dir "./licenses_by_county" files "*.txt"
+
+. 
+. local i = 0
+
+. foreach file in `files'{
+  2.         import delimited using "licenses_by_county/`file'", delimiters("\t") rowrange(2) varnames(2) ///
+>                 stringcols(_all) clear
+  3.         tempfile s`i'
+  4.         save `s`i''
+  5.         local i = `i' + 1
+  6. }
+(10 vars, 219 obs)
+file /tmp/St15136.000002 saved
+(10 vars, 366 obs)
+file /tmp/St15136.000003 saved
+(10 vars, 420 obs)
+file /tmp/St15136.000004 saved
+(10 vars, 56 obs)
+file /tmp/St15136.000005 saved
+(10 vars, 63 obs)
+file /tmp/St15136.000006 saved
+(10 vars, 32 obs)
+file /tmp/St15136.000007 saved
+(10 vars, 170 obs)
+file /tmp/St15136.000008 saved
+(10 vars, 108 obs)
+file /tmp/St15136.000009 saved
+(10 vars, 118 obs)
+file /tmp/St15136.00000a saved
+(10 vars, 119 obs)
+file /tmp/St15136.00000b saved
+(10 vars, 96 obs)
+file /tmp/St15136.00000c saved
+(10 vars, 595 obs)
+file /tmp/St15136.00000d saved
+(10 vars, 110 obs)
+file /tmp/St15136.00000e saved
+(10 vars, 67 obs)
+file /tmp/St15136.00000f saved
+(10 vars, 137 obs)
+file /tmp/St15136.00000g saved
+(10 vars, 1817 obs)
+file /tmp/St15136.00000h saved
+(10 vars, 403 obs)
+file /tmp/St15136.00000i saved
+(10 vars, 293 obs)
+file /tmp/St15136.00000j saved
+(10 vars, 52 obs)
+file /tmp/St15136.00000k saved
+(10 vars, 61 obs)
+file /tmp/St15136.00000l saved
+(10 vars, 28 obs)
+file /tmp/St15136.00000m saved
+(10 vars, 20 obs)
+file /tmp/St15136.00000n saved
+(10 vars, 3056 obs)
+file /tmp/St15136.00000o saved
+(10 vars, 32 obs)
+file /tmp/St15136.00000p saved
+(10 vars, 63 obs)
+file /tmp/St15136.00000q saved
+(10 vars, 59 obs)
+file /tmp/St15136.00000r saved
+(10 vars, 75 obs)
+file /tmp/St15136.00000s saved
+(10 vars, 154 obs)
+file /tmp/St15136.00000t saved
+(10 vars, 1042 obs)
+file /tmp/St15136.00000u saved
+(10 vars, 1479 obs)
+file /tmp/St15136.00000v saved
+(10 vars, 59 obs)
+file /tmp/St15136.00000w saved
+(10 vars, 56 obs)
+file /tmp/St15136.00000x saved
+(10 vars, 46 obs)
+file /tmp/St15136.000010 saved
+(10 vars, 211 obs)
+file /tmp/St15136.000011 saved
+(10 vars, 41 obs)
+file /tmp/St15136.000012 saved
+(10 vars, 34 obs)
+file /tmp/St15136.000013 saved
+(10 vars, 241 obs)
+file /tmp/St15136.000014 saved
+(10 vars, 104 obs)
+file /tmp/St15136.000015 saved
+(10 vars, 101 obs)
+file /tmp/St15136.000016 saved
+(10 vars, 72 obs)
+file /tmp/St15136.000017 saved
+(10 vars, 63 obs)
+file /tmp/St15136.000018 saved
+(10 vars, 109 obs)
+file /tmp/St15136.000019 saved
+(10 vars, 52 obs)
+file /tmp/St15136.00001a saved
+(10 vars, 63 obs)
+file /tmp/St15136.00001b saved
+(10 vars, 77 obs)
+file /tmp/St15136.00001c saved
+(10 vars, 18 obs)
+file /tmp/St15136.00001d saved
+(10 vars, 311 obs)
+file /tmp/St15136.00001e saved
+(10 vars, 2316 obs)
+file /tmp/St15136.00001f saved
+(10 vars, 20 obs)
+file /tmp/St15136.00001g saved
+(10 vars, 81 obs)
+file /tmp/St15136.00001h saved
+(10 vars, 1597 obs)
+file /tmp/St15136.00001i saved
+(10 vars, 186 obs)
+file /tmp/St15136.00001j saved
+(10 vars, 87 obs)
+file /tmp/St15136.00001k saved
+(10 vars, 184 obs)
+file /tmp/St15136.00001l saved
+(10 vars, 130 obs)
+file /tmp/St15136.00001m saved
+(10 vars, 63 obs)
+file /tmp/St15136.00001n saved
+(10 vars, 51 obs)
+file /tmp/St15136.00001o saved
+(10 vars, 162 obs)
+file /tmp/St15136.00001p saved
+(10 vars, 748 obs)
+file /tmp/St15136.00001q saved
+(10 vars, 28 obs)
+file /tmp/St15136.00001r saved
+(10 vars, 74 obs)
+file /tmp/St15136.00001s saved
+(10 vars, 1277 obs)
+file /tmp/St15136.00001t saved
+
+. 
+. local i = 0
+
+. foreach file in `files'{
+  2.         append using `s`i''
+  3.         local i = `i' + 1
+  4. }
+(note: variable premisesname was str52, now str54 to accommodate using data's values)
+(note: variable address was str30, now str33 to accommodate using data's values)
+(note: variable city was str17, now str21 to accommodate using data's values)
+(note: variable address was str33, now str34 to accommodate using data's values)
+(note: variable premisesname was str54, now str58 to accommodate using data's values)
+
+. 
+. foreach var of varlist _all {
+  2.         replace `var' = stritrim(`var')
+  3.         replace `var' = strtrim(`var')
+  4. }
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(79 real changes made)
+(0 real changes made)
+(0 real changes made)
+(48 real changes made)
+(848 real changes made)
+(154 real changes made)
+(1,369 real changes made)
+(0 real changes made)
+(0 real changes made)
+(8 real changes made)
+(2,109 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+
+. 
+. /* keeping only liquor stores */
+. 
+. keep if type == "L"
+(17,781 observations deleted)
+
+. 
+. /* removing zip+4 to just zip */
+. replace zip = substr(zip, 1,5) if strlen(zip) > 5
+(3 real changes made)
+
+. 
+. save ny_liquor_licenses_2016_06, replace
+file ny_liquor_licenses_2016_06.dta saved
+
+. 
+. preserve
+
+.         contract zip
+
+.         tab _freq
+
+  Frequency |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |        380       39.96       39.96
+          2 |        159       16.72       56.68
+          3 |         88        9.25       65.93
+          4 |         75        7.89       73.82
+          5 |         42        4.42       78.23
+          6 |         52        5.47       83.70
+          7 |         18        1.89       85.59
+          8 |         28        2.94       88.54
+          9 |         14        1.47       90.01
+         10 |         20        2.10       92.11
+         11 |         17        1.79       93.90
+         12 |         20        2.10       96.00
+         13 |         12        1.26       97.27
+         14 |          8        0.84       98.11
+         15 |          5        0.53       98.63
+         16 |          2        0.21       98.84
+         17 |          4        0.42       99.26
+         18 |          4        0.42       99.68
+         19 |          1        0.11       99.79
+         22 |          1        0.11       99.89
+         25 |          1        0.11      100.00
+------------+-----------------------------------
+      Total |        951      100.00
+
+. restore
+
+. 
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/gh8728/Liquor/Data/NY_liquor_licenses/data_explore_licenses.txt
+  log type:  text
+ closed on:  24 Jun 2016, 11:52:47
+--------------------------------------------------------------------------------------------------------------------

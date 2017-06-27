@@ -1,0 +1,19 @@
+-------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\demand_estimation\BLP-basic\blp.txt
+  log type:  text
+ opened on:  12 Apr 2017, 10:58:49
+
+. 
+. use "../berry_logit/berry_logit.dta"
+.dta too modern
+    File ../berry_logit/berry_logit.dta is from a more recent version of Stata.  Type update query to
+    determine whether a free update of Stata is available, and browse http://www.stata.com/ to determine if
+    a new version is available.
+r(610);
+
+end of do-file
+
+r(610);
+
+. exit

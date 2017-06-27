@@ -1,0 +1,146 @@
+--------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/gh8728/Liquor/demand_estimation/ind_logit/ind_logit_est.txt
+  log type:  text
+ opened on:  17 Jun 2016, 14:51:05
+
+. 
+. 
+. use "~/Liquor/Data/Nielsen_Panel/nielsen_extracts/analysis/individual_logit_sample.dta"
+
+. 
+. /* making some variables */
+. 
+. // Month & Year dummies
+. gen date_n = date(purchase_date, "YMD")
+
+. format date_n %td
+
+. gen purchase_year = year(date_n)
+
+. gen purchase_month = month(date_n)
+
+. 
+. // Liquor type dummies
+. gen d_gin = (product_module_descr == "GIN")
+
+. gen d_vod = (product_module_descr == "VODKA")
+
+. gen d_rum = (product_module_descr == "RUM")
+
+. gen d_sch = (product_module_descr == "SCOTCH")
+
+. gen d_brb = regexm(product_module_descr, "BOURBON")
+
+. gen d_whs = regexm(product_module_descr, "WHISKEY")
+
+. 
+. // generating choice variable. Should be 0 for non-liquor trips
+. egen choice = group(upc upc_ver_uc) if liquor_trip == 1 // may want to just group by upc instead of versions
+(3203206 missing values generated)
+
+. replace choice = 0 if liquor_trip == 0  // setting choice to 0 for non-liquor trips
+(3,203,206 real changes made)
+
+. 
+. gen price = total_price_paid / quantity
+
+. replace price = 0 if liquor_trip == 0 // setting price to 0 for non-liquor trips
+(3,199,460 real changes made)
+
+. 
+. /* at this point we need to output the data to a CSV. Stata's --mlogit--
+> command is limited to only 50 choices. We're interested in modeling
+> the choice among hundreds of products, but with a limited set of
+> coefficients (i.e. all have the same price coefficient) */
+. 
+. keep purchase_year purchase_month upc upc_ver_uc d_* choice price
+
+. 
+. // approximating the top number of choices
+. egen _freq = count(choice), by(choice)
+
+. 
+. egen freq_rank = rank(_freq), field
+
+. 
+. egen rank_rank = group(freq_rank)
+
+. 
+. 
+. //defining constraints
+. local rank_thresh = 55
+
+. local rhs "price d_gin d_vod d_rum d_sch d_brb d_whs"
+
+. levelsof choice if rank_rank < `rank_thresh' & rank_rank > 1, local(choices) // levels of choice except the 0
+61 231 314 326 390 424 431 435 439 442 443 509 511 548 660 674 689 690 695 703 739 829 939 943 949 1158 1228 1460 16
+> 08 1610 1724 1814 1819 1824 1830 1899 1906 2210 2211 2225 2293 2583 2740 2811 2876 2950 3052 3079 3239 3562 3563 3
+> 618 3672 3786 3940 3941 4244 4379
+
+. 
+. local counter = 1
+
+. local first : word 1 of `choices'
+
+. local rest : list choices - first
+
+. foreach c of local rest{
+  2.         constraint `counter++' [`first' = `c']: `rhs'
+  3. } 
+
+. 
+. preserve
+
+.         contract choice `rhs' rank_rank, freq(_est_freq)
+
+.         count
+  16,305
+
+.         mlogit choice `rhs' [fweight = _est_freq] if rank_rank < `rank_thresh', constraints(1/`counter')
+
+Iteration 0:   log likelihood = -151182.22  
+Iteration 1:   log likelihood = -61070.137  (not concave)
+Iteration 2:   log likelihood = -59617.365  (not concave)
+Iteration 3:   log likelihood = -58915.744  (not concave)
+Iteration 4:   log likelihood = -58883.931  (not concave)
+Iteration 5:   log likelihood = -58877.687  (not concave)
+Iteration 6:   log likelihood = -58877.531  (not concave)
+Iteration 7:   log likelihood =   -58877.5  (not concave)
+Iteration 8:   log likelihood = -58877.488  (not concave)
+Iteration 9:   log likelihood = -58877.483  (not concave)
+Iteration 10:  log likelihood =  -58877.48  (not concave)
+Iteration 11:  log likelihood =  -58877.48  (not concave)
+Iteration 12:  log likelihood =  -58877.48  (not concave)
+Iteration 13:  log likelihood =  -58877.48  (not concave)
+Iteration 14:  log likelihood =  -58877.48  (not concave)
+Iteration 15:  log likelihood =  -58877.48  (not concave)
+Iteration 16:  log likelihood =  -58877.48  (not concave)
+Iteration 17:  log likelihood =  -58877.48  (not concave)
+Iteration 18:  log likelihood =  -58877.48  (not concave)
+Iteration 19:  log likelihood =  -58877.48  (not concave)
+Iteration 20:  log likelihood =  -58877.48  (not concave)
+Iteration 21:  log likelihood =  -58877.48  (not concave)
+Iteration 22:  log likelihood =  -58877.48  (not concave)
+Iteration 23:  log likelihood =  -58877.48  (not concave)
+Iteration 24:  log likelihood =  -58877.48  (not concave)
+cannot compute an improvement -- discontinuous region encountered
+r(430);
+
+end of do-file
+
+r(430);
+
+. exit
+no; data in memory would be lost
+r(4);
+
+. clear exit
+exit not allowed
+r(198);
+
+. cler, exit
+command cler is unrecognized
+r(199);
+
+. exit, clear

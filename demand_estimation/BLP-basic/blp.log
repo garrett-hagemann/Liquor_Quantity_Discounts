@@ -1,0 +1,103 @@
+
+  ___  ____  ____  ____  ____ (R)
+ /__    /   ____/   /   ____/
+___/   /   /___/   /   /___/   14.0   Copyright 1985-2015 StataCorp LP
+  Statistics/Data Analysis            StataCorp
+                                      4905 Lakeway Drive
+                                      College Station, Texas 77845 USA
+                                      800-STATA-PC        http://www.stata.com
+                                      979-696-4600        stata@stata.com
+                                      979-696-4601 (fax)
+
+5-user Stata network perpetual license:
+       Serial number:  401406249371
+         Licensed to:  LAITS
+                       The University of Texas at Austin
+
+Notes:
+      1.  Stata is running in batch mode.
+
+Stata version 14
+Stata version 11, has moved to /opt/stata11
+      2.  Unicode is supported; see help unicode_advice.
+
+. do "blp.do" 
+
+. capture log close
+
+. clear
+
+. version 14
+
+. set more off
+
+. log using "blp.txt", text replace
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/gh8728/Liquor/demand_estimation/BLP-basic/blp.txt
+  log type:  text
+ opened on:  23 Jun 2016, 10:56:30
+
+. 
+. use "../berry_logit/berry_logit.dta"
+
+. 
+. blp share proof_alcohol_cont d_*, ///
+>         endog(price = price_per_case blp_inst1 blp_inst2 blp_inst3 blp_inst4 
+> blp_inst5 blp_inst6 blp_inst7 blp_inst8) ///
+>         stochastic(price) markets(mkt)
+Iteration 0:   f(p) =  18821.175  
+Iteration 1:   f(p) =  1414.2388  
+Iteration 2:   f(p) =  1414.2388  (backed up)
+
+GMM estimator of BLP-model
+
+GMM weight matrix: unadjusted               Number of obs            =  9100
+                                            Number of markets        =  9098
+                                            Number of Halton draws   =  200
+------------------------------------------------------------------------------
+             |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+Mean utility |
+        cons |  -3.027371   .1120015   -27.03   0.000     -3.24689   -2.807852
+proof_alco~t |  -.0004255   .0012153    -0.35   0.726    -.0028076    .0019565
+       d_gin |   .2131203    .057526     3.70   0.000     .1003714    .3258692
+       d_vod |  -.0475355   .0475904    -1.00   0.318    -.1408111      .04574
+       d_rum |   .0782365   .0560837     1.39   0.163    -.0316855    .1881586
+       d_sch |   .1304578   .0511306     2.55   0.011     .0302437     .230672
+       d_brb |   .1698477    .053402     3.18   0.001     .0651818    .2745136
+       d_whs |   .1309562    .054733     2.39   0.017     .0236815    .2382309
+        d_m1 |  -.0327242   .0599709    -0.55   0.585     -.150265    .0848165
+        d_m2 |   .0436096   .0613268     0.71   0.477    -.0765886    .1638078
+        d_m3 |  -.0046911   .0600196    -0.08   0.938    -.1223274    .1129451
+        d_m4 |  -.0357143   .0598169    -0.60   0.550    -.1529533    .0815248
+        d_m5 |   -.176304   .0585768    -3.01   0.003    -.2911125   -.0614955
+        d_m6 |  -.0282987   .0594095    -0.48   0.634    -.1447392    .0881417
+        d_m7 |  -.0537732   .0596136    -0.90   0.367    -.1706137    .0630673
+        d_m8 |  -.1221118   .0596396    -2.05   0.041    -.2390033   -.0052203
+        d_m9 |          0  (omitted)
+       d_m10 |  -.0914961    .060971    -1.50   0.133     -.210997    .0280048
+       d_m11 |  -.1085469   .0578404    -1.88   0.061    -.2219119    .0048182
+       d_m12 |  -.1716769    .055057    -3.12   0.002    -.2795867   -.0637671
+     d_y2009 |  -1.537023   .0780282   -19.70   0.000    -1.689955    -1.38409
+     d_y2010 |          0  (omitted)
+     d_y2011 |  -1.443395   .0783131   -18.43   0.000    -1.596885   -1.289904
+     d_y2012 |  -1.392978    .078676   -17.71   0.000    -1.547181   -1.238776
+     d_y2013 |  -1.361024    .078951   -17.24   0.000    -1.515765   -1.206283
+     d_y2014 |  -1.297564   .0794883   -16.32   0.000    -1.453359    -1.14177
+       price |  -.0003973   .0014694    -0.27   0.787    -.0032772    .0024826
+-------------+----------------------------------------------------------------
+price        |
+          SD |   7.62e-15          .        .       .            .           .
+------------------------------------------------------------------------------
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/gh8728/Liquor/demand_estimation/BLP-basic/blp.txt
+  log type:  text
+ closed on:  23 Jun 2016, 12:00:31
+-------------------------------------------------------------------------------
+
+. 
+end of do-file

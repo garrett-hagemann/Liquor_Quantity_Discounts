@@ -1,0 +1,159 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/gh8728/Liquor/Data/NY_price_schedules/data_clean_new_format.
+> txt
+  log type:  text
+ opened on:  23 May 2016, 17:44:23
+
+. 
+. local months "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"
+
+. 
+. 
+. foreach m in `months'{
+  2.         disp "Parsing 2015`m'"
+  3.         import delimited using "2015/LR-`m'-2015.txt", encoding(UTF-16) cl
+> ear
+  4.         tempfile tmp2015`m'
+  5.         save `tmp2015`m''
+  6. }
+Parsing 2015Jan
+(1 var, 0 obs)
+(note: dataset contains 0 observations)
+file /tmp/St29796.000001 saved
+Parsing 2015Feb
+(1 var, 0 obs)
+(note: dataset contains 0 observations)
+file /tmp/St29796.000002 saved
+Parsing 2015Mar
+(1 var, 0 obs)
+(note: dataset contains 0 observations)
+file /tmp/St29796.000003 saved
+Parsing 2015Apr
+(1 var, 0 obs)
+(note: dataset contains 0 observations)
+file /tmp/St29796.000004 saved
+Parsing 2015May
+(1 var, 0 obs)
+(note: dataset contains 0 observations)
+file /tmp/St29796.000005 saved
+Parsing 2015Jun
+(1 var, 0 obs)
+(note: dataset contains 0 observations)
+file /tmp/St29796.000006 saved
+Parsing 2015Jul
+(1 var, 0 obs)
+(note: dataset contains 0 observations)
+file /tmp/St29796.000007 saved
+Parsing 2015Aug
+(1 var, 0 obs)
+(note: dataset contains 0 observations)
+file /tmp/St29796.000008 saved
+Parsing 2015Sep
+(1 var, 0 obs)
+(note: dataset contains 0 observations)
+file /tmp/St29796.000009 saved
+Parsing 2015Oct
+(1 var, 0 obs)
+(note: dataset contains 0 observations)
+file /tmp/St29796.00000a saved
+Parsing 2015Nov
+(1 var, 0 obs)
+(note: dataset contains 0 observations)
+file /tmp/St29796.00000b saved
+Parsing 2015Dec
+(1 var, 0 obs)
+(note: dataset contains 0 observations)
+file /tmp/St29796.00000c saved
+
+. 
+. local 2014MonthsNew "May Jun Jul Aug Sep Oct Nov Dec"
+
+. 
+. foreach m in `2014MonthsNew'{
+  2.         disp "Parsing 2014`m'"
+  3.         import delimited using "2014/LR-`m'-2014-new-format.txt", encoding
+> (UTF-16) clear
+  4.         tempfile tmp2014`m'
+  5.         save `tmp2014`m''
+  6. }
+Parsing 2014May
+(1 var, 0 obs)
+(note: dataset contains 0 observations)
+file /tmp/St29796.00000d saved
+Parsing 2014Jun
+(1 var, 0 obs)
+(note: dataset contains 0 observations)
+file /tmp/St29796.00000e saved
+Parsing 2014Jul
+(1 var, 0 obs)
+(note: dataset contains 0 observations)
+file /tmp/St29796.00000f saved
+Parsing 2014Aug
+(1 var, 0 obs)
+(note: dataset contains 0 observations)
+file /tmp/St29796.00000g saved
+Parsing 2014Sep
+(1 var, 0 obs)
+(note: dataset contains 0 observations)
+file /tmp/St29796.00000h saved
+Parsing 2014Oct
+(1 var, 0 obs)
+(note: dataset contains 0 observations)
+file /tmp/St29796.00000i saved
+Parsing 2014Nov
+(1 var, 0 obs)
+(note: dataset contains 0 observations)
+file /tmp/St29796.00000j saved
+Parsing 2014Dec
+(1 var, 0 obs)
+(note: dataset contains 0 observations)
+file /tmp/St29796.00000k saved
+
+. 
+. clear // starting with a clean dataset
+
+. 
+. foreach m in `months'{
+  2.         disp "Appending 2015`m'"
+  3.         append using `tmp2015`m''
+  4. }
+Appending 2015Jan
+Appending 2015Feb
+Appending 2015Mar
+Appending 2015Apr
+Appending 2015May
+Appending 2015Jun
+Appending 2015Jul
+Appending 2015Aug
+Appending 2015Sep
+Appending 2015Oct
+Appending 2015Nov
+Appending 2015Dec
+
+. 
+. 
+. foreach m in `2014MonthsNew'{
+  2.         disp "Appending 2014`m'"
+  3.         append using `tmp2014`m''
+  4. }
+Appending 2014May
+Appending 2014Jun
+Appending 2014Jul
+Appending 2014Aug
+Appending 2014Sep
+Appending 2014Oct
+Appending 2014Nov
+Appending 2014Dec
+
+. 
+. gen record_num = _n
+
+. 
+. save new_format_months, replace
+(note: dataset contains 0 observations)
+(note: file new_format_months.dta not found)
+file new_format_months.dta saved
+
+. 
+end of do-file

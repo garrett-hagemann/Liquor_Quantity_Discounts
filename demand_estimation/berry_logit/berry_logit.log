@@ -1,0 +1,300 @@
+
+  ___  ____  ____  ____  ____ (R)
+ /__    /   ____/   /   ____/
+___/   /   /___/   /   /___/   14.0   Copyright 1985-2015 StataCorp LP
+  Statistics/Data Analysis            StataCorp
+                                      4905 Lakeway Drive
+                                      College Station, Texas 77845 USA
+                                      800-STATA-PC        http://www.stata.com
+                                      979-696-4600        stata@stata.com
+                                      979-696-4601 (fax)
+
+5-user Stata network perpetual license:
+       Serial number:  401406249371
+         Licensed to:  LAITS
+                       The University of Texas at Austin
+
+Notes:
+      1.  Stata is running in batch mode.
+
+Stata version 14
+Stata version 11, has moved to /opt/stata11
+      2.  Unicode is supported; see help unicode_advice.
+
+. do "berry_logit.do" 
+
+. capture log close
+
+. clear
+
+. version 14
+
+. set more off
+
+. log using "berry_logit.txt", text replace
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/gh8728/Projects/Liquor/demand_estimation/berry_logit/berry_l
+> ogit.txt
+  log type:  text
+ opened on:  11 Jul 2016, 15:37:59
+
+. 
+. /* FLAGS */
+. local price_sched_data = 0
+
+. 
+. /* This file estimates the so-called Berry-logit. This is basically
+> a version of BLP without random coefficients. This file makes the
+> relevant instruments:
+>         exogenous variable squares, interactions of exo vars,
+>         "other product" characteristics, etc.
+> */
+. 
+. if `price_sched_data'{
+.         use "../../Data/combined/merged_blp_sample"
+. }
+
+. else{
+.         use "../../Data/Nielsen_Panel/analysis/blp_sample"
+. }
+
+. 
+. drop if purchase_year == 2008 // only have partial month here
+(180 observations deleted)
+
+. 
+. gen delta = log(share) - log(outside_share) // explanatory variable
+(151 missing values generated)
+
+. gen cons = 1
+
+. 
+. 
+. 
+. /* Making instruments */
+. if `price_sched_data'{
+.         gen blp_inst1 = proof_alcohol_cont^2
+.         gen blp_inst2 = price_per_case^2
+. }
+
+. local i = 3
+
+. foreach var in  d_gin d_vod d_rum d_sch d_whs d_brb {
+  2.         egen blp_inst`i' = total(`var'), by(mkt)
+  3.         replace blp_inst`i' = blp_inst`i' - `var'
+  4.         local i = `i' + 1
+  5. }
+(1,410 real changes made)
+(6,402 real changes made)
+(3,056 real changes made)
+(1,794 real changes made)
+(1,627 real changes made)
+(2,809 real changes made)
+
+. 
+. /* making month and year dummies for easier export */
+. levelsof purchase_month, local(months)
+1 2 3 4 5 6 7 8 9 10 11 12
+
+. foreach month of local months{
+  2.         gen d_m`month' = (purchase_month == `month')
+  3. }
+
+. 
+. gen holiday = (d_m11 + d_m12)
+
+. 
+. levelsof purchase_year, local(years)
+2009 2010 2011 2012 2013 2014
+
+. foreach year of local years{
+  2.         gen d_y`year' = (purchase_year == `year')
+  3. }
+
+. 
+. if `price_sched_data'{
+.         ivregress gmm delta d_gin d_vod d_rum d_sch d_brb d_whs proof ///
+>                  (price = price_per_case ), nocons first
+.  }
+
+. else{    
+.         ivregress gmm delta d_gin d_vod d_rum d_sch d_brb d_whs holiday ///
+>                 (price = blp_inst* d_m* d_y* cons ), nocons first 
+note: d_y2014 omitted because of collinearity
+note: cons omitted because of collinearity
+note: d_m12 dropped due to collinearity
+
+First-stage regressions
+-----------------------
+
+                                                Number of obs     =     32,583
+                                                F(  29,  32554)   =    2833.53
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.6977
+                                                Adj R-squared     =     0.6975
+                                                Root MSE          =    10.7368
+
+------------------------------------------------------------------------------
+             |               Robust
+       price |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       d_gin |    8.62673    .265427    32.50   0.000     8.106483    9.146977
+       d_vod |   6.028804    .143604    41.98   0.000     5.747335    6.310273
+       d_rum |   6.359637   .1710175    37.19   0.000     6.024437    6.694838
+       d_sch |   19.77415   .4832064    40.92   0.000     18.82705    20.72126
+       d_brb |   11.23769   .2439358    46.07   0.000     10.75957    11.71582
+       d_whs |   7.262338   .2300328    31.57   0.000     6.811465    7.713211
+     holiday |   12.29028   .2525424    48.67   0.000     11.79529    12.78527
+   blp_inst3 |   1.077401   .1743649     6.18   0.000     .7356395    1.419163
+   blp_inst4 |  -.1654986   .0571615    -2.90   0.004    -.2775373     -.05346
+   blp_inst5 |  -.0182334    .098274    -0.19   0.853    -.2108541    .1743872
+   blp_inst6 |   1.879153   .1937886     9.70   0.000      1.49932    2.258986
+   blp_inst7 |  -.5469084   .1416893    -3.86   0.000    -.8246246   -.2691922
+   blp_inst8 |  -.3825434   .1051955    -3.64   0.000    -.5887304   -.1763563
+        d_m1 |   10.84405   .2860397    37.91   0.000      10.2834     11.4047
+        d_m2 |   11.01222   .2825698    38.97   0.000     10.45837    11.56607
+        d_m3 |   11.19349   .2892801    38.69   0.000     10.62649    11.76049
+        d_m4 |   10.42504   .2555404    40.80   0.000     9.924172    10.92591
+        d_m5 |   10.18848   .2331817    43.69   0.000     9.731432    10.64552
+        d_m6 |   9.678268   .2266146    42.71   0.000     9.234095    10.12244
+        d_m7 |   9.396795    .219082    42.89   0.000     8.967386    9.826204
+        d_m8 |   9.852272   .2328906    42.30   0.000     9.395797    10.30875
+        d_m9 |    10.6908   .2696565    39.65   0.000     10.16227    11.21934
+       d_m10 |   10.94111   .2995083    36.53   0.000     10.35406    11.52816
+       d_m11 |  -.5126455   .2911308    -1.76   0.078    -1.083273    .0579815
+     d_y2009 |   .4021799   .1988138     2.02   0.043     .0124976    .7918622
+     d_y2010 |   .6770627   .4869854     1.39   0.164    -.2774466    1.631572
+     d_y2011 |   .4490552   .2011647     2.23   0.026     .0547649    .8433455
+     d_y2012 |  -1.292166   .1917478    -6.74   0.000    -1.667999   -.9163336
+     d_y2013 |  -.0772722   .2067515    -0.37   0.709    -.4825128    .3279684
+     d_y2014 |          0  (omitted)
+        cons |          0  (omitted)
+------------------------------------------------------------------------------
+
+
+Instrumental variables (GMM) regression           Number of obs   =     32,583
+                                                  Wald chi2(8)    =          .
+                                                  Prob > chi2     =          .
+                                                  R-squared       =          .
+GMM weight matrix: Robust                         Root MSE        =     4.5835
+
+------------------------------------------------------------------------------
+             |               Robust
+       delta |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+       price |  -.4159723   .0036454  -114.11   0.000    -.4231172   -.4088273
+       d_gin |   3.543355    .130134    27.23   0.000     3.288297    3.798413
+       d_vod |    2.29762   .0748871    30.68   0.000     2.150844    2.444396
+       d_rum |   2.519794   .0839129    30.03   0.000     2.355328     2.68426
+       d_sch |   8.277667   .2225522    37.19   0.000     7.841473    8.713862
+       d_brb |   4.735555   .1228663    38.54   0.000     4.494741    4.976368
+       d_whs |   2.863349   .1125433    25.44   0.000     2.642768     3.08393
+     holiday |   .7080798   .0665167    10.65   0.000     .5777095    .8384501
+------------------------------------------------------------------------------
+Instrumented:  price
+Instruments:   d_gin d_vod d_rum d_sch d_brb d_whs holiday blp_inst3
+               blp_inst4 blp_inst5 blp_inst6 blp_inst7 blp_inst8 d_m1 d_m2
+               d_m3 d_m4 d_m5 d_m6 d_m7 d_m8 d_m9 d_m10 d_m11 d_y2009
+               d_y2010 d_y2011 d_y2012 d_y2013
+. }
+
+. /* outputting coefficients to matrix */
+. matrix coefs = e(b)
+
+. preserve
+
+.         clear
+
+.         svmat coefs
+number of observations will be reset to 1
+Press any key to continue, or Break to abort
+number of observations (_N) was 0, now 1
+
+.         rename coefs1 price
+
+.         rename coefs2 d_gin
+
+.         rename coefs3 d_vod
+
+.         rename coefs4 d_rum
+
+.         rename coefs5 d_sch
+
+.         rename coefs6 d_brb
+
+.         rename coefs7 d_whs
+
+.         rename coefs8 holiday
+
+.         /*rename coefs8 proof_alcohol_cont
+>         rename coefs9 d_m1
+>         rename coefs10 d_m2
+>         rename coefs11 d_m3
+>         rename coefs12 d_m4
+>         rename coefs13 d_m5
+>         rename coefs14 d_m6
+>         rename coefs15 d_m7
+>         rename coefs16 d_m8
+>         rename coefs17 d_m9
+>         rename coefs18 d_m10
+>         rename coefs19 d_m11
+>         rename coefs20 d_m12
+>         rename coefs21 d_y2009
+>         rename coefs22 d_y2010
+>         rename coefs23 d_y2011
+>         rename coefs24 d_y2012
+>         rename coefs25 d_y2013
+>         rename coefs26 d_y2014 */
+.         export delimited using "blogit_coefs.csv", replace 
+file blogit_coefs.csv saved
+
+. restore
+
+. 
+. 
+. /* Calculating the "retail type" associated with each (p,q) bundle. This trea
+> ts
+> each (p,q) as if it came from a monopolist facing independent demand and inde
+> pendent cost.
+> This is clearly at odds with the model that was estimated that was just estim
+> ated. However,
+> to do it correctly, each (p,q) must reliably be assocated with the same retai
+> ler. This is
+> difficult due to the Nielsen data not identifying retailers beyond a catch-al
+> l flag for
+> many of the products. However, this can serve as a first step. In particular,
+>  the logit demand
+> assumes everything is a substitute so we can bound the misspecification perha
+> ps. */
+. 
+. local alpha = _b[price]
+
+. gen markup = (1/`alpha')*(1 + exp(delta))
+(151 missing values generated)
+
+. /*gen rho = 
+> gen lambda = price - markup - rho */
+. 
+. 
+. predict xi, resid
+(151 missing values generated)
+
+. 
+. save berry_logit, replace
+file berry_logit.dta saved
+
+. export delimited using "berry_logit.csv", replace delim(",")
+file berry_logit.csv saved
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/gh8728/Projects/Liquor/demand_estimation/berry_logit/berry_l
+> ogit.txt
+  log type:  text
+ closed on:  11 Jul 2016, 15:38:13
+-------------------------------------------------------------------------------
+
+. 
+end of do-file

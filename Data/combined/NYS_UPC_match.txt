@@ -1,0 +1,4736 @@
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/gh8728/Projects/Liquor/Data/combined/NYS_UPC_match.txt
+  log type:  text
+ opened on:  29 Jul 2016, 11:38:19
+
+. 
+. /* To improve the quality of the match we're going to do this by year,month
+> and product size. There may be some duplicate listings in the price schedules
+> by these categories, due to different wholesalers. However, a quick look
+> shows that the difference in the prices is pretty minimal. This is likely
+> something that should be fixed */
+. 
+. local years = "2009 2010 2012 2013 2014"
+
+. local months = "1 2 3 4 5 6 7 8 9 10 11 12"
+
+. local sizes = "750ML 1L 1.75L"
+
+. 
+. /* first use the old format NYS data */
+. use "../NY_price_schedules/old_format_months"
+
+. 
+. drop _merge // need to drop for reshape
+
+. // reshaping wide so record num is unique key
+. reshape wide disc_p disc_q disc_dollars actual_p tariff norm_p norm_tariff, i
+> (record_num) j(option)
+(note: j = 0 1 2 3 4 5 6 7 8 9 10 11)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                  1.1e+06   ->  319533
+Number of variables                  33   ->     109
+j variable (12 values)           option   ->   (dropped)
+xij variables:
+                                 disc_p   ->   disc_p0 disc_p1 ... disc_p11
+                                 disc_q   ->   disc_q0 disc_q1 ... disc_q11
+                           disc_dollars   ->   disc_dollars0 disc_dollars1 ... 
+> disc_dollars11
+                               actual_p   ->   actual_p0 actual_p1 ... actual_p
+> 11
+                                 tariff   ->   tariff0 tariff1 ... tariff11
+                                 norm_p   ->   norm_p0 norm_p1 ... norm_p11
+                            norm_tariff   ->   norm_tariff0 norm_tariff1 ... no
+> rm_tariff11
+-----------------------------------------------------------------------------
+
+. 
+. // making one long string that is to be matched. Contains brand, product, and
+>  size
+. gen brand_string = brand_name + ";" + product_item_name + ";" + size
+
+. 
+. foreach year in `years'{
+  2.         foreach month in `months'{
+  3.                 foreach size in `sizes'{
+  4.                         if "`size'" == "1.75L"{
+  5.                                 tempfile ps_y`year'_m`month'_s175L
+  6.                                 preserve
+  7.                                         keep if (posting_month == `month' 
+> - 1) ///
+>                                                 & (posting_year == `year') //
+> /
+>                                                 & (size == "`size'")
+  8.                                         
+.                                         save `ps_y`year'_m`month'_s175L' 
+  9.                                 restore
+ 10.                                 disp "y`year',m`month',s`size'"
+ 11.                         }
+ 12.                         else {
+ 13.                                 tempfile ps_y`year'_m`month'_s`size'
+ 14.                                 preserve
+ 15.                                         keep if (posting_month == `month' 
+> - 1) ///
+>                                                 & (posting_year == `year') //
+> /
+>                                                 & (size == "`size'")
+ 16.                                         
+.                                         save `ps_y`year'_m`month'_s`size''
+ 17.                                 restore
+ 18.                                 disp "y`year',m`month',s`size'"
+ 19.                         }
+ 20.                 }
+ 21.         }
+ 22. }
+(317,156 observations deleted)
+file /tmp/St14235.000001 saved
+y2009,m1,s750ML
+(319,531 observations deleted)
+file /tmp/St14235.000003 saved
+y2009,m1,s1L
+(318,853 observations deleted)
+file /tmp/St14235.000005 saved
+y2009,m1,s1.75L
+(317,672 observations deleted)
+file /tmp/St14235.000007 saved
+y2009,m2,s750ML
+(319,531 observations deleted)
+file /tmp/St14235.000009 saved
+y2009,m2,s1L
+(318,998 observations deleted)
+file /tmp/St14235.00000b saved
+y2009,m2,s1.75L
+(316,028 observations deleted)
+file /tmp/St14235.00000d saved
+y2009,m3,s750ML
+(319,531 observations deleted)
+file /tmp/St14235.00000f saved
+y2009,m3,s1L
+(318,346 observations deleted)
+file /tmp/St14235.00000h saved
+y2009,m3,s1.75L
+(316,155 observations deleted)
+file /tmp/St14235.00000j saved
+y2009,m4,s750ML
+(319,532 observations deleted)
+file /tmp/St14235.00000l saved
+y2009,m4,s1L
+(318,365 observations deleted)
+file /tmp/St14235.00000n saved
+y2009,m4,s1.75L
+(315,843 observations deleted)
+file /tmp/St14235.00000p saved
+y2009,m5,s750ML
+(319,532 observations deleted)
+file /tmp/St14235.00000r saved
+y2009,m5,s1L
+(318,289 observations deleted)
+file /tmp/St14235.00000t saved
+y2009,m5,s1.75L
+(316,020 observations deleted)
+file /tmp/St14235.00000v saved
+y2009,m6,s750ML
+(319,532 observations deleted)
+file /tmp/St14235.00000x saved
+y2009,m6,s1L
+(318,299 observations deleted)
+file /tmp/St14235.000011 saved
+y2009,m6,s1.75L
+(315,988 observations deleted)
+file /tmp/St14235.000013 saved
+y2009,m7,s750ML
+(319,532 observations deleted)
+file /tmp/St14235.000015 saved
+y2009,m7,s1L
+(318,301 observations deleted)
+file /tmp/St14235.000017 saved
+y2009,m7,s1.75L
+(316,072 observations deleted)
+file /tmp/St14235.000019 saved
+y2009,m8,s750ML
+(319,532 observations deleted)
+file /tmp/St14235.00001b saved
+y2009,m8,s1L
+(318,341 observations deleted)
+file /tmp/St14235.00001d saved
+y2009,m8,s1.75L
+(315,970 observations deleted)
+file /tmp/St14235.00001f saved
+y2009,m9,s750ML
+(319,532 observations deleted)
+file /tmp/St14235.00001h saved
+y2009,m9,s1L
+(318,317 observations deleted)
+file /tmp/St14235.00001j saved
+y2009,m9,s1.75L
+(315,893 observations deleted)
+file /tmp/St14235.00001l saved
+y2009,m10,s750ML
+(319,532 observations deleted)
+file /tmp/St14235.00001n saved
+y2009,m10,s1L
+(318,321 observations deleted)
+file /tmp/St14235.00001p saved
+y2009,m10,s1.75L
+(315,894 observations deleted)
+file /tmp/St14235.00001r saved
+y2009,m11,s750ML
+(319,532 observations deleted)
+file /tmp/St14235.00001t saved
+y2009,m11,s1L
+(318,311 observations deleted)
+file /tmp/St14235.00001v saved
+y2009,m11,s1.75L
+(315,902 observations deleted)
+file /tmp/St14235.00001x saved
+y2009,m12,s750ML
+(319,532 observations deleted)
+file /tmp/St14235.000021 saved
+y2009,m12,s1L
+(318,315 observations deleted)
+file /tmp/St14235.000023 saved
+y2009,m12,s1.75L
+(316,001 observations deleted)
+file /tmp/St14235.000025 saved
+y2010,m1,s750ML
+(319,529 observations deleted)
+file /tmp/St14235.000027 saved
+y2010,m1,s1L
+(318,316 observations deleted)
+file /tmp/St14235.000029 saved
+y2010,m1,s1.75L
+(315,914 observations deleted)
+file /tmp/St14235.00002b saved
+y2010,m2,s750ML
+(319,523 observations deleted)
+file /tmp/St14235.00002d saved
+y2010,m2,s1L
+(318,299 observations deleted)
+file /tmp/St14235.00002f saved
+y2010,m2,s1.75L
+(315,908 observations deleted)
+file /tmp/St14235.00002h saved
+y2010,m3,s750ML
+(319,522 observations deleted)
+file /tmp/St14235.00002j saved
+y2010,m3,s1L
+(318,275 observations deleted)
+file /tmp/St14235.00002l saved
+y2010,m3,s1.75L
+(315,946 observations deleted)
+file /tmp/St14235.00002n saved
+y2010,m4,s750ML
+(319,526 observations deleted)
+file /tmp/St14235.00002p saved
+y2010,m4,s1L
+(318,292 observations deleted)
+file /tmp/St14235.00002r saved
+y2010,m4,s1.75L
+(315,893 observations deleted)
+file /tmp/St14235.00002t saved
+y2010,m5,s750ML
+(319,522 observations deleted)
+file /tmp/St14235.00002v saved
+y2010,m5,s1L
+(318,262 observations deleted)
+file /tmp/St14235.00002x saved
+y2010,m5,s1.75L
+(315,876 observations deleted)
+file /tmp/St14235.000031 saved
+y2010,m6,s750ML
+(319,524 observations deleted)
+file /tmp/St14235.000033 saved
+y2010,m6,s1L
+(318,253 observations deleted)
+file /tmp/St14235.000035 saved
+y2010,m6,s1.75L
+(315,974 observations deleted)
+file /tmp/St14235.000037 saved
+y2010,m7,s750ML
+(319,522 observations deleted)
+file /tmp/St14235.000039 saved
+y2010,m7,s1L
+(318,255 observations deleted)
+file /tmp/St14235.00003b saved
+y2010,m7,s1.75L
+(315,903 observations deleted)
+file /tmp/St14235.00003d saved
+y2010,m8,s750ML
+(319,528 observations deleted)
+file /tmp/St14235.00003f saved
+y2010,m8,s1L
+(318,235 observations deleted)
+file /tmp/St14235.00003h saved
+y2010,m8,s1.75L
+(315,954 observations deleted)
+file /tmp/St14235.00003j saved
+y2010,m9,s750ML
+(319,523 observations deleted)
+file /tmp/St14235.00003l saved
+y2010,m9,s1L
+(318,314 observations deleted)
+file /tmp/St14235.00003n saved
+y2010,m9,s1.75L
+(315,724 observations deleted)
+file /tmp/St14235.00003p saved
+y2010,m10,s750ML
+(319,520 observations deleted)
+file /tmp/St14235.00003r saved
+y2010,m10,s1L
+(318,249 observations deleted)
+file /tmp/St14235.00003t saved
+y2010,m10,s1.75L
+(315,776 observations deleted)
+file /tmp/St14235.00003v saved
+y2010,m11,s750ML
+(319,524 observations deleted)
+file /tmp/St14235.00003x saved
+y2010,m11,s1L
+(318,230 observations deleted)
+file /tmp/St14235.000041 saved
+y2010,m11,s1.75L
+(315,641 observations deleted)
+file /tmp/St14235.000043 saved
+y2010,m12,s750ML
+(319,524 observations deleted)
+file /tmp/St14235.000045 saved
+y2010,m12,s1L
+(318,240 observations deleted)
+file /tmp/St14235.000047 saved
+y2010,m12,s1.75L
+(315,960 observations deleted)
+file /tmp/St14235.000049 saved
+y2012,m1,s750ML
+(319,526 observations deleted)
+file /tmp/St14235.00004b saved
+y2012,m1,s1L
+(318,393 observations deleted)
+file /tmp/St14235.00004d saved
+y2012,m1,s1.75L
+(315,946 observations deleted)
+file /tmp/St14235.00004f saved
+y2012,m2,s750ML
+(319,527 observations deleted)
+file /tmp/St14235.00004h saved
+y2012,m2,s1L
+(318,389 observations deleted)
+file /tmp/St14235.00004j saved
+y2012,m2,s1.75L
+(315,832 observations deleted)
+file /tmp/St14235.00004l saved
+y2012,m3,s750ML
+(319,526 observations deleted)
+file /tmp/St14235.00004n saved
+y2012,m3,s1L
+(318,388 observations deleted)
+file /tmp/St14235.00004p saved
+y2012,m3,s1.75L
+(315,775 observations deleted)
+file /tmp/St14235.00004r saved
+y2012,m4,s750ML
+(319,527 observations deleted)
+file /tmp/St14235.00004t saved
+y2012,m4,s1L
+(318,362 observations deleted)
+file /tmp/St14235.00004v saved
+y2012,m4,s1.75L
+(315,757 observations deleted)
+file /tmp/St14235.00004x saved
+y2012,m5,s750ML
+(319,527 observations deleted)
+file /tmp/St14235.000051 saved
+y2012,m5,s1L
+(318,366 observations deleted)
+file /tmp/St14235.000053 saved
+y2012,m5,s1.75L
+(315,799 observations deleted)
+file /tmp/St14235.000055 saved
+y2012,m6,s750ML
+(319,527 observations deleted)
+file /tmp/St14235.000057 saved
+y2012,m6,s1L
+(318,333 observations deleted)
+file /tmp/St14235.000059 saved
+y2012,m6,s1.75L
+(315,574 observations deleted)
+file /tmp/St14235.00005b saved
+y2012,m7,s750ML
+(319,527 observations deleted)
+file /tmp/St14235.00005d saved
+y2012,m7,s1L
+(318,339 observations deleted)
+file /tmp/St14235.00005f saved
+y2012,m7,s1.75L
+(315,594 observations deleted)
+file /tmp/St14235.00005h saved
+y2012,m8,s750ML
+(319,527 observations deleted)
+file /tmp/St14235.00005j saved
+y2012,m8,s1L
+(318,327 observations deleted)
+file /tmp/St14235.00005l saved
+y2012,m8,s1.75L
+(315,500 observations deleted)
+file /tmp/St14235.00005n saved
+y2012,m9,s750ML
+(319,526 observations deleted)
+file /tmp/St14235.00005p saved
+y2012,m9,s1L
+(318,321 observations deleted)
+file /tmp/St14235.00005r saved
+y2012,m9,s1.75L
+(315,377 observations deleted)
+file /tmp/St14235.00005t saved
+y2012,m10,s750ML
+(319,525 observations deleted)
+file /tmp/St14235.00005v saved
+y2012,m10,s1L
+(318,292 observations deleted)
+file /tmp/St14235.00005x saved
+y2012,m10,s1.75L
+(315,276 observations deleted)
+file /tmp/St14235.000061 saved
+y2012,m11,s750ML
+(319,524 observations deleted)
+file /tmp/St14235.000063 saved
+y2012,m11,s1L
+(318,293 observations deleted)
+file /tmp/St14235.000065 saved
+y2012,m11,s1.75L
+(315,346 observations deleted)
+file /tmp/St14235.000067 saved
+y2012,m12,s750ML
+(319,524 observations deleted)
+file /tmp/St14235.000069 saved
+y2012,m12,s1L
+(318,305 observations deleted)
+file /tmp/St14235.00006b saved
+y2012,m12,s1.75L
+(315,448 observations deleted)
+file /tmp/St14235.00006d saved
+y2013,m1,s750ML
+(319,524 observations deleted)
+file /tmp/St14235.00006f saved
+y2013,m1,s1L
+(318,326 observations deleted)
+file /tmp/St14235.00006h saved
+y2013,m1,s1.75L
+(315,346 observations deleted)
+file /tmp/St14235.00006j saved
+y2013,m2,s750ML
+(319,524 observations deleted)
+file /tmp/St14235.00006l saved
+y2013,m2,s1L
+(318,294 observations deleted)
+file /tmp/St14235.00006n saved
+y2013,m2,s1.75L
+(315,387 observations deleted)
+file /tmp/St14235.00006p saved
+y2013,m3,s750ML
+(319,524 observations deleted)
+file /tmp/St14235.00006r saved
+y2013,m3,s1L
+(318,283 observations deleted)
+file /tmp/St14235.00006t saved
+y2013,m3,s1.75L
+(315,285 observations deleted)
+file /tmp/St14235.00006v saved
+y2013,m4,s750ML
+(319,522 observations deleted)
+file /tmp/St14235.00006x saved
+y2013,m4,s1L
+(318,273 observations deleted)
+file /tmp/St14235.000071 saved
+y2013,m4,s1.75L
+(315,432 observations deleted)
+file /tmp/St14235.000073 saved
+y2013,m5,s750ML
+(319,522 observations deleted)
+file /tmp/St14235.000075 saved
+y2013,m5,s1L
+(318,308 observations deleted)
+file /tmp/St14235.000077 saved
+y2013,m5,s1.75L
+(315,357 observations deleted)
+file /tmp/St14235.000079 saved
+y2013,m6,s750ML
+(319,523 observations deleted)
+file /tmp/St14235.00007b saved
+y2013,m6,s1L
+(318,307 observations deleted)
+file /tmp/St14235.00007d saved
+y2013,m6,s1.75L
+(315,236 observations deleted)
+file /tmp/St14235.00007f saved
+y2013,m7,s750ML
+(319,519 observations deleted)
+file /tmp/St14235.00007h saved
+y2013,m7,s1L
+(318,321 observations deleted)
+file /tmp/St14235.00007j saved
+y2013,m7,s1.75L
+(315,207 observations deleted)
+file /tmp/St14235.00007l saved
+y2013,m8,s750ML
+(319,521 observations deleted)
+file /tmp/St14235.00007n saved
+y2013,m8,s1L
+(318,277 observations deleted)
+file /tmp/St14235.00007p saved
+y2013,m8,s1.75L
+(315,126 observations deleted)
+file /tmp/St14235.00007r saved
+y2013,m9,s750ML
+(319,522 observations deleted)
+file /tmp/St14235.00007t saved
+y2013,m9,s1L
+(318,278 observations deleted)
+file /tmp/St14235.00007v saved
+y2013,m9,s1.75L
+(314,956 observations deleted)
+file /tmp/St14235.00007x saved
+y2013,m10,s750ML
+(319,523 observations deleted)
+file /tmp/St14235.000081 saved
+y2013,m10,s1L
+(318,276 observations deleted)
+file /tmp/St14235.000083 saved
+y2013,m10,s1.75L
+(314,872 observations deleted)
+file /tmp/St14235.000085 saved
+y2013,m11,s750ML
+(319,519 observations deleted)
+file /tmp/St14235.000087 saved
+y2013,m11,s1L
+(318,288 observations deleted)
+file /tmp/St14235.000089 saved
+y2013,m11,s1.75L
+(314,906 observations deleted)
+file /tmp/St14235.00008b saved
+y2013,m12,s750ML
+(319,519 observations deleted)
+file /tmp/St14235.00008d saved
+y2013,m12,s1L
+(318,290 observations deleted)
+file /tmp/St14235.00008f saved
+y2013,m12,s1.75L
+(314,952 observations deleted)
+file /tmp/St14235.00008h saved
+y2014,m1,s750ML
+(319,520 observations deleted)
+file /tmp/St14235.00008j saved
+y2014,m1,s1L
+(318,286 observations deleted)
+file /tmp/St14235.00008l saved
+y2014,m1,s1.75L
+(314,918 observations deleted)
+file /tmp/St14235.00008n saved
+y2014,m2,s750ML
+(319,518 observations deleted)
+file /tmp/St14235.00008p saved
+y2014,m2,s1L
+(318,282 observations deleted)
+file /tmp/St14235.00008r saved
+y2014,m2,s1.75L
+(314,933 observations deleted)
+file /tmp/St14235.00008t saved
+y2014,m3,s750ML
+(319,514 observations deleted)
+file /tmp/St14235.00008v saved
+y2014,m3,s1L
+(318,275 observations deleted)
+file /tmp/St14235.00008x saved
+y2014,m3,s1.75L
+(317,857 observations deleted)
+file /tmp/St14235.000091 saved
+y2014,m4,s750ML
+(319,520 observations deleted)
+file /tmp/St14235.000093 saved
+y2014,m4,s1L
+(319,326 observations deleted)
+file /tmp/St14235.000095 saved
+y2014,m4,s1.75L
+(319,533 observations deleted)
+(note: dataset contains 0 observations)
+file /tmp/St14235.000097 saved
+y2014,m5,s750ML
+(319,533 observations deleted)
+(note: dataset contains 0 observations)
+file /tmp/St14235.000099 saved
+y2014,m5,s1L
+(319,533 observations deleted)
+(note: dataset contains 0 observations)
+file /tmp/St14235.00009b saved
+y2014,m5,s1.75L
+(319,533 observations deleted)
+(note: dataset contains 0 observations)
+file /tmp/St14235.00009d saved
+y2014,m6,s750ML
+(319,533 observations deleted)
+(note: dataset contains 0 observations)
+file /tmp/St14235.00009f saved
+y2014,m6,s1L
+(319,533 observations deleted)
+(note: dataset contains 0 observations)
+file /tmp/St14235.00009h saved
+y2014,m6,s1.75L
+(319,533 observations deleted)
+(note: dataset contains 0 observations)
+file /tmp/St14235.00009j saved
+y2014,m7,s750ML
+(319,533 observations deleted)
+(note: dataset contains 0 observations)
+file /tmp/St14235.00009l saved
+y2014,m7,s1L
+(319,533 observations deleted)
+(note: dataset contains 0 observations)
+file /tmp/St14235.00009n saved
+y2014,m7,s1.75L
+(319,533 observations deleted)
+(note: dataset contains 0 observations)
+file /tmp/St14235.00009p saved
+y2014,m8,s750ML
+(319,533 observations deleted)
+(note: dataset contains 0 observations)
+file /tmp/St14235.00009r saved
+y2014,m8,s1L
+(319,533 observations deleted)
+(note: dataset contains 0 observations)
+file /tmp/St14235.00009t saved
+y2014,m8,s1.75L
+(319,533 observations deleted)
+(note: dataset contains 0 observations)
+file /tmp/St14235.00009v saved
+y2014,m9,s750ML
+(319,533 observations deleted)
+(note: dataset contains 0 observations)
+file /tmp/St14235.00009x saved
+y2014,m9,s1L
+(319,533 observations deleted)
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000a1 saved
+y2014,m9,s1.75L
+(319,533 observations deleted)
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000a3 saved
+y2014,m10,s750ML
+(319,533 observations deleted)
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000a5 saved
+y2014,m10,s1L
+(319,533 observations deleted)
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000a7 saved
+y2014,m10,s1.75L
+(319,533 observations deleted)
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000a9 saved
+y2014,m11,s750ML
+(319,533 observations deleted)
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000ab saved
+y2014,m11,s1L
+(319,533 observations deleted)
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000ad saved
+y2014,m11,s1.75L
+(319,533 observations deleted)
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000af saved
+y2014,m12,s750ML
+(319,533 observations deleted)
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000ah saved
+y2014,m12,s1L
+(319,533 observations deleted)
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000aj saved
+y2014,m12,s1.75L
+
+. 
+. clear
+
+. 
+. use "../Nielsen_Panel/analysis/ny_liquor_purchases_all_years"
+
+. 
+. /* Now we need to separate purchases by month, year, and size to allign
+> with the price schedule data. Then we can apply the matching algorithm */
+. 
+. foreach year in `years'{
+  2.         foreach month in `months'{
+  3.                 foreach size in `sizes'{
+  4.                         if "`size'" == "1.75L"{
+  5.                                 tempfile res_y`year'_m`month'_s175L
+  6.                                 tempfile raw_y`year'_m`month'_s175L
+  7.                                 preserve
+  8.                                         keep if (purchase_month == `month'
+> ) ///
+>                                         & (purchase_year == `year') ///
+>                                         & (size1_amount == 1.75)        
+  9. 
+.                                         matchit upc_id brand_string using `ps
+> _y`year'_m`month'_s175L', idusing(record_num) txtusing(brand_string) override
+>  sim(ngram, 3)
+ 10. 
+.                                         gen neg_similscore = -similscore
+ 11. 
+.                                         sort upc_id neg_similscore // sorting
+>  by each UPC and then by match rank within
+ 12. 
+.                                         save  `raw_y`year'_m`month'_s175L' //
+>  useful to fix hand matches
+ 13. 
+.                                         by upc_id: keep if _n == 3 // keeping
+>  top 3 matches 
+ 14. 
+.                                         save `res_y`year'_m`month'_s175L'
+ 15.                                         
+.                                 restore
+ 16.                         }
+ 17. 
+.                         if "`size'" == "1L"{
+ 18.                                 tempfile res_y`year'_m`month'_s1L
+ 19.                                 tempfile raw_y`year'_m`month'_s1L
+ 20.                                 preserve
+ 21.                                         keep if (purchase_month == `month'
+> ) ///
+>                                         & (purchase_year == `year') ///
+>                                         & (size1_amount == 1)   
+ 22. 
+.                                         matchit upc_id brand_string using `ps
+> _y`year'_m`month'_s1L', idusing(record_num) txtusing(brand_string) override s
+> im(ngram, 3)
+ 23. 
+.                                         gen neg_similscore = -similscore
+ 24. 
+.                                         sort upc_id neg_similscore // sorting
+>  by each UPC and then by match rank within
+ 25. 
+.                                         save  `raw_y`year'_m`month'_s1L' // u
+> seful to fix hand matches
+ 26. 
+.                                         by upc_id: keep if _n == 3 // keeping
+>  top 3 matches 
+ 27. 
+.                                         save `res_y`year'_m`month'_s1L'
+ 28.                                 restore
+ 29.                         }
+ 30. 
+.                         if "`size'" == "750ML"{
+ 31.                                 tempfile res_y`year'_m`month'_s750ML
+ 32.                                 tempfile raw_y`year'_m`month'_s750ML
+ 33.                                 preserve
+ 34.                                         keep if (purchase_month == `month'
+> ) ///
+>                                         & (purchase_year == `year') ///
+>                                         & (size1_amount == 750) 
+ 35. 
+.                                         matchit upc_id brand_string using `ps
+> _y`year'_m`month'_s750ML', idusing(record_num) txtusing(brand_string) overrid
+> e sim(ngram, 3)
+ 36. 
+.                                         gen neg_similscore = -similscore
+ 37. 
+.                                         sort upc_id neg_similscore // sorting
+>  by each UPC and then by match rank within
+ 38. 
+.                                         save  `raw_y`year'_m`month'_s750ML' /
+> / useful to fix hand matches
+ 39. 
+.                                         by upc_id: keep if _n <= 3 // keeping
+>  top 3 matches 
+ 40. 
+.                                         save `res_y`year'_m`month'_s750ML'
+ 41.                                 restore
+ 42.                         }
+ 43.                 }
+ 44.         }
+ 45. }
+(47,043 observations deleted)
+Matching current dataset with /tmp/St14235.000001
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000001
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000am saved
+(9 observations deleted)
+file /tmp/St14235.0000al saved
+(47,006 observations deleted)
+Matching current dataset with /tmp/St14235.000003
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000003
+Indexing USING file.
+0%
+60%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (88%)
+        40%               ...   (86%)
+        60%               ...   (84%)
+        80%               ...   (83%)
+        Done!
+Total search space saved by index: 84%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000ap saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000ao saved
+(46,822 observations deleted)
+Matching current dataset with /tmp/St14235.000005
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000005
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000as saved
+(65 observations deleted)
+file /tmp/St14235.0000ar saved
+(47,055 observations deleted)
+Matching current dataset with /tmp/St14235.000007
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000007
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000av saved
+(7 observations deleted)
+file /tmp/St14235.0000au saved
+(47,006 observations deleted)
+Matching current dataset with /tmp/St14235.000009
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000009
+Indexing USING file.
+0%
+60%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (86%)
+        40%               ...   (90%)
+        60%               ...   (90%)
+        80%               ...   (91%)
+        Done!
+Total search space saved by index: 91%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000b0 saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000ax saved
+(46,871 observations deleted)
+Matching current dataset with /tmp/St14235.00000b
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00000b
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (1%)
+        40%               ...   (0%)
+        60%               ...   (1%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000b3 saved
+(51 observations deleted)
+file /tmp/St14235.0000b2 saved
+(47,047 observations deleted)
+Matching current dataset with /tmp/St14235.00000d
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00000d
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000b6 saved
+(56 observations deleted)
+file /tmp/St14235.0000b5 saved
+(47,003 observations deleted)
+Matching current dataset with /tmp/St14235.00000f
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00000f
+Indexing USING file.
+0%
+60%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (90%)
+        40%               ...   (92%)
+        60%               ...   (91%)
+        80%               ...   (92%)
+        Done!
+Total search space saved by index: 91%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000b9 saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000b8 saved
+(46,818 observations deleted)
+Matching current dataset with /tmp/St14235.00000h
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00000h
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000bc saved
+(366 observations deleted)
+file /tmp/St14235.0000bb saved
+(47,068 observations deleted)
+Matching current dataset with /tmp/St14235.00000j
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00000j
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000bf saved
+(22 observations deleted)
+file /tmp/St14235.0000be saved
+(46,995 observations deleted)
+Matching current dataset with /tmp/St14235.00000l
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00000l
+Indexing USING file.
+0%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (74%)
+        40%               ...   (81%)
+        60%               ...   (82%)
+        80%               ...   (85%)
+        Done!
+Total search space saved by index: 86%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000bi saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000bh saved
+(46,859 observations deleted)
+Matching current dataset with /tmp/St14235.00000n
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00000n
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000bl saved
+(382 observations deleted)
+file /tmp/St14235.0000bk saved
+(47,042 observations deleted)
+Matching current dataset with /tmp/St14235.00000p
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00000p
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000bo saved
+(50 observations deleted)
+file /tmp/St14235.0000bn saved
+(46,989 observations deleted)
+Matching current dataset with /tmp/St14235.00000r
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00000r
+Indexing USING file.
+0%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (82%)
+        40%               ...   (86%)
+        60%               ...   (84%)
+        80%               ...   (84%)
+        Done!
+Total search space saved by index: 85%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000br saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000bq saved
+(46,792 observations deleted)
+Matching current dataset with /tmp/St14235.00000t
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00000t
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000bu saved
+(431 observations deleted)
+file /tmp/St14235.0000bt saved
+(47,063 observations deleted)
+Matching current dataset with /tmp/St14235.00000v
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00000v
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000bx saved
+(17 observations deleted)
+file /tmp/St14235.0000bw saved
+(47,010 observations deleted)
+Matching current dataset with /tmp/St14235.00000x
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00000x
+Indexing USING file.
+0%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (96%)
+        40%               ...   (94%)
+        60%               ...   (95%)
+        80%               ...   (92%)
+        Done!
+Total search space saved by index: 91%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000c2 saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000c1 saved
+(46,850 observations deleted)
+Matching current dataset with /tmp/St14235.000011
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000011
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000c5 saved
+(333 observations deleted)
+file /tmp/St14235.0000c4 saved
+(47,046 observations deleted)
+Matching current dataset with /tmp/St14235.000013
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000013
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000c8 saved
+(26 observations deleted)
+file /tmp/St14235.0000c7 saved
+(46,991 observations deleted)
+Matching current dataset with /tmp/St14235.000015
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000015
+Indexing USING file.
+0%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (97%)
+        40%               ...   (91%)
+        60%               ...   (89%)
+        80%               ...   (92%)
+        Done!
+Total search space saved by index: 90%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000cb saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000ca saved
+(46,829 observations deleted)
+Matching current dataset with /tmp/St14235.000017
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000017
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        100%              ...   (1%)
+        Done!
+Total search space saved by index: 1%
+file /tmp/St14235.0000ce saved
+(366 observations deleted)
+file /tmp/St14235.0000cd saved
+(47,060 observations deleted)
+Matching current dataset with /tmp/St14235.000019
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000019
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (1%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000ch saved
+(17 observations deleted)
+file /tmp/St14235.0000cg saved
+(46,992 observations deleted)
+Matching current dataset with /tmp/St14235.00001b
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00001b
+Indexing USING file.
+0%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (86%)
+        40%               ...   (82%)
+        60%               ...   (83%)
+        80%               ...   (81%)
+        Done!
+Total search space saved by index: 78%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000ck saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000cj saved
+(46,816 observations deleted)
+Matching current dataset with /tmp/St14235.00001d
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00001d
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000cn saved
+(316 observations deleted)
+file /tmp/St14235.0000cm saved
+(47,053 observations deleted)
+Matching current dataset with /tmp/St14235.00001f
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00001f
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (1%)
+        40%               ...   (1%)
+        60%               ...   (0%)
+        80%               ...   (1%)
+        Done!
+Total search space saved by index: 1%
+file /tmp/St14235.0000cq saved
+(59 observations deleted)
+file /tmp/St14235.0000cp saved
+(47,007 observations deleted)
+Matching current dataset with /tmp/St14235.00001h
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00001h
+Indexing USING file.
+0%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (92%)
+        40%               ...   (86%)
+        60%               ...   (89%)
+        80%               ...   (91%)
+        Done!
+Total search space saved by index: 91%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000ct saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000cs saved
+(46,821 observations deleted)
+Matching current dataset with /tmp/St14235.00001j
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00001j
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000cw saved
+(311 observations deleted)
+file /tmp/St14235.0000cv saved
+(47,052 observations deleted)
+Matching current dataset with /tmp/St14235.00001l
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00001l
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 1%
+file /tmp/St14235.0000d1 saved
+(42 observations deleted)
+file /tmp/St14235.0000d0 saved
+(47,007 observations deleted)
+Matching current dataset with /tmp/St14235.00001n
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00001n
+Indexing USING file.
+0%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (80%)
+        40%               ...   (88%)
+        60%               ...   (85%)
+        80%               ...   (87%)
+        Done!
+Total search space saved by index: 84%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000d4 saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000d3 saved
+(46,862 observations deleted)
+Matching current dataset with /tmp/St14235.00001p
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00001p
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (1%)
+        60%               ...   (0%)
+        80%               ...   (1%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000d7 saved
+(349 observations deleted)
+file /tmp/St14235.0000d6 saved
+(47,020 observations deleted)
+Matching current dataset with /tmp/St14235.00001r
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00001r
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000da saved
+(71 observations deleted)
+file /tmp/St14235.0000d9 saved
+(46,978 observations deleted)
+Matching current dataset with /tmp/St14235.00001t
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00001t
+Indexing USING file.
+0%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (73%)
+        40%               ...   (80%)
+        60%               ...   (81%)
+        80%               ...   (81%)
+        Done!
+Total search space saved by index: 79%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000dd saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000dc saved
+(46,800 observations deleted)
+Matching current dataset with /tmp/St14235.00001v
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00001v
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000dg saved
+(507 observations deleted)
+file /tmp/St14235.0000df saved
+(46,896 observations deleted)
+Matching current dataset with /tmp/St14235.00001x
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00001x
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000dj saved
+(1,356 observations deleted)
+file /tmp/St14235.0000di saved
+(46,862 observations deleted)
+Matching current dataset with /tmp/St14235.000021
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000021
+Indexing USING file.
+0%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (82%)
+        40%               ...   (81%)
+        60%               ...   (83%)
+        80%               ...   (84%)
+        Done!
+Total search space saved by index: 84%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000dm saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000dl saved
+(46,767 observations deleted)
+Matching current dataset with /tmp/St14235.000023
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000023
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (1%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000dp saved
+(587 observations deleted)
+file /tmp/St14235.0000do saved
+(47,046 observations deleted)
+Matching current dataset with /tmp/St14235.000025
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000025
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000ds saved
+(40 observations deleted)
+file /tmp/St14235.0000dr saved
+(47,024 observations deleted)
+Matching current dataset with /tmp/St14235.000027
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000027
+Indexing USING file.
+0%
+20%
+60%
+80%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (97%)
+        40%               ...   (95%)
+        60%               ...   (92%)
+        80%               ...   (92%)
+        Done!
+Total search space saved by index: 92%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000dv saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000du saved
+(46,851 observations deleted)
+Matching current dataset with /tmp/St14235.000029
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000029
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000e0 saved
+(386 observations deleted)
+file /tmp/St14235.0000dx saved
+(47,063 observations deleted)
+Matching current dataset with /tmp/St14235.00002b
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00002b
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000e3 saved
+(36 observations deleted)
+file /tmp/St14235.0000e2 saved
+(47,009 observations deleted)
+Matching current dataset with /tmp/St14235.00002d
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00002d
+Indexing USING file.
+0%
+40%
+60%
+80%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (90%)
+        40%               ...   (92%)
+        60%               ...   (92%)
+        80%               ...   (91%)
+        Done!
+Total search space saved by index: 91%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000e6 saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000e5 saved
+(46,877 observations deleted)
+Matching current dataset with /tmp/St14235.00002f
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00002f
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000e9 saved
+(353 observations deleted)
+file /tmp/St14235.0000e8 saved
+(47,047 observations deleted)
+Matching current dataset with /tmp/St14235.00002h
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00002h
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000ec saved
+(47 observations deleted)
+file /tmp/St14235.0000eb saved
+(47,025 observations deleted)
+Matching current dataset with /tmp/St14235.00002j
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00002j
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (87%)
+        40%               ...   (87%)
+        60%               ...   (88%)
+        80%               ...   (88%)
+        Done!
+Total search space saved by index: 87%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000ef saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000ee saved
+(46,850 observations deleted)
+Matching current dataset with /tmp/St14235.00002l
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00002l
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000ei saved
+(629 observations deleted)
+file /tmp/St14235.0000eh saved
+(47,058 observations deleted)
+Matching current dataset with /tmp/St14235.00002n
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00002n
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000el saved
+(886 observations deleted)
+file /tmp/St14235.0000ek saved
+(47,026 observations deleted)
+Matching current dataset with /tmp/St14235.00002p
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00002p
+Indexing USING file.
+0%
+20%
+40%
+80%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (91%)
+        40%               ...   (92%)
+        60%               ...   (92%)
+        80%               ...   (93%)
+        Done!
+Total search space saved by index: 94%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000eo saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000en saved
+(46,879 observations deleted)
+Matching current dataset with /tmp/St14235.00002r
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00002r
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000er saved
+(379 observations deleted)
+file /tmp/St14235.0000eq saved
+(47,044 observations deleted)
+Matching current dataset with /tmp/St14235.00002t
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00002t
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        100%              ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000eu saved
+(1,245 observations deleted)
+file /tmp/St14235.0000et saved
+(46,999 observations deleted)
+Matching current dataset with /tmp/St14235.00002v
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00002v
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (89%)
+        40%               ...   (88%)
+        60%               ...   (88%)
+        80%               ...   (89%)
+        Done!
+Total search space saved by index: 89%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000ex saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000ew saved
+(46,798 observations deleted)
+Matching current dataset with /tmp/St14235.00002x
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00002x
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000f2 saved
+(1,002 observations deleted)
+file /tmp/St14235.0000f1 saved
+(47,056 observations deleted)
+Matching current dataset with /tmp/St14235.000031
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000031
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (1%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 1%
+file /tmp/St14235.0000f5 saved
+(41 observations deleted)
+file /tmp/St14235.0000f4 saved
+(47,014 observations deleted)
+Matching current dataset with /tmp/St14235.000033
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000033
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (92%)
+        40%               ...   (92%)
+        60%               ...   (91%)
+        80%               ...   (91%)
+        Done!
+Total search space saved by index: 90%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000f8 saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000f7 saved
+(46,861 observations deleted)
+Matching current dataset with /tmp/St14235.000035
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000035
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 1%
+file /tmp/St14235.0000fb saved
+(344 observations deleted)
+file /tmp/St14235.0000fa saved
+(47,060 observations deleted)
+Matching current dataset with /tmp/St14235.000037
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000037
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (1%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000fe saved
+(361 observations deleted)
+file /tmp/St14235.0000fd saved
+(47,016 observations deleted)
+Matching current dataset with /tmp/St14235.000039
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000039
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (83%)
+        40%               ...   (86%)
+        60%               ...   (88%)
+        80%               ...   (88%)
+        Done!
+Total search space saved by index: 88%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000fh saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000fg saved
+(46,816 observations deleted)
+Matching current dataset with /tmp/St14235.00003b
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00003b
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000fk saved
+(602 observations deleted)
+file /tmp/St14235.0000fj saved
+(47,053 observations deleted)
+Matching current dataset with /tmp/St14235.00003d
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00003d
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000fn saved
+(44 observations deleted)
+file /tmp/St14235.0000fm saved
+(46,992 observations deleted)
+Matching current dataset with /tmp/St14235.00003f
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00003f
+Indexing USING file.
+0%
+40%
+60%
+80%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (93%)
+        40%               ...   (88%)
+        60%               ...   (88%)
+        80%               ...   (88%)
+        Done!
+Total search space saved by index: 88%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000fq saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000fp saved
+(46,875 observations deleted)
+Matching current dataset with /tmp/St14235.00003h
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00003h
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (1%)
+        40%               ...   (0%)
+        60%               ...   (1%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000ft saved
+(763 observations deleted)
+file /tmp/St14235.0000fs saved
+(47,065 observations deleted)
+Matching current dataset with /tmp/St14235.00003j
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00003j
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000fw saved
+(1,087 observations deleted)
+file /tmp/St14235.0000fv saved
+(47,031 observations deleted)
+Matching current dataset with /tmp/St14235.00003l
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00003l
+Indexing USING file.
+0%
+40%
+60%
+80%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (90%)
+        40%               ...   (91%)
+        60%               ...   (91%)
+        80%               ...   (91%)
+        100%              ...   (90%)
+        Done!
+Total search space saved by index: 90%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000g1 saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000g0 saved
+(46,875 observations deleted)
+Matching current dataset with /tmp/St14235.00003n
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00003n
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000g4 saved
+(551 observations deleted)
+file /tmp/St14235.0000g3 saved
+(47,085 observations deleted)
+Matching current dataset with /tmp/St14235.00003p
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00003p
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000g7 saved
+(775 observations deleted)
+file /tmp/St14235.0000g6 saved
+(47,005 observations deleted)
+Matching current dataset with /tmp/St14235.00003r
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00003r
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (86%)
+        40%               ...   (87%)
+        60%               ...   (87%)
+        80%               ...   (87%)
+        Done!
+Total search space saved by index: 86%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000ga saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000g9 saved
+(46,857 observations deleted)
+Matching current dataset with /tmp/St14235.00003t
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00003t
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (1%)
+        40%               ...   (0%)
+        60%               ...   (1%)
+        80%               ...   (1%)
+        100%              ...   (1%)
+        Done!
+Total search space saved by index: 1%
+file /tmp/St14235.0000gd saved
+(326 observations deleted)
+file /tmp/St14235.0000gc saved
+(47,020 observations deleted)
+Matching current dataset with /tmp/St14235.00003v
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00003v
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000gg saved
+(948 observations deleted)
+file /tmp/St14235.0000gf saved
+(47,006 observations deleted)
+Matching current dataset with /tmp/St14235.00003x
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00003x
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (84%)
+        40%               ...   (85%)
+        60%               ...   (85%)
+        80%               ...   (84%)
+        Done!
+Total search space saved by index: 84%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000gj saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000gi saved
+(46,847 observations deleted)
+Matching current dataset with /tmp/St14235.000041
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000041
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (1%)
+        40%               ...   (1%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 1%
+file /tmp/St14235.0000gm saved
+(482 observations deleted)
+file /tmp/St14235.0000gl saved
+(46,930 observations deleted)
+Matching current dataset with /tmp/St14235.000043
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000043
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000gp saved
+(2,805 observations deleted)
+file /tmp/St14235.0000go saved
+(46,899 observations deleted)
+Matching current dataset with /tmp/St14235.000045
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000045
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (81%)
+        40%               ...   (84%)
+        60%               ...   (85%)
+        80%               ...   (85%)
+        Done!
+Total search space saved by index: 86%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000gs saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000gr saved
+(46,781 observations deleted)
+Matching current dataset with /tmp/St14235.000047
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000047
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000gv saved
+(1,016 observations deleted)
+file /tmp/St14235.0000gu saved
+(47,050 observations deleted)
+Matching current dataset with /tmp/St14235.000049
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000049
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000h0 saved
+(296 observations deleted)
+file /tmp/St14235.0000gx saved
+(47,022 observations deleted)
+Matching current dataset with /tmp/St14235.00004b
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00004b
+Indexing USING file.
+0%
+20%
+40%
+80%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (86%)
+        40%               ...   (87%)
+        60%               ...   (87%)
+        80%               ...   (88%)
+        Done!
+Total search space saved by index: 87%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000h3 saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000h2 saved
+(46,917 observations deleted)
+Matching current dataset with /tmp/St14235.00004d
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00004d
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (1%)
+        Done!
+Total search space saved by index: 1%
+file /tmp/St14235.0000h6 saved
+(565 observations deleted)
+file /tmp/St14235.0000h5 saved
+(47,050 observations deleted)
+Matching current dataset with /tmp/St14235.00004f
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00004f
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000h9 saved
+(317 observations deleted)
+file /tmp/St14235.0000h8 saved
+(47,043 observations deleted)
+Matching current dataset with /tmp/St14235.00004h
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00004h
+Indexing USING file.
+0%
+40%
+60%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (89%)
+        40%               ...   (86%)
+        60%               ...   (88%)
+        80%               ...   (85%)
+        Done!
+Total search space saved by index: 86%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000hc saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000hb saved
+(46,916 observations deleted)
+Matching current dataset with /tmp/St14235.00004j
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00004j
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (1%)
+        40%               ...   (1%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000hf saved
+(579 observations deleted)
+file /tmp/St14235.0000he saved
+(47,048 observations deleted)
+Matching current dataset with /tmp/St14235.00004l
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00004l
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000hi saved
+(343 observations deleted)
+file /tmp/St14235.0000hh saved
+(47,019 observations deleted)
+Matching current dataset with /tmp/St14235.00004n
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00004n
+Indexing USING file.
+0%
+20%
+40%
+80%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (90%)
+        40%               ...   (85%)
+        60%               ...   (84%)
+        80%               ...   (81%)
+        Done!
+Total search space saved by index: 82%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000hl saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000hk saved
+(46,931 observations deleted)
+Matching current dataset with /tmp/St14235.00004p
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00004p
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (1%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000ho saved
+(494 observations deleted)
+file /tmp/St14235.0000hn saved
+(47,049 observations deleted)
+Matching current dataset with /tmp/St14235.00004r
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00004r
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (1%)
+        40%               ...   (1%)
+        60%               ...   (1%)
+        80%               ...   (1%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000hr saved
+(96 observations deleted)
+file /tmp/St14235.0000hq saved
+(47,030 observations deleted)
+Matching current dataset with /tmp/St14235.00004t
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00004t
+Indexing USING file.
+0%
+40%
+60%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (84%)
+        40%               ...   (87%)
+        60%               ...   (87%)
+        80%               ...   (88%)
+        Done!
+Total search space saved by index: 87%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000hu saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000ht saved
+(46,917 observations deleted)
+Matching current dataset with /tmp/St14235.00004v
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00004v
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000hx saved
+(629 observations deleted)
+file /tmp/St14235.0000hw saved
+(47,050 observations deleted)
+Matching current dataset with /tmp/St14235.00004x
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00004x
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000i2 saved
+(167 observations deleted)
+file /tmp/St14235.0000i1 saved
+(47,016 observations deleted)
+Matching current dataset with /tmp/St14235.000051
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000051
+Indexing USING file.
+0%
+40%
+60%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (86%)
+        40%               ...   (85%)
+        60%               ...   (82%)
+        80%               ...   (82%)
+        Done!
+Total search space saved by index: 81%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000i5 saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000i4 saved
+(46,895 observations deleted)
+Matching current dataset with /tmp/St14235.000053
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000053
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (1%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 1%
+file /tmp/St14235.0000i8 saved
+(588 observations deleted)
+file /tmp/St14235.0000i7 saved
+(47,061 observations deleted)
+Matching current dataset with /tmp/St14235.000055
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000055
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (1%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000ib saved
+(181 observations deleted)
+file /tmp/St14235.0000ia saved
+(47,003 observations deleted)
+Matching current dataset with /tmp/St14235.000057
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000057
+Indexing USING file.
+0%
+40%
+60%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (82%)
+        40%               ...   (84%)
+        60%               ...   (84%)
+        80%               ...   (84%)
+        Done!
+Total search space saved by index: 83%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000ie saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000id saved
+(46,872 observations deleted)
+Matching current dataset with /tmp/St14235.000059
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000059
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (1%)
+        40%               ...   (1%)
+        60%               ...   (0%)
+        80%               ...   (1%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000ih saved
+(771 observations deleted)
+file /tmp/St14235.0000ig saved
+(47,073 observations deleted)
+Matching current dataset with /tmp/St14235.00005b
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00005b
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (1%)
+        40%               ...   (1%)
+        60%               ...   (0%)
+        80%               ...   (1%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000ik saved
+(194 observations deleted)
+file /tmp/St14235.0000ij saved
+(47,021 observations deleted)
+Matching current dataset with /tmp/St14235.00005d
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00005d
+Indexing USING file.
+0%
+40%
+60%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (85%)
+        40%               ...   (86%)
+        60%               ...   (85%)
+        80%               ...   (83%)
+        Done!
+Total search space saved by index: 83%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000in saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000im saved
+(46,884 observations deleted)
+Matching current dataset with /tmp/St14235.00005f
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00005f
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000iq saved
+(720 observations deleted)
+file /tmp/St14235.0000ip saved
+(47,060 observations deleted)
+Matching current dataset with /tmp/St14235.00005h
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00005h
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (1%)
+        40%               ...   (1%)
+        60%               ...   (0%)
+        80%               ...   (1%)
+        Done!
+Total search space saved by index: 1%
+file /tmp/St14235.0000it saved
+(163 observations deleted)
+file /tmp/St14235.0000is saved
+(46,996 observations deleted)
+Matching current dataset with /tmp/St14235.00005j
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00005j
+Indexing USING file.
+0%
+40%
+60%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (89%)
+        40%               ...   (87%)
+        60%               ...   (84%)
+        80%               ...   (83%)
+        Done!
+Total search space saved by index: 83%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000iw saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000iv saved
+(46,877 observations deleted)
+Matching current dataset with /tmp/St14235.00005l
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00005l
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000j1 saved
+(566 observations deleted)
+file /tmp/St14235.0000j0 saved
+(47,067 observations deleted)
+Matching current dataset with /tmp/St14235.00005n
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00005n
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000j4 saved
+(237 observations deleted)
+file /tmp/St14235.0000j3 saved
+(47,027 observations deleted)
+Matching current dataset with /tmp/St14235.00005p
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00005p
+Indexing USING file.
+0%
+20%
+40%
+80%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (90%)
+        40%               ...   (87%)
+        60%               ...   (86%)
+        80%               ...   (86%)
+        Done!
+Total search space saved by index: 86%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000j7 saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000j6 saved
+(46,936 observations deleted)
+Matching current dataset with /tmp/St14235.00005r
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00005r
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (1%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000ja saved
+(493 observations deleted)
+file /tmp/St14235.0000j9 saved
+(47,047 observations deleted)
+Matching current dataset with /tmp/St14235.00005t
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00005t
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (1%)
+        60%               ...   (0%)
+        80%               ...   (1%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000jd saved
+(81 observations deleted)
+file /tmp/St14235.0000jc saved
+(47,026 observations deleted)
+Matching current dataset with /tmp/St14235.00005v
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00005v
+Indexing USING file.
+0%
+20%
+60%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (79%)
+        40%               ...   (79%)
+        60%               ...   (79%)
+        80%               ...   (78%)
+        Done!
+Total search space saved by index: 78%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000jg saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000jf saved
+(46,939 observations deleted)
+Matching current dataset with /tmp/St14235.00005x
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00005x
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        100%              ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000jj saved
+(590 observations deleted)
+file /tmp/St14235.0000ji saved
+(47,012 observations deleted)
+Matching current dataset with /tmp/St14235.000061
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000061
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (1%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000jm saved
+(160 observations deleted)
+file /tmp/St14235.0000jl saved
+(47,016 observations deleted)
+Matching current dataset with /tmp/St14235.000063
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000063
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (81%)
+        40%               ...   (82%)
+        60%               ...   (82%)
+        80%               ...   (82%)
+        Done!
+Total search space saved by index: 84%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000jp saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000jo saved
+(46,904 observations deleted)
+Matching current dataset with /tmp/St14235.000065
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000065
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 1%
+file /tmp/St14235.0000js saved
+(659 observations deleted)
+file /tmp/St14235.0000jr saved
+(46,923 observations deleted)
+Matching current dataset with /tmp/St14235.000067
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000067
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000jv saved
+(332 observations deleted)
+file /tmp/St14235.0000ju saved
+(46,913 observations deleted)
+Matching current dataset with /tmp/St14235.000069
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000069
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (82%)
+        40%               ...   (82%)
+        60%               ...   (82%)
+        80%               ...   (83%)
+        Done!
+Total search space saved by index: 84%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000k0 saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000jx saved
+(46,842 observations deleted)
+Matching current dataset with /tmp/St14235.00006b
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00006b
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (1%)
+        40%               ...   (1%)
+        60%               ...   (1%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 1%
+file /tmp/St14235.0000k3 saved
+(662 observations deleted)
+file /tmp/St14235.0000k2 saved
+(47,042 observations deleted)
+Matching current dataset with /tmp/St14235.00006d
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00006d
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000k6 saved
+(91 observations deleted)
+file /tmp/St14235.0000k5 saved
+(47,042 observations deleted)
+Matching current dataset with /tmp/St14235.00006f
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00006f
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (80%)
+        40%               ...   (81%)
+        60%               ...   (80%)
+        80%               ...   (82%)
+        Done!
+Total search space saved by index: 82%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000k9 saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000k8 saved
+(46,955 observations deleted)
+Matching current dataset with /tmp/St14235.00006h
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00006h
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000kc saved
+(489 observations deleted)
+file /tmp/St14235.0000kb saved
+(47,062 observations deleted)
+Matching current dataset with /tmp/St14235.00006j
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00006j
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000kf saved
+(74 observations deleted)
+file /tmp/St14235.0000ke saved
+(47,018 observations deleted)
+Matching current dataset with /tmp/St14235.00006l
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00006l
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (85%)
+        40%               ...   (86%)
+        60%               ...   (86%)
+        80%               ...   (86%)
+        Done!
+Total search space saved by index: 85%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000ki saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000kh saved
+(46,926 observations deleted)
+Matching current dataset with /tmp/St14235.00006n
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00006n
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (1%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 1%
+file /tmp/St14235.0000kl saved
+(613 observations deleted)
+file /tmp/St14235.0000kk saved
+(47,035 observations deleted)
+Matching current dataset with /tmp/St14235.00006p
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00006p
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000ko saved
+(89 observations deleted)
+file /tmp/St14235.0000kn saved
+(46,997 observations deleted)
+Matching current dataset with /tmp/St14235.00006r
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00006r
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (77%)
+        40%               ...   (74%)
+        60%               ...   (73%)
+        80%               ...   (73%)
+        Done!
+Total search space saved by index: 73%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000kr saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000kq saved
+(46,906 observations deleted)
+Matching current dataset with /tmp/St14235.00006t
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00006t
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000ku saved
+(544 observations deleted)
+file /tmp/St14235.0000kt saved
+(47,059 observations deleted)
+Matching current dataset with /tmp/St14235.00006v
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00006v
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000kx saved
+(50 observations deleted)
+file /tmp/St14235.0000kw saved
+(47,033 observations deleted)
+Matching current dataset with /tmp/St14235.00006x
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00006x
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (79%)
+        40%               ...   (79%)
+        60%               ...   (77%)
+        80%               ...   (75%)
+        Done!
+Total search space saved by index: 75%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000l2 saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000l1 saved
+(46,906 observations deleted)
+Matching current dataset with /tmp/St14235.000071
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000071
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (1%)
+        Done!
+Total search space saved by index: 1%
+file /tmp/St14235.0000l5 saved
+(521 observations deleted)
+file /tmp/St14235.0000l4 saved
+(47,057 observations deleted)
+Matching current dataset with /tmp/St14235.000073
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000073
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000l8 saved
+(43 observations deleted)
+file /tmp/St14235.0000l7 saved
+(47,026 observations deleted)
+Matching current dataset with /tmp/St14235.000075
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000075
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (77%)
+        40%               ...   (76%)
+        60%               ...   (78%)
+        80%               ...   (76%)
+        Done!
+Total search space saved by index: 77%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000lb saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000la saved
+(46,884 observations deleted)
+Matching current dataset with /tmp/St14235.000077
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000077
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (1%)
+        Done!
+Total search space saved by index: 1%
+file /tmp/St14235.0000le saved
+(529 observations deleted)
+file /tmp/St14235.0000ld saved
+(47,046 observations deleted)
+Matching current dataset with /tmp/St14235.000079
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000079
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000lh saved
+(83 observations deleted)
+file /tmp/St14235.0000lg saved
+(47,040 observations deleted)
+Matching current dataset with /tmp/St14235.00007b
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00007b
+Indexing USING file.
+0%
+40%
+60%
+80%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (65%)
+        40%               ...   (71%)
+        60%               ...   (72%)
+        80%               ...   (72%)
+        Done!
+Total search space saved by index: 72%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000lk saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000lj saved
+(46,906 observations deleted)
+Matching current dataset with /tmp/St14235.00007d
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00007d
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000ln saved
+(550 observations deleted)
+file /tmp/St14235.0000lm saved
+(47,063 observations deleted)
+Matching current dataset with /tmp/St14235.00007f
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00007f
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000lq saved
+(43 observations deleted)
+file /tmp/St14235.0000lp saved
+(47,031 observations deleted)
+Matching current dataset with /tmp/St14235.00007h
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00007h
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (83%)
+        40%               ...   (83%)
+        60%               ...   (84%)
+        80%               ...   (83%)
+        100%              ...   (84%)
+        Done!
+Total search space saved by index: 84%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000lt saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000ls saved
+(46,905 observations deleted)
+Matching current dataset with /tmp/St14235.00007j
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00007j
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000lw saved
+(553 observations deleted)
+file /tmp/St14235.0000lv saved
+(47,058 observations deleted)
+Matching current dataset with /tmp/St14235.00007l
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00007l
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (1%)
+        40%               ...   (1%)
+        60%               ...   (0%)
+        80%               ...   (1%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000m1 saved
+(316 observations deleted)
+file /tmp/St14235.0000m0 saved
+(47,032 observations deleted)
+Matching current dataset with /tmp/St14235.00007n
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00007n
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (92%)
+        40%               ...   (85%)
+        60%               ...   (87%)
+        80%               ...   (86%)
+        Done!
+Total search space saved by index: 86%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000m4 saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000m3 saved
+(46,899 observations deleted)
+Matching current dataset with /tmp/St14235.00007p
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00007p
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 1%
+file /tmp/St14235.0000m7 saved
+(657 observations deleted)
+file /tmp/St14235.0000m6 saved
+(47,055 observations deleted)
+Matching current dataset with /tmp/St14235.00007r
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00007r
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 1%
+file /tmp/St14235.0000ma saved
+(364 observations deleted)
+file /tmp/St14235.0000m9 saved
+(47,050 observations deleted)
+Matching current dataset with /tmp/St14235.00007t
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00007t
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (90%)
+        40%               ...   (83%)
+        60%               ...   (82%)
+        80%               ...   (83%)
+        Done!
+Total search space saved by index: 83%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000md saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000mc saved
+(46,949 observations deleted)
+Matching current dataset with /tmp/St14235.00007v
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00007v
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        100%              ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000mg saved
+(503 observations deleted)
+file /tmp/St14235.0000mf saved
+(47,058 observations deleted)
+Matching current dataset with /tmp/St14235.00007x
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00007x
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (1%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000mj saved
+(143 observations deleted)
+file /tmp/St14235.0000mi saved
+(47,023 observations deleted)
+Matching current dataset with /tmp/St14235.000081
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000081
+Indexing USING file.
+0%
+40%
+60%
+80%
+100%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (76%)
+        40%               ...   (82%)
+        60%               ...   (83%)
+        80%               ...   (81%)
+        Done!
+Total search space saved by index: 81%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000mm saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000ml saved
+(46,907 observations deleted)
+Matching current dataset with /tmp/St14235.000083
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000083
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000mp saved
+(509 observations deleted)
+file /tmp/St14235.0000mo saved
+(47,014 observations deleted)
+Matching current dataset with /tmp/St14235.000085
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000085
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (1%)
+        40%               ...   (1%)
+        60%               ...   (0%)
+        80%               ...   (1%)
+        Done!
+Total search space saved by index: 1%
+file /tmp/St14235.0000ms saved
+(170 observations deleted)
+file /tmp/St14235.0000mr saved
+(47,009 observations deleted)
+Matching current dataset with /tmp/St14235.000087
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000087
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (87%)
+        40%               ...   (85%)
+        60%               ...   (86%)
+        80%               ...   (86%)
+        Done!
+Total search space saved by index: 85%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000mv saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000mu saved
+(46,891 observations deleted)
+Matching current dataset with /tmp/St14235.000089
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000089
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (1%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000n0 saved
+(659 observations deleted)
+file /tmp/St14235.0000mx saved
+(46,937 observations deleted)
+Matching current dataset with /tmp/St14235.00008b
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00008b
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000n3 saved
+(668 observations deleted)
+file /tmp/St14235.0000n2 saved
+(46,948 observations deleted)
+Matching current dataset with /tmp/St14235.00008d
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00008d
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (87%)
+        40%               ...   (86%)
+        60%               ...   (86%)
+        80%               ...   (85%)
+        Done!
+Total search space saved by index: 86%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000n6 saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000n5 saved
+(46,867 observations deleted)
+Matching current dataset with /tmp/St14235.00008f
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00008f
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 1%
+file /tmp/St14235.0000n9 saved
+(756 observations deleted)
+file /tmp/St14235.0000n8 saved
+(47,050 observations deleted)
+Matching current dataset with /tmp/St14235.00008h
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00008h
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (1%)
+        60%               ...   (0%)
+        80%               ...   (1%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000nc saved
+(171 observations deleted)
+file /tmp/St14235.0000nb saved
+(47,038 observations deleted)
+Matching current dataset with /tmp/St14235.00008j
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00008j
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (87%)
+        40%               ...   (85%)
+        60%               ...   (85%)
+        80%               ...   (85%)
+        Done!
+Total search space saved by index: 84%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000nf saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000ne saved
+(46,945 observations deleted)
+Matching current dataset with /tmp/St14235.00008l
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00008l
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (1%)
+        40%               ...   (0%)
+        60%               ...   (1%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000ni saved
+(480 observations deleted)
+file /tmp/St14235.0000nh saved
+(47,053 observations deleted)
+Matching current dataset with /tmp/St14235.00008n
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00008n
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (1%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000nl saved
+(193 observations deleted)
+file /tmp/St14235.0000nk saved
+(47,041 observations deleted)
+Matching current dataset with /tmp/St14235.00008p
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00008p
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (85%)
+        40%               ...   (83%)
+        60%               ...   (84%)
+        80%               ...   (82%)
+        Done!
+Total search space saved by index: 81%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000no saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000nn saved
+(46,938 observations deleted)
+Matching current dataset with /tmp/St14235.00008r
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00008r
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (1%)
+        40%               ...   (1%)
+        60%               ...   (0%)
+        80%               ...   (1%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000nr saved
+(581 observations deleted)
+file /tmp/St14235.0000nq saved
+(47,032 observations deleted)
+Matching current dataset with /tmp/St14235.00008t
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00008t
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (1%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000nu saved
+(479 observations deleted)
+file /tmp/St14235.0000nt saved
+(47,041 observations deleted)
+Matching current dataset with /tmp/St14235.00008v
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00008v
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (76%)
+        40%               ...   (77%)
+        60%               ...   (79%)
+        80%               ...   (78%)
+        Done!
+Total search space saved by index: 77%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000nx saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000nw saved
+(46,911 observations deleted)
+Matching current dataset with /tmp/St14235.00008x
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00008x
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000o2 saved
+(679 observations deleted)
+file /tmp/St14235.0000o1 saved
+(47,058 observations deleted)
+Matching current dataset with /tmp/St14235.000091
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000091
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (1%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000o5 saved
+(87 observations deleted)
+file /tmp/St14235.0000o4 saved
+(47,042 observations deleted)
+Matching current dataset with /tmp/St14235.000093
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000093
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (93%)
+        40%               ...   (90%)
+        60%               ...   (88%)
+        80%               ...   (86%)
+        Done!
+Total search space saved by index: 86%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000o8 saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000o7 saved
+(46,913 observations deleted)
+Matching current dataset with /tmp/St14235.000095
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000095
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file /tmp/St14235.0000ob saved
+(62 observations deleted)
+file /tmp/St14235.0000oa saved
+(47,052 observations deleted)
+Matching current dataset with /tmp/St14235.000097
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000097
+Indexing USING file.
+0%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (.%)
+        40%               ...   (.%)
+        60%               ...   (.%)
+        80%               ...   (.%)
+        Done!
+Total search space saved by index: .%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000oe saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000od saved
+(47,037 observations deleted)
+Matching current dataset with /tmp/St14235.000099
+Similarity function: ngram
+Loading USING file: /tmp/St14235.000099
+Indexing USING file.
+0%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (.%)
+        40%               ...   (.%)
+        60%               ...   (.%)
+        80%               ...   (.%)
+        Done!
+Total search space saved by index: .%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000oh saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000og saved
+(46,902 observations deleted)
+Matching current dataset with /tmp/St14235.00009b
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00009b
+Indexing USING file.
+0%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (.%)
+        40%               ...   (.%)
+        60%               ...   (.%)
+        80%               ...   (.%)
+        Done!
+Total search space saved by index: .%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000ok saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000oj saved
+(47,067 observations deleted)
+Matching current dataset with /tmp/St14235.00009d
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00009d
+Indexing USING file.
+0%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (.%)
+        40%               ...   (.%)
+        60%               ...   (.%)
+        80%               ...   (.%)
+        Done!
+Total search space saved by index: .%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000on saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000om saved
+(47,032 observations deleted)
+Matching current dataset with /tmp/St14235.00009f
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00009f
+Indexing USING file.
+0%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (.%)
+        40%               ...   (.%)
+        60%               ...   (.%)
+        80%               ...   (.%)
+        Done!
+Total search space saved by index: .%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000oq saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000op saved
+(46,920 observations deleted)
+Matching current dataset with /tmp/St14235.00009h
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00009h
+Indexing USING file.
+0%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (.%)
+        40%               ...   (.%)
+        60%               ...   (.%)
+        80%               ...   (.%)
+        Done!
+Total search space saved by index: .%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000ot saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000os saved
+(47,061 observations deleted)
+Matching current dataset with /tmp/St14235.00009j
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00009j
+Indexing USING file.
+0%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (.%)
+        40%               ...   (.%)
+        60%               ...   (.%)
+        80%               ...   (.%)
+        Done!
+Total search space saved by index: .%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000ow saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000ov saved
+(47,029 observations deleted)
+Matching current dataset with /tmp/St14235.00009l
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00009l
+Indexing USING file.
+0%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (.%)
+        40%               ...   (.%)
+        60%               ...   (.%)
+        80%               ...   (.%)
+        Done!
+Total search space saved by index: .%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000p1 saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000p0 saved
+(46,892 observations deleted)
+Matching current dataset with /tmp/St14235.00009n
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00009n
+Indexing USING file.
+0%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (.%)
+        40%               ...   (.%)
+        60%               ...   (.%)
+        80%               ...   (.%)
+        Done!
+Total search space saved by index: .%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000p4 saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000p3 saved
+(47,052 observations deleted)
+Matching current dataset with /tmp/St14235.00009p
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00009p
+Indexing USING file.
+0%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (.%)
+        40%               ...   (.%)
+        60%               ...   (.%)
+        80%               ...   (.%)
+        Done!
+Total search space saved by index: .%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000p7 saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000p6 saved
+(47,032 observations deleted)
+Matching current dataset with /tmp/St14235.00009r
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00009r
+Indexing USING file.
+0%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (.%)
+        40%               ...   (.%)
+        60%               ...   (.%)
+        80%               ...   (.%)
+        Done!
+Total search space saved by index: .%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000pa saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000p9 saved
+(46,920 observations deleted)
+Matching current dataset with /tmp/St14235.00009t
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00009t
+Indexing USING file.
+0%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (.%)
+        40%               ...   (.%)
+        60%               ...   (.%)
+        80%               ...   (.%)
+        Done!
+Total search space saved by index: .%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000pd saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000pc saved
+(47,068 observations deleted)
+Matching current dataset with /tmp/St14235.00009v
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00009v
+Indexing USING file.
+0%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (.%)
+        40%               ...   (.%)
+        60%               ...   (.%)
+        80%               ...   (.%)
+        Done!
+Total search space saved by index: .%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000pg saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000pf saved
+(47,057 observations deleted)
+Matching current dataset with /tmp/St14235.00009x
+Similarity function: ngram
+Loading USING file: /tmp/St14235.00009x
+Indexing USING file.
+0%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (.%)
+        40%               ...   (.%)
+        60%               ...   (.%)
+        80%               ...   (.%)
+        Done!
+Total search space saved by index: .%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000pj saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000pi saved
+(46,921 observations deleted)
+Matching current dataset with /tmp/St14235.0000a1
+Similarity function: ngram
+Loading USING file: /tmp/St14235.0000a1
+Indexing USING file.
+0%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (.%)
+        40%               ...   (.%)
+        60%               ...   (.%)
+        80%               ...   (.%)
+        Done!
+Total search space saved by index: .%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000pm saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000pl saved
+(47,051 observations deleted)
+Matching current dataset with /tmp/St14235.0000a3
+Similarity function: ngram
+Loading USING file: /tmp/St14235.0000a3
+Indexing USING file.
+0%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (.%)
+        40%               ...   (.%)
+        60%               ...   (.%)
+        80%               ...   (.%)
+        Done!
+Total search space saved by index: .%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000pp saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000po saved
+(47,043 observations deleted)
+Matching current dataset with /tmp/St14235.0000a5
+Similarity function: ngram
+Loading USING file: /tmp/St14235.0000a5
+Indexing USING file.
+0%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (.%)
+        40%               ...   (.%)
+        60%               ...   (.%)
+        80%               ...   (.%)
+        Done!
+Total search space saved by index: .%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000ps saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000pr saved
+(46,928 observations deleted)
+Matching current dataset with /tmp/St14235.0000a7
+Similarity function: ngram
+Loading USING file: /tmp/St14235.0000a7
+Indexing USING file.
+0%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (.%)
+        40%               ...   (.%)
+        60%               ...   (.%)
+        80%               ...   (.%)
+        Done!
+Total search space saved by index: .%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000pv saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000pu saved
+(47,015 observations deleted)
+Matching current dataset with /tmp/St14235.0000a9
+Similarity function: ngram
+Loading USING file: /tmp/St14235.0000a9
+Indexing USING file.
+0%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (.%)
+        40%               ...   (.%)
+        60%               ...   (.%)
+        80%               ...   (.%)
+        Done!
+Total search space saved by index: .%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000q0 saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000px saved
+(47,024 observations deleted)
+Matching current dataset with /tmp/St14235.0000ab
+Similarity function: ngram
+Loading USING file: /tmp/St14235.0000ab
+Indexing USING file.
+0%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (.%)
+        40%               ...   (.%)
+        60%               ...   (.%)
+        80%               ...   (.%)
+        Done!
+Total search space saved by index: .%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000q3 saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000q2 saved
+(46,914 observations deleted)
+Matching current dataset with /tmp/St14235.0000ad
+Similarity function: ngram
+Loading USING file: /tmp/St14235.0000ad
+Indexing USING file.
+0%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (.%)
+        40%               ...   (.%)
+        60%               ...   (.%)
+        80%               ...   (.%)
+        Done!
+Total search space saved by index: .%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000q6 saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000q5 saved
+(46,930 observations deleted)
+Matching current dataset with /tmp/St14235.0000af
+Similarity function: ngram
+Loading USING file: /tmp/St14235.0000af
+Indexing USING file.
+0%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (.%)
+        40%               ...   (.%)
+        60%               ...   (.%)
+        80%               ...   (.%)
+        Done!
+Total search space saved by index: .%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000q9 saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000q8 saved
+(46,988 observations deleted)
+Matching current dataset with /tmp/St14235.0000ah
+Similarity function: ngram
+Loading USING file: /tmp/St14235.0000ah
+Indexing USING file.
+0%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (.%)
+        40%               ...   (.%)
+        60%               ...   (.%)
+        80%               ...   (.%)
+        Done!
+Total search space saved by index: .%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000qc saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000qb saved
+(46,907 observations deleted)
+Matching current dataset with /tmp/St14235.0000aj
+Similarity function: ngram
+Loading USING file: /tmp/St14235.0000aj
+Indexing USING file.
+0%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (.%)
+        40%               ...   (.%)
+        60%               ...   (.%)
+        80%               ...   (.%)
+        Done!
+Total search space saved by index: .%
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000qf saved
+(note: dataset contains 0 observations)
+file /tmp/St14235.0000qe saved
+
+. 
+. clear
+
+. 
+. local sizes = "175L 1L 750ML"
+
+. 
+. foreach year in `years'{
+  2.         foreach month in `months'{
+  3.                 foreach size in `sizes'{
+  4.                         append using `res_y`year'_m`month'_s`size''
+  5.                 }
+  6.         }
+  7. }                       
+(note: variable upc_id was int, now double to accommodate using data's
+       values)
+(note: variable brand_string was str52, now str244 to accommodate using
+       data's values)
+(note: variable record_num was int, now double to accommodate using data's
+       values)
+(note: variable brand_string1 was str54, now str244 to accommodate using
+       data's values)
+
+. 
+. save upc_crosswalk, replace
+file upc_crosswalk.dta saved
+
+. export delim using "upc_crosswalk.csv", replace delim(",") quote
+file upc_crosswalk.csv saved
+
+. 
+. clear
+
+. 
+. foreach year in `years'{
+  2.         foreach month in `months'{
+  3.                 foreach size in `sizes'{
+  4.                         append using `raw_y`year'_m`month'_s`size''
+  5.                 }
+  6.         }
+  7. }                       
+(note: variable upc_id was int, now double to accommodate using data's
+       values)
+(note: variable brand_string was str52, now str244 to accommodate using
+       data's values)
+(note: variable record_num was int, now double to accommodate using data's
+       values)
+(note: variable brand_string1 was str54, now str244 to accommodate using
+       data's values)
+
+. 
+. save upc_match_raw, replace
+file upc_match_raw.dta saved
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/gh8728/Projects/Liquor/Data/combined/NYS_UPC_match.txt
+  log type:  text
+ closed on:  29 Jul 2016, 12:38:30
+-------------------------------------------------------------------------------

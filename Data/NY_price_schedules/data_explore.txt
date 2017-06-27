@@ -1,0 +1,153 @@
+-------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/gh8728/Projects/Liquor/Data/NY_price_schedules/data_explore.txt
+  log type:  text
+ opened on:  28 Feb 2017, 13:07:55
+
+. 
+. use old_format_months
+
+. 
+. drop _merge
+
+. 
+. // distribution of number of price segments
+. preserve
+
+.         sort record_num option
+
+.         bys record_num: keep if _n == _N
+(789,055 observations deleted)
+
+.         replace option = option+1
+(319,533 real changes made)
+
+.         hist option, discrete percent xtitle("Price Schedule Parts")
+(start=1, width=1)
+
+.         graph export option_hist.pdf, replace
+(file option_hist.pdf written in PDF format)
+
+. restore
+
+. 
+. // trying to pin down how schedules change over time
+. reshape wide disc_p disc_q disc_dollars actual_p tariff norm_p norm_tariff, i(record_num) j(option)
+(note: j = 0 1 2 3 4 5 6 7 8 9 10 11)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                  1.1e+06   ->  319533
+Number of variables                  33   ->     109
+j variable (12 values)           option   ->   (dropped)
+xij variables:
+                                 disc_p   ->   disc_p0 disc_p1 ... disc_p11
+                                 disc_q   ->   disc_q0 disc_q1 ... disc_q11
+                           disc_dollars   ->   disc_dollars0 disc_dollars1 ... disc_dollars11
+                               actual_p   ->   actual_p0 actual_p1 ... actual_p11
+                                 tariff   ->   tariff0 tariff1 ... tariff11
+                                 norm_p   ->   norm_p0 norm_p1 ... norm_p11
+                            norm_tariff   ->   norm_tariff0 norm_tariff1 ... norm_tariff11
+-----------------------------------------------------------------------------
+
+. egen product = group(size brand_name brand_label_reg_id nv_serial_number) // "product" is a brand lab
+> el id and a wholesaler id
+
+. gen str_month = string(posting_month+1,"%02.0f")
+
+. gen str_year = string(posting_year)
+
+. gen str_date = str_year + "-" + str_month
+
+. gen date_n = monthly(str_date,"YM")
+
+. format date_n %tm
+
+. 
+. /* dropping some duplicates. Appears to be due to weak definition of a "product"
+> given the variables in a data set. Works mostly - but some producers appear to 
+> overlap numbers */
+. duplicates tag product date_n, gen(tag)
+
+Duplicates in terms of product date_n
+
+. drop if tag > 0
+(65,040 observations deleted)
+
+. 
+. xtset product date_n
+       panel variable:  product (unbalanced)
+        time variable:  date_n, 2009m1 to 2014m4, but with gaps
+                delta:  1 month
+
+. 
+. gen p0_diff = actual_p0 - L.actual_p0
+(51,131 missing values generated)
+
+. gen p1_p0spread = actual_p0 - actual_p1
+(292 missing values generated)
+
+. gen spread_diff = p1_p0spread - L.p1_p0spread
+(51,357 missing values generated)
+
+. 
+. tabstat disc_q1 p1_p0spread p0_diff spread_diff if discount_size_type == "CASE", stat(p1 p5 p25 p50 p
+> 75 p95 p99 mean) columns(statistics)
+
+    variable |        p1        p5       p25       p50       p75       p95       p99      mean
+-------------+--------------------------------------------------------------------------------
+     disc_q1 |         1         2         2         2         3         6       121  5.095761
+ p1_p0spread |  .5999985         2  4.979996         9     15.43  47.50999       123  15.61932
+     p0_diff | -3.960007 -3.160004         0         0         0  3.400009        12  .8409231
+ spread_diff | -2.009995         0         0         0         0         0  5.990005  .0505918
+----------------------------------------------------------------------------------------------
+
+. tabstat disc_q1 p1_p0spread p0_diff spread_diff if discount_size_type == "BOTTLE", stat(p1 p5 p25 p50
+>  p75 p95 p99 mean) columns(statistics)
+
+    variable |        p1        p5       p25       p50       p75       p95       p99      mean
+-------------+--------------------------------------------------------------------------------
+     disc_q1 |         2         2         2         3         3        12        12  3.748789
+ p1_p0spread |  .0999999  .3299999  .8500004  1.669998      3.26        10        32  3.369219
+     p0_diff | -.6599998 -.2600002         0         0         0  .2800007  1.419998 -.4037776
+ spread_diff |     -1.74         0         0         0         0         0  1.280001 -.0447435
+----------------------------------------------------------------------------------------------
+
+. 
+. gen p0_diff_pct = (actual_p0 - L.actual_p0)/L.actual_p0
+(51,131 missing values generated)
+
+. gen p1_p0spread_pct = (actual_p0 - actual_p1)/actual_p0
+(292 missing values generated)
+
+. gen spread_diff_pct = p1_p0spread_pct - L.p1_p0spread_pct
+(51,357 missing values generated)
+
+. 
+. tabstat p1_p0spread_pct p0_diff_pct spread_diff_pct if discount_size_type == "CASE", stat(p1 p5 p25 p
+> 50 p75 p95 p99 mean) columns(statistics)
+
+    variable |        p1        p5       p25       p50       p75       p95       p99      mean
+-------------+--------------------------------------------------------------------------------
+p1_p0sprea~t |  .0061839  .0168856   .039267       .06  .1015704  .2265194  .8083333  .0919556
+ p0_diff_pct | -.0394212 -.0134709         0         0         0  .0228986  .0748873  .0343898
+spread_dif~t | -.0151524 -.0011293         0         0         0  .0007038  .0248526 -.0002718
+----------------------------------------------------------------------------------------------
+
+. tabstat p1_p0spread_pct p0_diff_pct spread_diff_pct if discount_size_type == "BOTTLE", stat(p1 p5 p25
+>  p50 p75 p95 p99 mean) columns(statistics)
+
+    variable |        p1        p5       p25       p50       p75       p95       p99      mean
+-------------+--------------------------------------------------------------------------------
+p1_p0sprea~t |  .0048125  .0153031  .0338983  .0547945  .0909308  .1954652  .4390426  .0791504
+ p0_diff_pct | -.0269912 -.0068855         0         0         0  .0119524  .0431355 -.0005594
+spread_dif~t | -.0356394 -.0006842         0         0         0  .0004034  .0412833  .0000685
+----------------------------------------------------------------------------------------------
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/gh8728/Projects/Liquor/Data/NY_price_schedules/data_explore.txt
+  log type:  text
+ closed on:  28 Feb 2017, 13:09:09
+-------------------------------------------------------------------------------------------------------

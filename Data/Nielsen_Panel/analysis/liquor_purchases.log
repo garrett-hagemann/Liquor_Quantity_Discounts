@@ -1,0 +1,308 @@
+
+  ___  ____  ____  ____  ____ (R)
+ /__    /   ____/   /   ____/
+___/   /   /___/   /   /___/   14.0   Copyright 1985-2015 StataCorp LP
+  Statistics/Data Analysis            StataCorp
+                                      4905 Lakeway Drive
+                                      College Station, Texas 77845 USA
+                                      800-STATA-PC        http://www.stata.com
+                                      979-696-4600        stata@stata.com
+                                      979-696-4601 (fax)
+
+5-user Stata network perpetual license:
+       Serial number:  401406249371
+         Licensed to:  LAITS
+                       The University of Texas at Austin
+
+Notes:
+      1.  Stata is running in batch mode.
+
+Stata version 14
+Stata version 11, has moved to /opt/stata11
+      2.  Unicode is supported; see help unicode_advice.
+
+. do liquor_purchases.do 
+
+. capture log close
+
+. clear
+
+. set more off
+
+. log using "liquor_purchases.txt", text replace
+-------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/gh8728/Projects/Liquor/Data/Nielsen_Panel/analysis/liquor_pu
+> rchases.txt
+  log type:  text
+ opened on:  17 Mar 2017, 18:01:09
+
+. version 14.0
+
+. 
+. display "$S_TIME  $S_DATE"
+18:01:09  17 Mar 2017
+
+. 
+. /* Notes:
+> 
+> 1) Files are huge. Importing is really slow. Patience, friend.
+> 
+> 2) Make sure the codes are set at the begining. These are an attempt to speed
+> up execution. This avoids rebuilding data files if need be.
+> */
+. 
+. local rebuild_upcs = 0 //rebuild UPC file from scratch
+
+. local rebuild_panelists = 0 // rebuild panelist and their associated trips
+
+. 
+. local years = "2008 2009 2010 2011 2012 2013 2014"
+
+. 
+. if `rebuild_upcs' {
+.         /* Importing UPCs to keep just the liquor ones */
+.         import delimited using "../nielsen_extracts/HMS/Master_Files/Latest/p
+> roducts.tsv"
+. 
+.         /* Keeping only Liquor records. CAn narrow it down to Alcoholic bever
+> age first,
+>         but no need. Only other Alocohol is coded as Beer or Wine. There may 
+> be some
+>         marginal cases that differ between the NYS data and the Nielsen Data.
+>  Right now, 
+>         just working with the Liquor records for simplicity */
+.         keep if product_group_desc == "LIQUOR"  // corresponding product_grou
+> p_code is 5002
+. 
+.         /* Uncomment the following line to remove multi-packs. This might mak
+> e matching
+>         brand strings easier between the NYS and Nielsen datasets. The price 
+> schedules do
+>         contain multipacks, but it seems more complicated to model. The multi
+> packs represent
+>         a form of retail quantity discounts. The focus here is on wholesale q
+> uantity discoutns
+> 
+>         drop if multi >= 1 */
+. 
+.         save liquor_upcs, replace
+. 
+.         clear
+. }
+
+. 
+. foreach year in `years' {
+  2.         if `rebuild_panelists' {
+  3.                 /* Import Panelists and keep only NY records */
+.                 
+.                 import delimited using "../nielsen_extracts/HMS/`year'/Annual
+> _Files/panelists_`year'.tsv", clear
+  4.                 
+.                 keep if fips_state_desc == "NY" // associated code is 36
+  5.                 
+.                 save ny_panelists_`year', replace
+  6.                 
+.                 clear
+  7.                 
+.                 import delimited using "../nielsen_extracts/HMS/`year'/Annual
+> _Files/trips_`year'.tsv"
+  8.                 
+.                 merge m:1 household_code panel_year using ny_panelists_`year'
+> , gen(_merge_panelists) keep(3)
+  9.                 
+.                 save ny_trips_`year', replace
+ 10.         }
+ 11. 
+.         /* Importing purchases. There are many purchases to one trip. For now
+> , we'll
+>         drop all other purchases at that trip. That information may be import
+> ant for 
+>         instrumenting purposes or some sort of multi-purchase demand model */
+.         import delimited using "../nielsen_extracts/HMS/`year'/Annual_Files/p
+> urchases_`year'.tsv", clear
+ 12. 
+.         /*Now we need to sort the purchases to get only Liquor purchases in N
+> YS. Merging
+>         is slow. It is faster if the merging file is smaller. So, we're going
+>  to get just
+>         Liquor purchases than merge down to just the NYS records. */
+. 
+.         // Identifying liquor purchases
+.         merge m:1 upc upc_ver_uc using liquor_upcs, gen(_merge_upcs) keep(3) 
+> // m:1 because multiple purchases of same item
+ 13. 
+.         // WHich liquor purchases were from trips in NY
+.         merge m:1 trip_code_uc using ny_trips_`year', gen(_merge_trips) keep(
+> 3) // m:1 because many purcahses to 1 trip
+ 14. 
+.         save ny_liquor_purchases_`year', replace
+ 15.         
+.         clear
+ 16. }
+(7 vars, 64527995 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                           149,213  (_merge_upcs==3)
+    -----------------------------------------
+(label _merge already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                             8,350  (_merge_trips==3)
+    -----------------------------------------
+file ny_liquor_purchases_2008.dta saved
+(7 vars, 63686904 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                           145,259  (_merge_upcs==3)
+    -----------------------------------------
+(label _merge already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                             8,038  (_merge_trips==3)
+    -----------------------------------------
+file ny_liquor_purchases_2009.dta saved
+(7 vars, 62817813 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                           144,414  (_merge_upcs==3)
+    -----------------------------------------
+(label _merge already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                             7,385  (_merge_trips==3)
+    -----------------------------------------
+file ny_liquor_purchases_2010.dta saved
+(7 vars, 66321848 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                           160,115  (_merge_upcs==3)
+    -----------------------------------------
+(label _merge already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                             7,713  (_merge_trips==3)
+    -----------------------------------------
+file ny_liquor_purchases_2011.dta saved
+(7 vars, 62952271 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                           159,184  (_merge_upcs==3)
+    -----------------------------------------
+(label _merge already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                             8,326  (_merge_trips==3)
+    -----------------------------------------
+file ny_liquor_purchases_2012.dta saved
+(7 vars, 63142825 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                           169,598  (_merge_upcs==3)
+    -----------------------------------------
+(label _merge already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                             7,764  (_merge_trips==3)
+    -----------------------------------------
+file ny_liquor_purchases_2013.dta saved
+(7 vars, 64717120 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                           168,211  (_merge_upcs==3)
+    -----------------------------------------
+(label _merge already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                             7,896  (_merge_trips==3)
+    -----------------------------------------
+file ny_liquor_purchases_2014.dta saved
+
+. 
+. foreach year in `years' {
+  2.         append using ny_liquor_purchases_`year'
+  3. }
+(label _merge already defined)
+(label _merge already defined)
+(label _merge already defined)
+(label _merge already defined)
+(label _merge already defined)
+(label _merge already defined)
+
+. 
+. gen date_n = date(purchase_date, "YMD")
+
+. 
+. format date_n %td
+
+. 
+. gen purchase_year = year(date_n)
+
+. gen purchase_month = month(date_n)
+
+. gen purchase_quarter = quarter(date_n)
+
+. 
+. egen brand_string = concat(brand_descr upc_descr size1_amount size1_units), p
+> unct(";")
+
+. egen upc_id = group(upc upc_ver_uc purchase_month purchase_year)
+
+. 
+. /* Thinning out data set to just NYC. Could possibly do earlier, but easier
+> to do here */
+. gen NYC = (fips_county_descr == "BRONX" | fips_county_descr == "NEW YORK" | f
+> ips_county_descr == "KINGS" | fips_county_descr == "QUEENS" | fips_county_des
+> cr == "RICHMOND")
+
+. keep if NYC == 1
+(43,673 observations deleted)
+
+. 
+. 
+. save ny_liquor_purchases_all_years, replace
+file ny_liquor_purchases_all_years.dta saved
+
+. 
+. display "$S_TIME  $S_DATE"
+19:33:31  17 Mar 2017
+
+. 
+. log close
+      name:  <unnamed>
+       log:  /home/gh8728/Projects/Liquor/Data/Nielsen_Panel/analysis/liquor_pu
+> rchases.txt
+  log type:  text
+ closed on:  17 Mar 2017, 19:33:31
+-------------------------------------------------------------------------------
+
+. 
+end of do-file

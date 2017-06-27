@@ -1,0 +1,17 @@
+-------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  /home/gh8728/Liquor/demand_estimation/BLP-basic/berry_logit.txt
+  log type:  text
+ opened on:  23 Jun 2016, 10:48:07
+
+. 
+. use "../berry_logit/berry_logit.dta"
+
+. 
+end of do-file
+
+. help blp
+
+. do "/home/gh8728/Liquor/demand_estimation/BLP-basic/blp.do"
+
+. capture log close

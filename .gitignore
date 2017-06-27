@@ -1,0 +1,9 @@
+*.dta
+Data/Nielsen_Panel/nielsen_extracts/
+Data/Nielsen_Panel/download-2016-06-06/
+Data/NY_liquor_licenses/licenses_by_county/
+Data/NY_price_schedules/**/
+*.pdf
+demand_estimation/BLP-basic/BLPbasic.m
+*.csv
+Data/Nielsen_Panel/analysis/.Rhistory

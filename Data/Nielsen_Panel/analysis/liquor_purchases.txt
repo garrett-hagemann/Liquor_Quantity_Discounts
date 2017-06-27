@@ -1,0 +1,334 @@
+-------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  D:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\Nielsen_Panel\analysis\liquor_purcha
+> ses.txt
+  log type:  text
+ opened on:  28 Mar 2017, 15:24:30
+
+. 
+. display "$S_TIME  $S_DATE"
+15:24:30  28 Mar 2017
+
+. 
+. /* Notes:
+> 
+> 1) Files are huge. Importing is really slow. Patience, friend.
+> 
+> 2) Make sure the codes are set at the begining. These are an attempt to speed
+> up execution. This avoids rebuilding data files if need be.
+> */
+. 
+. local rebuild_upcs = 1 //rebuild UPC file from scratch
+
+. local rebuild_panelists = 1 // rebuild panelist and their associated trips
+
+. 
+. local years = "2008 2009 2010 2011 2012 2013 2014"
+
+. 
+. if `rebuild_upcs' {
+.         /* Importing UPCs to keep just the liquor ones */
+.         import delimited using "../nielsen_extracts/HMS/Master_Files/Latest/products.tsv"
+(17 vars, 3946174 obs)
+. 
+.         /* Keeping only Liquor records. CAn narrow it down to Alcoholic beverage first,
+>         but no need. Only other Alocohol is coded as Beer or Wine. There may be some
+>         marginal cases that differ between the NYS data and the Nielsen Data. Right now, 
+>         just working with the Liquor records for simplicity */
+.         keep if product_group_desc == "LIQUOR"  // corresponding product_group_code is 5002
+(3913729 observations deleted)
+. 
+.         /* Uncomment the following line to remove multi-packs. This might make matching
+>         brand strings easier between the NYS and Nielsen datasets. The price schedules do
+>         contain multipacks, but it seems more complicated to model. The multipacks represent
+>         a form of retail quantity discounts. The focus here is on wholesale quantity discoutns
+> 
+>         drop if multi >= 1 */
+. 
+.         save liquor_upcs, replace
+file liquor_upcs.dta saved
+. 
+.         clear
+. }
+
+. 
+. foreach year in `years' {
+  2.         if `rebuild_panelists' {
+  3.                 /* Import Panelists and keep only NY records */
+.                 
+.                 import delimited using "../nielsen_extracts/HMS/`year'/Annual_Files/panelists_`year'.tsv", 
+> clear
+  4.                 
+.                 keep if fips_state_desc == "NY" // associated code is 36
+  5.                 
+.                 save ny_panelists_`year', replace
+  6.                 
+.                 clear
+  7.                 
+.                 import delimited using "../nielsen_extracts/HMS/`year'/Annual_Files/trips_`year'.tsv"
+  8.                 
+.                 merge m:1 household_code panel_year using ny_panelists_`year', gen(_merge_panelists) keep(3
+> )
+  9.                 
+.                 save ny_trips_`year', replace
+ 10.         }
+ 11. 
+.         /* Importing purchases. There are many purchases to one trip. For now, we'll
+>         drop all other purchases at that trip. That information may be important for 
+>         instrumenting purposes or some sort of multi-purchase demand model */
+.         import delimited using "../nielsen_extracts/HMS/`year'/Annual_Files/purchases_`year'.tsv", clear
+ 12. 
+.         /*Now we need to sort the purchases to get only Liquor purchases in NYS. Merging
+>         is slow. It is faster if the merging file is smaller. So, we're going to get just
+>         Liquor purchases than merge down to just the NYS records. */
+. 
+.         // Identifying liquor purchases
+.         merge m:1 upc upc_ver_uc using liquor_upcs, gen(_merge_upcs) keep(3) // m:1 because multiple purcha
+> ses of same item
+ 13. 
+.         // WHich liquor purchases were from trips in NY
+.         merge m:1 trip_code_uc using ny_trips_`year', gen(_merge_trips) keep(3) // m:1 because many purcahs
+> es to 1 trip
+ 14. 
+.         save ny_liquor_purchases_`year', replace
+ 15.         
+.         clear
+ 16. }
+(58 vars, 61440 obs)
+(57707 observations deleted)
+file ny_panelists_2008.dta saved
+(8 vars, 11105106 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                           747,310  (_merge_panelists==3)
+    -----------------------------------------
+file ny_trips_2008.dta saved
+(7 vars, 64527995 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                           149,213  (_merge_upcs==3)
+    -----------------------------------------
+(label _merge already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                             8,350  (_merge_trips==3)
+    -----------------------------------------
+file ny_liquor_purchases_2008.dta saved
+(58 vars, 60506 obs)
+(56863 observations deleted)
+file ny_panelists_2009.dta saved
+(8 vars, 10857909 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                           713,239  (_merge_panelists==3)
+    -----------------------------------------
+file ny_trips_2009.dta saved
+(7 vars, 63686904 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                           145,259  (_merge_upcs==3)
+    -----------------------------------------
+(label _merge already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                             8,038  (_merge_trips==3)
+    -----------------------------------------
+file ny_liquor_purchases_2009.dta saved
+(58 vars, 60658 obs)
+(57097 observations deleted)
+file ny_panelists_2010.dta saved
+(8 vars, 10798312 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                           683,703  (_merge_panelists==3)
+    -----------------------------------------
+file ny_trips_2010.dta saved
+(7 vars, 62817813 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                           144,414  (_merge_upcs==3)
+    -----------------------------------------
+(label _merge already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                             7,385  (_merge_trips==3)
+    -----------------------------------------
+file ny_liquor_purchases_2010.dta saved
+(58 vars, 62092 obs)
+(58438 observations deleted)
+file ny_panelists_2011.dta saved
+(8 vars, 11269184 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                           709,812  (_merge_panelists==3)
+    -----------------------------------------
+file ny_trips_2011.dta saved
+(7 vars, 66321848 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                           160,115  (_merge_upcs==3)
+    -----------------------------------------
+(label _merge already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                             7,713  (_merge_trips==3)
+    -----------------------------------------
+file ny_liquor_purchases_2011.dta saved
+(58 vars, 60538 obs)
+(57061 observations deleted)
+file ny_panelists_2012.dta saved
+(8 vars, 10603660 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                           652,824  (_merge_panelists==3)
+    -----------------------------------------
+file ny_trips_2012.dta saved
+(7 vars, 62952271 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                           159,184  (_merge_upcs==3)
+    -----------------------------------------
+(label _merge already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                             8,326  (_merge_trips==3)
+    -----------------------------------------
+file ny_liquor_purchases_2012.dta saved
+(58 vars, 61097 obs)
+(57671 observations deleted)
+file ny_panelists_2013.dta saved
+(9 vars, 10511397 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                           636,586  (_merge_panelists==3)
+    -----------------------------------------
+file ny_trips_2013.dta saved
+(7 vars, 63142825 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                           169,598  (_merge_upcs==3)
+    -----------------------------------------
+(label _merge already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                             7,764  (_merge_trips==3)
+    -----------------------------------------
+file ny_liquor_purchases_2013.dta saved
+(58 vars, 61557 obs)
+(58211 observations deleted)
+file ny_panelists_2014.dta saved
+(8 vars, 10579135 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                           617,762  (_merge_panelists==3)
+    -----------------------------------------
+file ny_trips_2014.dta saved
+(7 vars, 64717120 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                           168,211  (_merge_upcs==3)
+    -----------------------------------------
+(label _merge already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                             7,896  (_merge_trips==3)
+    -----------------------------------------
+file ny_liquor_purchases_2014.dta saved
+
+. 
+. foreach year in `years' {
+  2.         append using ny_liquor_purchases_`year'
+  3. }
+(label _merge already defined)
+(label _merge already defined)
+(label _merge already defined)
+(label _merge already defined)
+(label _merge already defined)
+(label _merge already defined)
+
+. 
+. gen date_n = date(purchase_date, "YMD")
+
+. 
+. format date_n %td
+
+. 
+. gen purchase_year = year(date_n)
+
+. gen purchase_month = month(date_n)
+
+. gen purchase_quarter = quarter(date_n)
+
+. 
+. egen brand_string = concat(brand_descr upc_descr size1_amount size1_units), punct(";")
+
+. egen upc_id = group(upc upc_ver_uc purchase_month purchase_year)
+
+. 
+. /* Thinning out data set to just NYC. Could possibly do earlier, but easier
+> to do here */
+. gen NYC = (fips_county_descr == "BRONX" | fips_county_descr == "NEW YORK" | fips_county_descr == "KINGS" | 
+> fips_county_descr == "QUEENS" | fips_county_descr == "RICHMOND")
+
+. keep if NYC == 1
+(43673 observations deleted)
+
+. 
+. 
+. save ny_liquor_purchases_all_years, replace
+file ny_liquor_purchases_all_years.dta saved
+
+. 
+. display "$S_TIME  $S_DATE"
+17:33:30  28 Mar 2017
+
+. 
+. log close
+      name:  <unnamed>
+       log:  D:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\Nielsen_Panel\analysis\liquor_purcha
+> ses.txt
+  log type:  text
+ closed on:  28 Mar 2017, 17:33:30
+-------------------------------------------------------------------------------------------------------------
