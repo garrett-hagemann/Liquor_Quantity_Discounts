@@ -1,8 +1,8 @@
--------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /home/gh8728/Projects/Liquor/Data/NY_price_schedules/data_explore.txt
+       log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\NY_price_schedules\data_explore.txt
   log type:  text
- opened on:  28 Feb 2017, 13:07:55
+ opened on:  28 Jun 2017, 08:22:55
 
 . 
 . use old_format_months
@@ -17,10 +17,10 @@
 .         sort record_num option
 
 .         bys record_num: keep if _n == _N
-(789,055 observations deleted)
+(640331 observations deleted)
 
 .         replace option = option+1
-(319,533 real changes made)
+(258691 real changes made)
 
 .         hist option, discrete percent xtitle("Price Schedule Parts")
 (start=1, width=1)
@@ -31,27 +31,29 @@
 . restore
 
 . 
+. 
+. 
 . // trying to pin down how schedules change over time
 . reshape wide disc_p disc_q disc_dollars actual_p tariff norm_p norm_tariff, i(record_num) j(option)
-(note: j = 0 1 2 3 4 5 6 7 8 9 10 11)
+(note: j = 0 1 2 3 4 5 6 7 8 9)
 
 Data                               long   ->   wide
 -----------------------------------------------------------------------------
-Number of obs.                  1.1e+06   ->  319533
-Number of variables                  33   ->     109
-j variable (12 values)           option   ->   (dropped)
+Number of obs.                   899022   ->  258691
+Number of variables                  33   ->      95
+j variable (10 values)           option   ->   (dropped)
 xij variables:
-                                 disc_p   ->   disc_p0 disc_p1 ... disc_p11
-                                 disc_q   ->   disc_q0 disc_q1 ... disc_q11
-                           disc_dollars   ->   disc_dollars0 disc_dollars1 ... disc_dollars11
-                               actual_p   ->   actual_p0 actual_p1 ... actual_p11
-                                 tariff   ->   tariff0 tariff1 ... tariff11
-                                 norm_p   ->   norm_p0 norm_p1 ... norm_p11
-                            norm_tariff   ->   norm_tariff0 norm_tariff1 ... norm_tariff11
+                                 disc_p   ->   disc_p0 disc_p1 ... disc_p9
+                                 disc_q   ->   disc_q0 disc_q1 ... disc_q9
+                           disc_dollars   ->   disc_dollars0 disc_dollars1 ... disc_dollars9
+                               actual_p   ->   actual_p0 actual_p1 ... actual_p9
+                                 tariff   ->   tariff0 tariff1 ... tariff9
+                                 norm_p   ->   norm_p0 norm_p1 ... norm_p9
+                            norm_tariff   ->   norm_tariff0 norm_tariff1 ... norm_tariff9
 -----------------------------------------------------------------------------
 
-. egen product = group(size brand_name brand_label_reg_id nv_serial_number) // "product" is a brand lab
-> el id and a wholesaler id
+. egen product = group(size brand_name brand_label_reg_id nv_serial_number) // "product" is a brand label id a
+> nd a wholesaler id
 
 . gen str_month = string(posting_month+1,"%02.0f")
 
@@ -72,7 +74,7 @@ xij variables:
 Duplicates in terms of product date_n
 
 . drop if tag > 0
-(65,040 observations deleted)
+(50001 observations deleted)
 
 . 
 . xtset product date_n
@@ -82,72 +84,72 @@ Duplicates in terms of product date_n
 
 . 
 . gen p0_diff = actual_p0 - L.actual_p0
-(51,131 missing values generated)
+(42238 missing values generated)
 
 . gen p1_p0spread = actual_p0 - actual_p1
-(292 missing values generated)
+(211 missing values generated)
 
 . gen spread_diff = p1_p0spread - L.p1_p0spread
-(51,357 missing values generated)
+(42389 missing values generated)
 
 . 
-. tabstat disc_q1 p1_p0spread p0_diff spread_diff if discount_size_type == "CASE", stat(p1 p5 p25 p50 p
-> 75 p95 p99 mean) columns(statistics)
+. tabstat disc_q1 p1_p0spread p0_diff spread_diff if discount_size_type == "CASE", stat(p1 p5 p25 p50 p75 p95 
+> p99 mean) columns(statistics)
 
     variable |        p1        p5       p25       p50       p75       p95       p99      mean
 -------------+--------------------------------------------------------------------------------
-     disc_q1 |         1         2         2         2         3         6       121  5.095761
- p1_p0spread |  .5999985         2  4.979996         9     15.43  47.50999       123  15.61932
-     p0_diff | -3.960007 -3.160004         0         0         0  3.400009        12  .8409231
- spread_diff | -2.009995         0         0         0         0         0  5.990005  .0505918
+     disc_q1 |         1         2         2         2         3         6     81.48  4.545057
+ p1_p0spread |  .9599991         2         5         9        15        42       120  14.51844
+     p0_diff |     -3.68         0         0         0         0  2.160004        10  .7648875
+ spread_diff | -1.779999         0         0         0         0         0  5.040009  .0536608
 ----------------------------------------------------------------------------------------------
 
-. tabstat disc_q1 p1_p0spread p0_diff spread_diff if discount_size_type == "BOTTLE", stat(p1 p5 p25 p50
->  p75 p95 p99 mean) columns(statistics)
+. tabstat disc_q1 p1_p0spread p0_diff spread_diff if discount_size_type == "BOTTLE", stat(p1 p5 p25 p50 p75 p9
+> 5 p99 mean) columns(statistics)
 
     variable |        p1        p5       p25       p50       p75       p95       p99      mean
 -------------+--------------------------------------------------------------------------------
-     disc_q1 |         2         2         2         3         3        12        12  3.748789
- p1_p0spread |  .0999999  .3299999  .8500004  1.669998      3.26        10        32  3.369219
-     p0_diff | -.6599998 -.2600002         0         0         0  .2800007  1.419998 -.4037776
- spread_diff |     -1.74         0         0         0         0         0  1.280001 -.0447435
+     disc_q1 |         2         2         2         3         3        12        12  3.802091
+ p1_p0spread |  .1599998  .3400002  .9599991      1.75      3.34        10  26.67001  3.262508
+     p0_diff | -.6100006         0         0         0         0  .2600002      1.32 -.3688595
+ spread_diff | -1.959999         0         0         0         0         0  1.600002 -.0431202
 ----------------------------------------------------------------------------------------------
 
 . 
 . gen p0_diff_pct = (actual_p0 - L.actual_p0)/L.actual_p0
-(51,131 missing values generated)
+(42238 missing values generated)
 
 . gen p1_p0spread_pct = (actual_p0 - actual_p1)/actual_p0
-(292 missing values generated)
+(211 missing values generated)
 
 . gen spread_diff_pct = p1_p0spread_pct - L.p1_p0spread_pct
-(51,357 missing values generated)
+(42389 missing values generated)
 
 . 
-. tabstat p1_p0spread_pct p0_diff_pct spread_diff_pct if discount_size_type == "CASE", stat(p1 p5 p25 p
-> 50 p75 p95 p99 mean) columns(statistics)
+. tabstat p1_p0spread_pct p0_diff_pct spread_diff_pct if discount_size_type == "CASE", stat(p1 p5 p25 p50 p75 
+> p95 p99 mean) columns(statistics)
 
     variable |        p1        p5       p25       p50       p75       p95       p99      mean
 -------------+--------------------------------------------------------------------------------
-p1_p0sprea~t |  .0061839  .0168856   .039267       .06  .1015704  .2265194  .8083333  .0919556
- p0_diff_pct | -.0394212 -.0134709         0         0         0  .0228986  .0748873  .0343898
-spread_dif~t | -.0151524 -.0011293         0         0         0  .0007038  .0248526 -.0002718
+p1_p0sprea~t |  .0098971  .0194951  .0402509  .0613108  .1035378  .2213809  .8687068  .0932048
+ p0_diff_pct | -.0335522         0         0         0         0  .0133431  .0563334  .0308077
+spread_dif~t | -.0168025 -.0005115         0         0         0         0  .0245614 -.0001201
 ----------------------------------------------------------------------------------------------
 
-. tabstat p1_p0spread_pct p0_diff_pct spread_diff_pct if discount_size_type == "BOTTLE", stat(p1 p5 p25
->  p50 p75 p95 p99 mean) columns(statistics)
+. tabstat p1_p0spread_pct p0_diff_pct spread_diff_pct if discount_size_type == "BOTTLE", stat(p1 p5 p25 p50 p7
+> 5 p95 p99 mean) columns(statistics)
 
     variable |        p1        p5       p25       p50       p75       p95       p99      mean
 -------------+--------------------------------------------------------------------------------
-p1_p0sprea~t |  .0048125  .0153031  .0338983  .0547945  .0909308  .1954652  .4390426  .0791504
- p0_diff_pct | -.0269912 -.0068855         0         0         0  .0119524  .0431355 -.0005594
-spread_dif~t | -.0356394 -.0006842         0         0         0  .0004034  .0412833  .0000685
+p1_p0sprea~t |  .0087883  .0166667  .0360842   .057971  .0943026      .198  .3670617  .0785837
+ p0_diff_pct | -.0233694         0         0         0         0  .0093561  .0405445 -.0005334
+spread_dif~t |  -.042735 -.0005537         0         0         0  .0002478  .0486878  .0001581
 ----------------------------------------------------------------------------------------------
 
 . 
 . log close
       name:  <unnamed>
-       log:  /home/gh8728/Projects/Liquor/Data/NY_price_schedules/data_explore.txt
+       log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\NY_price_schedules\data_explore.txt
   log type:  text
- closed on:  28 Feb 2017, 13:09:09
--------------------------------------------------------------------------------------------------------
+ closed on:  28 Jun 2017, 08:23:29
+--------------------------------------------------------------------------------------------------------------

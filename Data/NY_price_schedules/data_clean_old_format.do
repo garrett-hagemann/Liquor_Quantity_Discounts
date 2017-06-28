@@ -24,7 +24,7 @@ local years "2009 2010 2011 2012 2013"
 foreach y in `years'{
 	foreach m in `months'{
 		disp "Parsing `y'`m'"
-		import delimited using "`y'/LR-`m'-`y'.txt", encoding(UTF-16) clear
+		import delimited using "`y'/LR-`m'-`y'.txt", clear // will generate an error, but appears to have no effect. In stata 14, use option encoding(UTF-16). Files are encoded in UTF-16LE. But doesn't appear to contain any special characters?
 		tempfile tmp`y'`m'
 		save `tmp`y'`m''
 	}
@@ -34,7 +34,7 @@ local 2014MonthsOld "Jan Feb Mar Apr"
 
 foreach m in `2014MonthsOld'{
 	disp "Parsing 2014`m'"
-	import delimited using "2014/LR-`m'-2014-old-format.txt", encoding(UTF-16) clear
+	import delimited using "2014/LR-`m'-2014-old-format.txt", clear // see previous UTF comment.
 	tempfile tmp2014`m'
 	save `tmp2014`m''
 }
@@ -63,14 +63,14 @@ clear
 /* importing the discount codes and then merging them in */
 foreach y in `years'{
 	disp "Parsing discoutn codes for `y'"
-	import delimited using "`y'/Discount-codes-`y'.txt", encoding(UTF-16) clear
+	import delimited using "`y'/Discount-codes-`y'.txt", clear // see previous UTF comment
 	duplicates drop _all, force // there appear to be duplicate records
 	
 	tempfile discount`y'
 	save `discount`y''
 }
 
-import delimited using "2014/Discount-codes-Jan-thru-Apr-2014-old-format.txt", encoding(UTF-16) clear
+import delimited using "2014/Discount-codes-Jan-thru-Apr-2014-old-format.txt", clear // see previous UTF comment
 duplicates drop _all, force // there appear to be EXACT duplicate records. Not sure why
 
 foreach y in `years'{
@@ -102,7 +102,10 @@ duplicates drop nv_serial_number posting_year posting_month posting_type discoun
 save old_format_months, replace
 
 /* Fixing sizes so they have a common format */
-replace size = ustrregexra(size, "[^a-zA-Z0-9.]","") // removing non-alpha numeric characters
+foreach non_char in "( ) , - . /" {
+	replace size = subinstr(size, "`non_char'", "",.) // removing known non alpha-numeric characters
+}
+// replace size = ustrregexra(size, "[^a-zA-Z0-9.]","") // removing non-alpha numeric characters. Only works with unicode
 
 /* cleaning up some different labels to have consistent structure. Covers 90+% of raw
 data */

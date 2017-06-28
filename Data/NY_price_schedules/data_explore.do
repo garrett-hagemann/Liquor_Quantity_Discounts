@@ -16,6 +16,8 @@ preserve
 	graph export option_hist.pdf, replace
 restore
 
+
+
 // trying to pin down how schedules change over time
 reshape wide disc_p disc_q disc_dollars actual_p tariff norm_p norm_tariff, i(record_num) j(option)
 egen product = group(size brand_name brand_label_reg_id nv_serial_number) // "product" is a brand label id and a wholesaler id
