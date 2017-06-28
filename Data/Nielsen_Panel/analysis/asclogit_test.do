@@ -87,19 +87,19 @@ keep if select == 1
 sample 10 if choice == 0 & product != 0, by(case) count
 */
 
-/*
+
 //generating product dummies
 foreach i of numlist 1/101{
 	gen byte d_p_`i' = (product == `i')
 }
-*/
 
-gen holiday = d_m_11 + d_m_12 + d_m_1 // Nov or Dec or Jan
 
-gen d_q_1 = d_m_1 + d_m_2 + d_m_3
-gen d_q_2 = d_m_4 + d_m_5 + d_m_6
-gen d_q_3 = d_m_7 + d_m_8 + d_m_9
-gen d_q_4 = d_m_10 + d_m_11 + d_m_12
+gen byte holiday = d_m_11 + d_m_12 + d_m_1 // Nov or Dec or Jan
+
+gen byte d_q_1 = d_m_1 + d_m_2 + d_m_3
+gen byte d_q_2 = d_m_4 + d_m_5 + d_m_6
+gen byte d_q_3 = d_m_7 + d_m_8 + d_m_9
+gen byte d_q_4 = d_m_10 + d_m_11 + d_m_12
 
 //export delimited asclogit_test.csv, replace
 
@@ -110,9 +110,8 @@ replace product = 105 if product == 101 & d_g_whs == 1
 replace product = 106 if product == 101 & d_g_teq == 1
 replace product = 107 if product == 101 & d_g_otr == 1
 
-asclogit choice p_x_* imported_x_* proof_x_*, case(case) alt(product) base(0) diff casevar(holiday)
+clogit choice p_x_* imported_x_* proof_x_* d_g_gin d_g_vod d_g_rum d_g_sch d_p_1-d_p_101, group(case) iter(150)
 /*
-//asclogit choice p_x_* imported_x_* proof_x_* d_g_gin d_g_vod d_g_rum d_g_sch, case(case) alt(product) base(0) diff
 mixlogit choice imported_x_* proof_x_* d_g_gin d_g_vod d_g_rum d_g_sch d_p_1-d_p_101, group(case) rand(p_x_*) iter(150) nrep(1)
 */
 
