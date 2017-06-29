@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\NY_price_schedules\data_explore.txt
   log type:  text
- opened on:  28 Jun 2017, 08:22:55
+ opened on:  28 Jun 2017, 22:53:27
 
 . 
 . use old_format_months
@@ -10,46 +10,33 @@
 . 
 . drop _merge
 
-. 
-. // distribution of number of price segments
-. preserve
-
-.         sort record_num option
-
-.         bys record_num: keep if _n == _N
-(640331 observations deleted)
-
-.         replace option = option+1
-(258691 real changes made)
-
-.         hist option, discrete percent xtitle("Price Schedule Parts")
-(start=1, width=1)
-
-.         graph export option_hist.pdf, replace
-(file option_hist.pdf written in PDF format)
-
-. restore
+. drop if posting_year == 2014 // only incomplete data for 2014. No need to keep it.
+(51446 observations deleted)
 
 . 
+. replace option=option+1 // correcting options which start at 0
+(847008 real changes made)
+
+. egen total_options = max(option), by(record_num) // calculating total number of options
+
 . 
-. 
-. // trying to pin down how schedules change over time
+. // Need to reshape to one record per row for some operations. Doing that first so everything is consistent
 . reshape wide disc_p disc_q disc_dollars actual_p tariff norm_p norm_tariff, i(record_num) j(option)
-(note: j = 0 1 2 3 4 5 6 7 8 9)
+(note: j = 1 2 3 4 5 6 7 8 9 10)
 
 Data                               long   ->   wide
 -----------------------------------------------------------------------------
-Number of obs.                   899022   ->  258691
-Number of variables                  33   ->      95
+Number of obs.                   847008   ->  243143
+Number of variables                  34   ->      96
 j variable (10 values)           option   ->   (dropped)
 xij variables:
-                                 disc_p   ->   disc_p0 disc_p1 ... disc_p9
-                                 disc_q   ->   disc_q0 disc_q1 ... disc_q9
-                           disc_dollars   ->   disc_dollars0 disc_dollars1 ... disc_dollars9
-                               actual_p   ->   actual_p0 actual_p1 ... actual_p9
-                                 tariff   ->   tariff0 tariff1 ... tariff9
-                                 norm_p   ->   norm_p0 norm_p1 ... norm_p9
-                            norm_tariff   ->   norm_tariff0 norm_tariff1 ... norm_tariff9
+                                 disc_p   ->   disc_p1 disc_p2 ... disc_p10
+                                 disc_q   ->   disc_q1 disc_q2 ... disc_q10
+                           disc_dollars   ->   disc_dollars1 disc_dollars2 ... disc_dollars10
+                               actual_p   ->   actual_p1 actual_p2 ... actual_p10
+                                 tariff   ->   tariff1 tariff2 ... tariff10
+                                 norm_p   ->   norm_p1 norm_p2 ... norm_p10
+                            norm_tariff   ->   norm_tariff1 norm_tariff2 ... norm_tariff10
 -----------------------------------------------------------------------------
 
 . egen product = group(size brand_name brand_label_reg_id nv_serial_number) // "product" is a brand label id a
@@ -65,6 +52,10 @@ xij variables:
 
 . format date_n %tm
 
+. gen month_n = month(dofm(date_n))
+
+. gen year_n = year(dofm(date_n))
+
 . 
 . /* dropping some duplicates. Appears to be due to weak definition of a "product"
 > given the variables in a data set. Works mostly - but some producers appear to 
@@ -74,76 +65,330 @@ xij variables:
 Duplicates in terms of product date_n
 
 . drop if tag > 0
-(50001 observations deleted)
+(47586 observations deleted)
+
+. 
+. reshape long // going back to long for a few things
+(note: j = 1 2 3 4 5 6 7 8 9 10)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                   195557   -> 2.0e+06
+Number of variables                 104   ->      42
+j variable (10 values)                    ->   option
+xij variables:
+           disc_p1 disc_p2 ... disc_p10   ->   disc_p
+           disc_q1 disc_q2 ... disc_q10   ->   disc_q
+disc_dollars1 disc_dollars2 ... disc_dollars10->disc_dollars
+     actual_p1 actual_p2 ... actual_p10   ->   actual_p
+           tariff1 tariff2 ... tariff10   ->   tariff
+           norm_p1 norm_p2 ... norm_p10   ->   norm_p
+norm_tariff1 norm_tariff2 ... norm_tariff10->  norm_tariff
+-----------------------------------------------------------------------------
+
+. 
+. table total_options option, contents(mean actual_p sd actual_p med actual_p) format(%9.2f)
+
+------------------------------------------------------------------------------------------
+total_opt |                                     option                                    
+ions      |      1       2       3       4       5       6       7       8       9      10
+----------+-------------------------------------------------------------------------------
+        1 | 240.95                                                                        
+          | 101.77                                                                        
+          | 249.00                                                                        
+          | 
+        2 | 106.41   94.01                                                                
+          | 123.49  115.01                                                                
+          |  78.01   70.00                                                                
+          | 
+        3 |  73.67   67.53   62.96                                                        
+          |  96.36   89.38   84.28                                                        
+          |  41.00   37.61   34.99                                                        
+          | 
+        4 |  60.30   56.09   53.21   49.34                                                
+          |  71.86   66.46   63.08   58.30                                                
+          |  32.06   30.33   28.88   26.90                                                
+          | 
+        5 |  73.15   68.45   65.15   60.18   56.27                                        
+          |  80.44   75.37   71.59   75.82   65.07                                        
+          |  33.40   31.50   30.41   28.33   26.00                                        
+          | 
+        6 |  77.68   72.75   69.54   66.11   62.17   57.24                                
+          |  79.98   75.29   71.77   68.08   64.49   63.28                                
+          |  40.75   37.49   35.04   33.25   32.10   29.16                                
+          | 
+        7 | 103.06   96.82   93.40   90.19   86.20   80.84   76.27                        
+          |  93.43   86.45   84.03   81.39   78.76   74.18   71.14                        
+          |  61.22   59.50   56.50   56.50   54.50   52.00   46.62                        
+          | 
+        8 | 120.03  112.03  107.62  103.39   98.65   90.79   74.16   55.99                
+          |  50.74   48.12   46.47   44.67   43.61   45.28   86.75  140.25                
+          | 142.92  129.96  124.98  119.74  115.48  109.98  105.00  100.50                
+          | 
+        9 |  51.45   49.60   48.34   46.02   43.20   39.53   35.29   21.72    0.77        
+          |  53.19   51.31   50.08   47.52   45.63   40.27   39.58   78.28  130.22        
+          |  21.46   20.99   20.79   20.13   18.67   18.21   17.34   16.79   14.93        
+          | 
+       10 | 120.00  111.90   95.48   91.43   86.67   80.48   75.00   64.52  120.00  118.00
+          |   0.00    2.05    0.51    1.54    1.79    0.51    0.00    0.51    0.00    0.00
+          | 120.00  110.00   95.00   90.00   85.00   80.00   75.00   65.00  120.00  118.00
+------------------------------------------------------------------------------------------
+
+. table total_options option, contents(mean disc_q sd disc_q med disc_q) format(%9.2f)
+
+------------------------------------------------------------------------------------------
+total_opt |                                     option                                    
+ions      |      1       2       3       4       5       6       7       8       9      10
+----------+-------------------------------------------------------------------------------
+        1 |   0.00                                                                        
+          |   0.00                                                                        
+          |   0.00                                                                        
+          | 
+        2 |   0.00    5.74                                                                
+          |   0.00   19.71                                                                
+          |   0.00    3.00                                                                
+          | 
+        3 |   0.00    3.73   10.78                                                        
+          |   0.00    8.62   29.59                                                        
+          |   0.00    2.00    6.00                                                        
+          | 
+        4 |   0.00    3.44    8.37   22.64                                                
+          |   0.00    5.39   13.08   45.77                                                
+          |   0.00    2.00    6.00   12.00                                                
+          | 
+        5 |   0.00    3.61   10.94   18.62   47.83                                        
+          |   0.00    7.84   45.60   33.64   62.78                                        
+          |   0.00    2.00    6.00   12.00   25.00                                        
+          | 
+        6 |   0.00    3.38    8.07   18.00   40.52   93.27                                
+          |   0.00    4.99    9.24   25.62   58.53  138.40                                
+          |   0.00    2.00    6.00   12.00   24.00   50.00                                
+          | 
+        7 |   0.00    2.74   14.61   21.81   35.67   64.67  157.56                        
+          |   0.00    1.72   78.66   78.41   79.14   89.16  220.42                        
+          |   0.00    2.00    6.00   12.00   24.00   50.00   90.00                        
+          | 
+        8 |   0.00    3.30    6.10   12.55   29.12   52.90  105.57  155.93                
+          |   0.00    1.25    2.24    7.09   19.88   33.83  106.48  188.05                
+          |   0.00    3.00    5.00   10.00   25.00   50.00   75.00  100.00                
+          | 
+        9 |   0.00    2.21    5.67   11.00   25.83   70.33  110.92  255.54  509.29        
+          |   0.00    0.66    1.13    2.36    7.24   30.97   53.82  103.54  176.37        
+          |   0.00    2.00    6.00   12.00   30.00   90.00  120.00  300.00  600.00        
+          | 
+       10 |   0.00    1.52    5.00   12.62   50.00  100.00  500.00    1.00   60.00    0.00
+          |   0.00    0.51    0.00    2.56    0.00    0.00    0.00    0.00    0.00    0.00
+          |   0.00    2.00    5.00   15.00   50.00  100.00  500.00    1.00   60.00    0.00
+------------------------------------------------------------------------------------------
+
+. 
+. reshape wide
+(note: j = 1 2 3 4 5 6 7 8 9 10)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                  2.0e+06   ->  195557
+Number of variables                  42   ->     104
+j variable (10 values)           option   ->   (dropped)
+xij variables:
+                                 disc_p   ->   disc_p1 disc_p2 ... disc_p10
+                                 disc_q   ->   disc_q1 disc_q2 ... disc_q10
+                           disc_dollars   ->   disc_dollars1 disc_dollars2 ... disc_dollars10
+                               actual_p   ->   actual_p1 actual_p2 ... actual_p10
+                                 tariff   ->   tariff1 tariff2 ... tariff10
+                                 norm_p   ->   norm_p1 norm_p2 ... norm_p10
+                            norm_tariff   ->   norm_tariff1 norm_tariff2 ... norm_tariff10
+-----------------------------------------------------------------------------
+
+. 
+. // distribution of number of price segments
+. hist total_options, discrete percent xtitle("Price Schedule Parts")
+(start=1, width=1)
+
+. graph export option_hist.pdf, replace
+(file option_hist.pdf written in PDF format)
+
+. 
+. tab total_options
+
+total_optio |
+         ns |      Freq.     Percent        Cum.
+------------+-----------------------------------
+          1 |         56        0.03        0.03
+          2 |     38,120       19.49       19.52
+          3 |     69,469       35.52       55.05
+          4 |     59,688       30.52       85.57
+          5 |     20,278       10.37       95.94
+          6 |      6,341        3.24       99.18
+          7 |      1,330        0.68       99.86
+          8 |        230        0.12       99.98
+          9 |         24        0.01       99.99
+         10 |         21        0.01      100.00
+------------+-----------------------------------
+      Total |    195,557      100.00
 
 . 
 . xtset product date_n
        panel variable:  product (unbalanced)
-        time variable:  date_n, 2009m1 to 2014m4, but with gaps
+        time variable:  date_n, 2009m1 to 2013m12, but with gaps
                 delta:  1 month
 
 . 
-. gen p0_diff = actual_p0 - L.actual_p0
-(42238 missing values generated)
+. // number of case discounts vs bottle discounts
+. tab discount_size_type
 
-. gen p1_p0spread = actual_p0 - actual_p1
-(211 missing values generated)
-
-. gen spread_diff = p1_p0spread - L.p1_p0spread
-(42389 missing values generated)
+discount_si |
+    ze_type |      Freq.     Percent        Cum.
+------------+-----------------------------------
+     BOTTLE |    137,565       70.35       70.35
+       CASE |     57,992       29.65      100.00
+------------+-----------------------------------
+      Total |    195,557      100.00
 
 . 
-. tabstat disc_q1 p1_p0spread p0_diff spread_diff if discount_size_type == "CASE", stat(p1 p5 p25 p50 p75 p95 
+. // price schedules per  month
+. tab year_n month_n
+
+           |                                   month_n
+    year_n |         1          2          3          4          5          6          7 |     Total
+-----------+-----------------------------------------------------------------------------+----------
+      2009 |     1,241      1,001      2,675      2,730      2,946      2,895      2,948 |    31,103 
+      2010 |     2,973      3,018      3,043      3,013      2,755      2,854      2,837 |    34,532 
+      2011 |     2,903      2,982      3,398      3,304      3,355      3,346      3,337 |    39,576 
+      2012 |     3,352      3,386      3,469      3,453      3,468      3,505      3,659 |    43,137 
+      2013 |     3,735      3,815      3,815      3,855      3,856      3,906      3,883 |    47,209 
+-----------+-----------------------------------------------------------------------------+----------
+     Total |    14,204     14,202     16,400     16,355     16,380     16,506     16,664 |   195,557 
+
+
+           |                        month_n
+    year_n |         8          9         10         11         12 |     Total
+-----------+-------------------------------------------------------+----------
+      2009 |     2,875      2,949      2,941      2,956      2,946 |    31,103 
+      2010 |     2,864      2,654      2,827      2,839      2,855 |    34,532 
+      2011 |     3,357      3,391      3,366      3,414      3,423 |    39,576 
+      2012 |     3,701      3,715      3,823      3,830      3,776 |    43,137 
+      2013 |     3,977      4,008      4,095      4,129      4,135 |    47,209 
+-----------+-------------------------------------------------------+----------
+     Total |    16,774     16,717     17,052     17,168     17,135 |   195,557 
+
+
+. tab year_n month_n if discount_size_type == "CASE"
+
+           |                                   month_n
+    year_n |         1          2          3          4          5          6          7 |     Total
+-----------+-----------------------------------------------------------------------------+----------
+      2009 |       359        295        782        794        833        824        861 |     8,848 
+      2010 |       831        848        844        839        789        849        835 |     9,732 
+      2011 |       765        807        940        897        945        947        953 |    11,220 
+      2012 |     1,012        988      1,035      1,005      1,028      1,017      1,127 |    13,051 
+      2013 |     1,170      1,198      1,208      1,215      1,229      1,268      1,274 |    15,141 
+-----------+-----------------------------------------------------------------------------+----------
+     Total |     4,137      4,136      4,809      4,750      4,824      4,905      5,050 |    57,992 
+
+
+           |                        month_n
+    year_n |         8          9         10         11         12 |     Total
+-----------+-------------------------------------------------------+----------
+      2009 |       817        811        814        837        821 |     8,848 
+      2010 |       812        761        775        780        769 |     9,732 
+      2011 |       970        988        989      1,009      1,010 |    11,220 
+      2012 |     1,136      1,119      1,190      1,205      1,189 |    13,051 
+      2013 |     1,295      1,257      1,327      1,337      1,363 |    15,141 
+-----------+-------------------------------------------------------+----------
+     Total |     5,030      4,936      5,095      5,168      5,152 |    57,992 
+
+
+. tab year_n month_n if discount_size_type == "BOTTLE"
+
+           |                                   month_n
+    year_n |         1          2          3          4          5          6          7 |     Total
+-----------+-----------------------------------------------------------------------------+----------
+      2009 |       882        706      1,893      1,936      2,113      2,071      2,087 |    22,255 
+      2010 |     2,142      2,170      2,199      2,174      1,966      2,005      2,002 |    24,800 
+      2011 |     2,138      2,175      2,458      2,407      2,410      2,399      2,384 |    28,356 
+      2012 |     2,340      2,398      2,434      2,448      2,440      2,488      2,532 |    30,086 
+      2013 |     2,565      2,617      2,607      2,640      2,627      2,638      2,609 |    32,068 
+-----------+-----------------------------------------------------------------------------+----------
+     Total |    10,067     10,066     11,591     11,605     11,556     11,601     11,614 |   137,565 
+
+
+           |                        month_n
+    year_n |         8          9         10         11         12 |     Total
+-----------+-------------------------------------------------------+----------
+      2009 |     2,058      2,138      2,127      2,119      2,125 |    22,255 
+      2010 |     2,052      1,893      2,052      2,059      2,086 |    24,800 
+      2011 |     2,387      2,403      2,377      2,405      2,413 |    28,356 
+      2012 |     2,565      2,596      2,633      2,625      2,587 |    30,086 
+      2013 |     2,682      2,751      2,768      2,792      2,772 |    32,068 
+-----------+-------------------------------------------------------+----------
+     Total |    11,744     11,781     11,957     12,000     11,983 |   137,565 
+
+
+. 
+. // analyzing time differences
+. 
+. gen p1_diff = actual_p1 - L.actual_p1
+(37104 missing values generated)
+
+. gen p2_p1spread = actual_p1 - actual_p2
+(56 missing values generated)
+
+. gen spread_diff = p2_p1spread - L.p2_p1spread
+(37129 missing values generated)
+
+. 
+. tabstat disc_q2 p2_p1spread p1_diff spread_diff if discount_size_type == "CASE", stat(p1 p5 p25 p50 p75 p95 
 > p99 mean) columns(statistics)
 
     variable |        p1        p5       p25       p50       p75       p95       p99      mean
 -------------+--------------------------------------------------------------------------------
-     disc_q1 |         1         2         2         2         3         6     81.48  4.545057
- p1_p0spread |  .9599991         2         5         9        15        42       120  14.51844
-     p0_diff |     -3.68         0         0         0         0  2.160004        10  .7648875
- spread_diff | -1.779999         0         0         0         0         0  5.040009  .0536608
+     disc_q2 |         1         2         2         2         3         6        81  4.494165
+ p2_p1spread |  .9599991         2         5         9        15  41.04001       120  14.47053
+     p1_diff |     -3.68         0         0         0         0   2.76001  10.01999  .8007877
+ spread_diff | -1.560005         0         0         0         0         0  5.269997  .0497035
 ----------------------------------------------------------------------------------------------
 
-. tabstat disc_q1 p1_p0spread p0_diff spread_diff if discount_size_type == "BOTTLE", stat(p1 p5 p25 p50 p75 p9
+. tabstat disc_q2 p2_p1spread p1_diff spread_diff if discount_size_type == "BOTTLE", stat(p1 p5 p25 p50 p75 p9
 > 5 p99 mean) columns(statistics)
 
     variable |        p1        p5       p25       p50       p75       p95       p99      mean
 -------------+--------------------------------------------------------------------------------
-     disc_q1 |         2         2         2         3         3        12        12  3.802091
- p1_p0spread |  .1599998  .3400002  .9599991      1.75      3.34        10  26.67001  3.262508
-     p0_diff | -.6100006         0         0         0         0  .2600002      1.32 -.3688595
- spread_diff | -1.959999         0         0         0         0         0  1.600002 -.0431202
+     disc_q2 |         2         2         2         3         3        12        12  3.797301
+ p2_p1spread |  .1599998  .3400002  .9599991      1.75      3.34        10  26.67001  3.260833
+     p1_diff | -.6100006         0         0         0         0  .2600002  1.330002 -.4137917
+ spread_diff | -1.959999         0         0         0         0         0  1.600002 -.0493599
 ----------------------------------------------------------------------------------------------
 
 . 
-. gen p0_diff_pct = (actual_p0 - L.actual_p0)/L.actual_p0
-(42238 missing values generated)
+. gen p1_diff_pct = (actual_p1 - L.actual_p1)/L.actual_p1
+(37104 missing values generated)
 
-. gen p1_p0spread_pct = (actual_p0 - actual_p1)/actual_p0
-(211 missing values generated)
+. gen p2_p1spread_pct = (actual_p1 - actual_p2)/actual_p1
+(56 missing values generated)
 
-. gen spread_diff_pct = p1_p0spread_pct - L.p1_p0spread_pct
-(42389 missing values generated)
+. gen spread_diff_pct = p2_p1spread_pct - L.p2_p1spread_pct
+(37129 missing values generated)
 
 . 
-. tabstat p1_p0spread_pct p0_diff_pct spread_diff_pct if discount_size_type == "CASE", stat(p1 p5 p25 p50 p75 
+. tabstat p2_p1spread_pct p1_diff_pct spread_diff_pct if discount_size_type == "CASE", stat(p1 p5 p25 p50 p75 
 > p95 p99 mean) columns(statistics)
 
     variable |        p1        p5       p25       p50       p75       p95       p99      mean
 -------------+--------------------------------------------------------------------------------
-p1_p0sprea~t |  .0098971  .0194951  .0402509  .0613108  .1035378  .2213809  .8687068  .0932048
- p0_diff_pct | -.0335522         0         0         0         0  .0133431  .0563334  .0308077
-spread_dif~t | -.0168025 -.0005115         0         0         0         0  .0245614 -.0001201
+p2_p1sprea~t |  .0097978  .0192389  .0400347  .0615252  .1055404     .2222  .8687068  .0931057
+ p1_diff_pct | -.0339202         0         0         0         0  .0146965  .0607094   .031442
+spread_dif~t | -.0176519 -.0005562         0         0         0         0  .0250893 -.0001398
 ----------------------------------------------------------------------------------------------
 
-. tabstat p1_p0spread_pct p0_diff_pct spread_diff_pct if discount_size_type == "BOTTLE", stat(p1 p5 p25 p50 p7
+. tabstat p2_p1spread_pct p1_diff_pct spread_diff_pct if discount_size_type == "BOTTLE", stat(p1 p5 p25 p50 p7
 > 5 p95 p99 mean) columns(statistics)
 
     variable |        p1        p5       p25       p50       p75       p95       p99      mean
 -------------+--------------------------------------------------------------------------------
-p1_p0sprea~t |  .0087883  .0166667  .0360842   .057971  .0943026      .198  .3670617  .0785837
- p0_diff_pct | -.0233694         0         0         0         0  .0093561  .0405445 -.0005334
-spread_dif~t |  -.042735 -.0005537         0         0         0  .0002478  .0486878  .0001581
+p2_p1sprea~t |  .0087883  .0166667  .0360231  .0579374  .0943026  .1970624  .3622194  .0784307
+ p1_diff_pct | -.0243615         0         0         0         0  .0099411  .0409327  -.000777
+spread_dif~t | -.0417767 -.0005875         0         0         0   .000264  .0478346  .0001662
 ----------------------------------------------------------------------------------------------
 
 . 
@@ -151,5 +396,5 @@ spread_dif~t |  -.042735 -.0005537         0         0         0  .0002478  .048
       name:  <unnamed>
        log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\NY_price_schedules\data_explore.txt
   log type:  text
- closed on:  28 Jun 2017, 08:23:29
+ closed on:  28 Jun 2017, 22:56:13
 --------------------------------------------------------------------------------------------------------------

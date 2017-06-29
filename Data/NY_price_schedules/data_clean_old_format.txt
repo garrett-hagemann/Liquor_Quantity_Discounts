@@ -3,7 +3,7 @@
        log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\NY_price_schedules\data_clean_old_for
 > mat.txt
   log type:  text
- opened on:  28 Jun 2017, 08:03:07
+ opened on:  28 Jun 2017, 20:23:19
 
 . 
 . /* Dealing with all years prior to 2014 */
@@ -27,302 +27,302 @@ Parsing 2009Jan
 Note:  4,479,791 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 30403 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_04000001.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_04000003.tmp saved
 Parsing 2009Feb
 Note:  3,903,370 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 27398 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_04000002.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_04000004.tmp saved
 Parsing 2009Mar
 Note:  4,615,382 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 31092 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_04000003.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_04000005.tmp saved
 Parsing 2009Apr
 Note:  4,479,599 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 30381 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_04000004.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_04000006.tmp saved
 Parsing 2009May
 Note:  4,819,667 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 33265 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_04000005.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_04000007.tmp saved
 Parsing 2009Jun
 Note:  4,692,381 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 32387 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_04000006.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_04000008.tmp saved
 Parsing 2009Jul
 Note:  4,824,587 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 33525 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_04000007.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_04000009.tmp saved
 Parsing 2009Aug
 Note:  4,616,954 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 31791 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_04000008.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400000a.tmp saved
 Parsing 2009Sep
 Note:  4,861,494 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 33469 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_04000009.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400000b.tmp saved
 Parsing 2009Oct
 Note:  4,904,965 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 33738 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400000a.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400000c.tmp saved
 Parsing 2009Nov
 Note:  5,240,637 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 35327 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400000b.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400000d.tmp saved
 Parsing 2009Dec
 Note:  5,196,602 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 34946 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400000c.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400000e.tmp saved
 Parsing 2010Jan
 Note:  4,886,755 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 33373 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400000d.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400000f.tmp saved
 Parsing 2010Feb
 Note:  4,926,554 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 33424 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400000e.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400000g.tmp saved
 Parsing 2010Mar
 Note:  4,932,119 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 33419 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400000f.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400000h.tmp saved
 Parsing 2010Apr
 Note:  4,948,444 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 33751 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400000g.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400000i.tmp saved
 Parsing 2010May
 Note:  5,098,589 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 34532 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400000h.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400000j.tmp saved
 Parsing 2010Jun
 Note:  5,099,650 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 34446 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400000i.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400000k.tmp saved
 Parsing 2010Jul
 Note:  5,142,823 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 35934 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400000j.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400000l.tmp saved
 Parsing 2010Aug
 Note:  5,044,929 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 34335 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400000k.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400000m.tmp saved
 Parsing 2010Sep
 Note:  5,319,264 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 36412 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400000l.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400000n.tmp saved
 Parsing 2010Oct
 Note:  5,131,178 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 34825 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400000m.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400000o.tmp saved
 Parsing 2010Nov
 Note:  5,378,270 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 36586 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400000n.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400000p.tmp saved
 Parsing 2010Dec
 Note:  5,551,171 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 38001 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400000o.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400000q.tmp saved
 Parsing 2011Jan
 Note:  5,421,432 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 37963 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400000p.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400000r.tmp saved
 Parsing 2011Feb
 Note:  5,735,556 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 39828 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400000q.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400000s.tmp saved
 Parsing 2011Mar
 Note:  5,695,253 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 40332 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400000r.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400000t.tmp saved
 Parsing 2011Apr
 Note:  5,424,944 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 38436 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400000s.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400000u.tmp saved
 Parsing 2011May
 Note:  5,556,126 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 39305 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400000t.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400000v.tmp saved
 Parsing 2011Jun
 Note:  6,000,769 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 43389 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400000u.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400000w.tmp saved
 Parsing 2011Jul
 Note:  4,810,216 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 33805 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400000v.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400000x.tmp saved
 Parsing 2011Aug
 Note:  4,893,825 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 34319 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400000w.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_04000010.tmp saved
 Parsing 2011Sep
 Note:  4,988,671 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 34863 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400000x.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_04000011.tmp saved
 Parsing 2011Oct
 Note:  5,126,707 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 35546 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_04000010.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_04000012.tmp saved
 Parsing 2011Nov
 Note:  5,665,131 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 38824 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_04000011.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_04000013.tmp saved
 Parsing 2011Dec
 Note:  5,611,899 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 38212 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_04000012.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_04000014.tmp saved
 Parsing 2012Jan
 Note:  5,154,395 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 35688 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_04000013.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_04000015.tmp saved
 Parsing 2012Feb
 Note:  5,178,895 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 35786 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_04000014.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_04000016.tmp saved
 Parsing 2012Mar
 Note:  5,298,181 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 36355 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_04000015.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_04000017.tmp saved
 Parsing 2012Apr
 Note:  5,440,965 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 37384 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_04000016.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_04000018.tmp saved
 Parsing 2012May
 Note:  5,346,645 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 36368 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_04000017.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_04000019.tmp saved
 Parsing 2012Jun
 Note:  6,266,081 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 36656 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_04000018.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400001a.tmp saved
 Parsing 2012Jul
 Note:  5,296,776 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 37128 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_04000019.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400001b.tmp saved
 Parsing 2012Aug
 Note:  5,683,068 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 37590 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400001a.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400001c.tmp saved
 Parsing 2012Sep
 Note:  5,389,311 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 37733 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400001b.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400001d.tmp saved
 Parsing 2012Oct
 Note:  5,040,624 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 35203 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400001c.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400001e.tmp saved
 Parsing 2012Nov
 Note:  5,083,995 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 35313 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400001d.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400001f.tmp saved
 Parsing 2012Dec
 Note:  4,967,220 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 34291 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400001e.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400001g.tmp saved
 Parsing 2013Jan
 Note:  4,873,341 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 34265 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400001f.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400001h.tmp saved
 Parsing 2013Feb
 Note:  4,939,522 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 34514 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400001g.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400001i.tmp saved
 Parsing 2013Mar
 Note:  4,895,611 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 34211 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400001h.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400001j.tmp saved
 Parsing 2013Apr
 Note:  5,056,756 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 35334 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400001i.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400001k.tmp saved
 Parsing 2013May
 Note:  5,066,893 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 35483 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400001j.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400001l.tmp saved
 Parsing 2013Jun
 Note:  5,073,533 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 35455 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400001k.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400001m.tmp saved
 Parsing 2013Jul
 Note:  5,048,969 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 35499 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400001l.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400001n.tmp saved
 Parsing 2013Aug
 Note:  5,159,129 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 36097 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400001m.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400001o.tmp saved
 Parsing 2013Sep
 Note:  5,193,142 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 36315 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400001n.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400001p.tmp saved
 Parsing 2013Oct
 Note:  5,309,290 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 37068 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400001o.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400001q.tmp saved
 Parsing 2013Nov
 Note:  5,323,745 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 36907 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400001p.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400001r.tmp saved
 Parsing 2013Dec
 Note:  5,437,994 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 38698 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400001q.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400001s.tmp saved
 
 . 
 . local 2014MonthsOld "Jan Feb Mar Apr"
@@ -338,22 +338,22 @@ Parsing 2014Jan
 Note:  5,418,259 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 38724 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400001r.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400001t.tmp saved
 Parsing 2014Feb
 Note:  5,392,685 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 38814 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400001s.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400001u.tmp saved
 Parsing 2014Mar
 Note:  5,366,458 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 38602 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400001t.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400001v.tmp saved
 Parsing 2014Apr
 Note:  1,464,393 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
 (19 vars, 10744 obs)
-file C:\Users\garre\AppData\Local\Temp\ST_0400001u.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400001w.tmp saved
 
 . 
 . clear // starting with a clean dataset
@@ -473,7 +473,7 @@ Note:  286,739 binary zeros were ignored in the source file.  The first instance
 Duplicates in terms of nv_serial_number posting_type posting_month posting_year discount_code discount_desc
 
 (668 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_0400001v.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0400001x.tmp saved
 Parsing discoutn codes for 2010
 Note:  4,776,093 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
@@ -482,7 +482,7 @@ Note:  4,776,093 binary zeros were ignored in the source file.  The first instan
 Duplicates in terms of nv_serial_number posting_type posting_month posting_year discount_code discount_desc
 
 (83549 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_0400001w.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_04000020.tmp saved
 Parsing discoutn codes for 2011
 Note:  5,695,027 binary zeros were ignored in the source file.  The first instance occurred on line 1.
        Binary zeros are not valid in text data.  Inspect your data carefully.
@@ -491,7 +491,7 @@ Note:  5,695,027 binary zeros were ignored in the source file.  The first instan
 Duplicates in terms of nv_serial_number posting_type posting_month posting_year discount_code discount_desc
 
 (86767 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_0400001x.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_04000021.tmp saved
 Parsing discoutn codes for 2012
 Note:  247,480 binary zeros were ignored in the source file.  The first instance occurred on line 1.  Binary
        zeros are not valid in text data.  Inspect your data carefully.
@@ -500,7 +500,7 @@ Note:  247,480 binary zeros were ignored in the source file.  The first instance
 Duplicates in terms of nv_serial_number posting_type posting_month posting_year discount_code discount_desc
 
 (2774 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_04000020.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_04000022.tmp saved
 Parsing discoutn codes for 2013
 Note:  286,322 binary zeros were ignored in the source file.  The first instance occurred on line 1.  Binary
        zeros are not valid in text data.  Inspect your data carefully.
@@ -509,7 +509,7 @@ Note:  286,322 binary zeros were ignored in the source file.  The first instance
 Duplicates in terms of nv_serial_number posting_type posting_month posting_year discount_code discount_desc
 
 (1815 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_04000021.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_04000023.tmp saved
 
 . 
 . import delimited using "2014/Discount-codes-Jan-thru-Apr-2014-old-format.txt", clear // see previous UTF com
@@ -555,7 +555,7 @@ Duplicates in terms of nv_serial_number posting_year posting_month posting_type 
 . tempfile AllDiscountCodes
 
 . save `AllDiscountCodes'
-file C:\Users\garre\AppData\Local\Temp\ST_04000022.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_04000024.tmp saved
 
 . 
 . 
@@ -606,49 +606,49 @@ file old_format_months.dta saved
 . /* cleaning up some different labels to have consistent structure. Covers 90+% of raw
 > data */
 . replace size = "1L" if size == "1.0L"
-(61571 real changes made)
+(61582 real changes made)
 
 . replace size = "750ML" if size == "750"
-(25633 real changes made)
+(25609 real changes made)
 
 . replace size = "50ML" if size == "050ML"
-(11 real changes made)
+(10 real changes made)
 
 . replace size = "1.75L" if size == "1.75"
-(5349 real changes made)
+(5391 real changes made)
 
 . replace size = "375ML" if size == "375"
-(4567 real changes made)
+(4565 real changes made)
 
 . replace size = "1L" if size == "LT"
-(1355 real changes made)
+(1358 real changes made)
 
 . replace size = "750ML" if size == "750BTL"
 (0 real changes made)
 
 . replace size = "750ML" if size == "750ML."
-(3868 real changes made)
+(3840 real changes made)
 
 . replace size = "1L" if size == "LITER"
-(3962 real changes made)
+(3967 real changes made)
 
 . replace size = "50ML" if size == "50"
-(836 real changes made)
+(813 real changes made)
 
 . replace size = "1L" if size == "1LT"
-(1789 real changes made)
+(1796 real changes made)
 
 . replace size = "750ML" if size == "0.75"
-(3318 real changes made)
+(3320 real changes made)
 
 . replace size = "200ML" if size == "200"
-(1363 real changes made)
+(1362 real changes made)
 
 . replace size = "750ML" if size == ".750LITERSBOTTLE"
 (0 real changes made)
 
 . replace size = "1L" if size == "1"
-(1530 real changes made)
+(1523 real changes made)
 
 . replace size = "1L" if size == "1LITER"
 (0 real changes made)
@@ -660,19 +660,19 @@ file old_format_months.dta saved
 (0 real changes made)
 
 . replace size = "1LTR" if size == "1L"
-(104857 real changes made)
+(104908 real changes made)
 
 . replace size = "1.75L" if size == "1.75LT"
-(288 real changes made)
+(295 real changes made)
 
 . replace size = "50ML" if size == "50ML."
-(284 real changes made)
+(292 real changes made)
 
 . replace size = "375ML" if size == "375ML."
-(571 real changes made)
+(576 real changes made)
 
 . replace size = "1L" if size == "1000ML"
-(447 real changes made)
+(455 real changes made)
 
 . replace size = "1.75L" if size == "1.75LIT"
 (0 real changes made)
@@ -692,20 +692,20 @@ file old_format_months.dta saved
 . 
 . /* keeping only larger bottles. Most likely to be purcahsed sizes I think*/
 . keep if size == "750ML" | size == "1L" | size == "1.75L"
-(436579 observations deleted)
+(436679 observations deleted)
 
 . 
 . /* identifying the type of discount, case or bottle */
 . gen discount_size_type = ""
-(307488 missing values generated)
+(307388 missing values generated)
 
 . replace discount_size_type = "CASE" if regexm(discount_code, "(CS)|(CASE)|(CAS)")
 discount_size_type was str1 now str4
-(101127 real changes made)
+(101060 real changes made)
 
 . replace discount_size_type = "BOTTLE" if regexm(discount_code, "(BT)|(BTL)|(BOTTLE)")
 discount_size_type was str4 now str6
-(185046 real changes made)
+(185055 real changes made)
 
 . 
 . /* Identifying if discount is in percentage terms or dollar terms */
@@ -716,27 +716,27 @@ discount_size_type was str4 now str6
 . 
 . /* Dropping unclear discounts */
 . drop if pct_discount == 0 & dollar_discount == 0 // unclear discount style
-(24462 observations deleted)
+(24410 observations deleted)
 
 . drop if discount_size_type == "" // unclear if case or bottles
-(15513 observations deleted)
+(15506 observations deleted)
 
 . drop if pct_discount == 1 & dollar_discount == 1 // small number of observations with typos. Can fix later
 (158 observations deleted)
 
 . 
 . replace discount_code = subinstr(discount_code, ")", ",",.) // normalizing some formatting
-(36023 real changes made)
+(36019 real changes made)
 
 . replace discount_code = subinstr(discount_code, "(", "",.) // normalizing some formatting
-(36023 real changes made)
+(36019 real changes made)
 
 . replace discount_code = stritrim(discount_code) // removing internal double spaces
-(176649 real changes made)
+(176636 real changes made)
 
 . 
 . drop if regexm(discount_code, "-") // irregular formatting for discoutn code. Maybe fix later.
-(8664 observations deleted)
+(8668 observations deleted)
 
 . 
 . /* Using the SSC package moss to pull numbers out of discount codes */
@@ -769,37 +769,37 @@ disc_p1 contains nonnumeric characters; replaced as double
 disc_q1 contains nonnumeric characters; replaced as double
 (216 missing values generated)
 disc_p2 contains nonnumeric characters; replaced as double
-(47741 missing values generated)
+(47683 missing values generated)
 disc_q2 contains nonnumeric characters; replaced as double
-(49216 missing values generated)
+(49162 missing values generated)
 disc_p3 contains nonnumeric characters; replaced as double
-(139834 missing values generated)
+(139790 missing values generated)
 disc_q3 contains nonnumeric characters; replaced as double
-(139952 missing values generated)
+(139907 missing values generated)
 disc_p4 contains nonnumeric characters; replaced as double
-(218813 missing values generated)
+(218763 missing values generated)
 disc_q4 contains nonnumeric characters; replaced as double
-(218870 missing values generated)
+(218836 missing values generated)
 disc_p5 contains nonnumeric characters; replaced as double
-(247252 missing values generated)
+(247201 missing values generated)
 disc_q5 contains nonnumeric characters; replaced as double
-(247313 missing values generated)
+(247262 missing values generated)
 disc_p6 contains nonnumeric characters; replaced as double
-(256374 missing values generated)
+(256323 missing values generated)
 disc_q6 contains nonnumeric characters; replaced as double
-(256370 missing values generated)
+(256319 missing values generated)
 disc_p7 contains nonnumeric characters; replaced as double
-(258335 missing values generated)
+(258284 missing values generated)
 disc_q7 contains nonnumeric characters; replaced as int
-(258346 missing values generated)
+(258295 missing values generated)
 disc_p8 contains nonnumeric characters; replaced as double
-(258607 missing values generated)
+(258563 missing values generated)
 disc_q8 contains nonnumeric characters; replaced as int
-(258615 missing values generated)
+(258571 missing values generated)
 disc_p9 contains nonnumeric characters; replaced as byte
-(258670 missing values generated)
+(258625 missing values generated)
 disc_q9 contains nonnumeric characters; replaced as byte
-(258670 missing values generated)
+(258625 missing values generated)
 
 . 
 . drop _count _pos*
@@ -816,24 +816,24 @@ disc_q9 contains nonnumeric characters; replaced as byte
 . 
 . reshape long disc_p disc_q, i(record_num) j(option)
 (note: j = 0 1 2 3 4 5 6 7 8 9)
-disc_p1:  145003 values would be changed; not changed
+disc_p1:  144951 values would be changed; not changed
 disc_q1:  1152 values would be changed; not changed
-disc_p2:  118819 values would be changed; not changed
-disc_q2:  561 values would be changed; not changed
-disc_p3:  68577 values would be changed; not changed
-disc_q3:  196 values would be changed; not changed
-disc_p4:  21889 values would be changed; not changed
-disc_q4:  95 values would be changed; not changed
-disc_p5:  6028 values would be changed; not changed
+disc_p2:  118832 values would be changed; not changed
+disc_q2:  563 values would be changed; not changed
+disc_p3:  68586 values would be changed; not changed
+disc_q3:  195 values would be changed; not changed
+disc_p4:  21893 values would be changed; not changed
+disc_q4:  94 values would be changed; not changed
+disc_p5:  6030 values would be changed; not changed
 disc_q5:  7 values would be changed; not changed
-disc_p6:  1259 values would be changed; not changed
+disc_p6:  1261 values would be changed; not changed
 disc_q6:  11 values would be changed; not changed
-disc_p7:  217 values would be changed; not changed
+disc_p7:  219 values would be changed; not changed
 disc_p8:  37 values would be changed; not changed
 
 Data                               wide   ->   long
 -----------------------------------------------------------------------------
-Number of obs.                   258691   -> 2.6e+06
+Number of obs.                   258646   -> 2.6e+06
 Number of variables                  45   ->      28
 j variable (10 values)                    ->   option
 xij variables:
@@ -846,7 +846,7 @@ xij variables:
 > the maximum observed in the data set is higher than 2) or some other problem
 > that resulted in a missing value for p or q */
 . drop if disc_p == . | disc_q == .
-(1687888 observations deleted)
+(1687514 observations deleted)
 
 . 
 . /* Calculating actual price paid at each point. 4 cases to deal with:
@@ -865,26 +865,26 @@ xij variables:
 > instances where there is a big discrepancy represent less than 1% of the data, so
 > we can probably assume their typos */
 . gen disc_dollars = .
-(899022 missing values generated)
+(898946 missing values generated)
 
 . replace disc_dollars = disc_p if dollar_discount == 1
-(843653 real changes made)
+(843478 real changes made)
 
 . replace disc_dollars = disc_p/100*price_per_case if discount_size_type == "CASE" & pct_discount == 1
-(37718 real changes made)
+(37790 real changes made)
 
 . replace disc_dollars = disc_p/100*price_per_bottle if discount_size_type == "BOTTLE" & pct_discount == 1
-(17651 real changes made)
+(17678 real changes made)
 
 . 
 . gen actual_p = .
-(899022 missing values generated)
+(898946 missing values generated)
 
 . replace actual_p = price_per_bottle - disc_dollars if discount_size_type == "BOTTLE"
-(625731 real changes made)
+(625774 real changes made)
 
 . replace actual_p = price_per_case - disc_dollars if discount_size_type == "CASE"
-(273291 real changes made)
+(273172 real changes made)
 
 . 
 . gen tariff = actual_p * disc_q
@@ -899,6 +899,21 @@ xij variables:
 . gen norm_tariff = norm_p*disc_q
 
 . 
+. /* some data validation. Some records have options labeled incorrectly (i.e. non-
+> consecutively. Generating a test and then dropping records that don't conform */
+. 
+. bys record_num (option): gen test = _n
+
+. gen test_tag = (option != (test-1))
+
+. egen test_total = total(test_tag), by(record_num)
+
+. drop if test_total > 0
+(492 observations deleted)
+
+. drop test test_tag test_total
+
+. 
 . save old_format_months, replace
 file old_format_months.dta saved
 
@@ -908,5 +923,5 @@ file old_format_months.dta saved
        log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\NY_price_schedules\data_clean_old_for
 > mat.txt
   log type:  text
- closed on:  28 Jun 2017, 08:07:05
+ closed on:  28 Jun 2017, 20:27:21
 --------------------------------------------------------------------------------------------------------------

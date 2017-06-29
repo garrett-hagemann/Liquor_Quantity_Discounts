@@ -233,6 +233,15 @@ gen norm_p = actual_p / max_p
 
 gen norm_tariff = norm_p*disc_q
 
+/* some data validation. Some records have options labeled incorrectly (i.e. non-
+consecutively. Generating a test and then dropping records that don't conform */
+
+bys record_num (option): gen test = _n
+gen test_tag = (option != (test-1))
+egen test_total = total(test_tag), by(record_num)
+drop if test_total > 0
+drop test test_tag test_total
+
 save old_format_months, replace
 
 log close
