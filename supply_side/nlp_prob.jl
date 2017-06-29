@@ -1,5 +1,4 @@
-using NLsolve, ForwardDiff, Distributions, Gadfly, Cairo, Roots, NLopt, JuMP, Ipopt, Optim, MathProgBase
-EnableNLPResolve()
+using ForwardDiff, Distributions, Roots, Optim
 
 function sparse_int(f::Function, a::Number, b::Number)
 	#= Implements sparse grid quadrature from sparsegrids.de
@@ -47,15 +46,42 @@ function dd_dt_dt(p,t)
 	return 0.0
 end
 
-a = 0.0
-b = 1.0
+function ks_dist(x::Float64,a::Float64,b::Float64)
+  if a <= 0.0
+    error("Must have a > 0")
+  end
+  if b <= 0.0
+    error("Must have b > 0")
+  end
+  if (x < 0.0) | (x > 1.0)
+    error("Distribution is defined only on x=[0,1]")
+  end
+  return 1.0 - (1.0-x^a)^b
+end
+
+function ks_dens(x::Float64,a::Float64,b::Float64)
+  if a <= 0.0
+    error("Must have a > 0")
+  end
+  if b <= 0.0
+    error("Must have b > 0")
+  end
+  if (x < 0.0) | (x > 1.0)
+    error("Density is defined only on x=[0,1]")
+  end
+  return a*b*x^(a-1.0)*(1.0-x^a)^(b-1.0)
+end
+
+
+a = 2.0
+b = 2.0
 c = 0.0
 
 
-t_pdf(x) = pdf(Uniform(a,b),x)
-t_cdf(x) = cdf(Uniform(a,b),x)
-#t_pdf(x) = pdf(Beta(1,.5),x)
-#t_cdf(x) = cdf(Beta(1,.5),x)
+#t_pdf(x) = pdf(Beta(a,b),x)
+#t_cdf(x) = cdf(Beta(a,b),x)
+t_pdf(x) = ks_dens(x,a,b)
+t_cdf(x) = ks_dist(x,a,b)
 
 t_lb = 0.0
 t_ub = 1.0
@@ -63,7 +89,7 @@ t_ub = 1.0
 N = 3
 
 function focs!(theta,focs_vec)
-	
+
 	rho_vec = [1; theta[1:N-1]]
 	t_vec = [t_lb; 0.0; theta[N:end] ; t_ub]
 
@@ -138,7 +164,7 @@ function focs_jac!(theta,focs_jac_mat)
 			end
 		end
 	end
-end 
+end
 
 srand(200096868)
 ##### NLsolve solution.
@@ -327,7 +353,7 @@ function hess!(theta,hess_mat)
 			end
 		end
 	end
-end 
+end
 x0 = rand(2*(N-1))
 @time solution = Optim.optimize(obj_func,grad!,hess!,x0,method=NewtonTrustRegion(),show_trace=false)
 println(solution)
@@ -345,21 +371,25 @@ println(solution)
 
 # constrained problem
 function obj_func(theta)
-	rho_vec = [1; theta[1:N-1]]
-	t_vec = [t_lb; 0.0; theta[N:end] ; t_ub]
-	profit = 0.0
-	for i = 1:N-1
-		f(t) = (rho_vec[i+1] - c)*d(rho_vec[i+1],t)
-		int1 = sparse_int(f,t_vec[i+1],t_vec[i+1+1])
-		g(p) = d(p,t_vec[i+1])
-		int2 = sparse_int(g,rho_vec[i+1],rho_vec[i+1-1])
-		inc = int1 + (1-t_cdf(t_vec[i+1]))*int2
-		profit = profit + inc
+	if !all((0 .<= theta .<= 1)) # if not all elements in [0,1]
+		return Inf
+	else
+		rho_vec = [1; theta[1:N-1]]
+		t_vec = [t_lb; 0.0; theta[N:end] ; t_ub]
+		profit = 0.0
+		for i = 1:N-1
+			f(t) = (rho_vec[i+1] - c)*d(rho_vec[i+1],t)
+			int1 = sparse_int(f,t_vec[i+1],t_vec[i+1+1])
+			g(p) = d(p,t_vec[i+1])
+			int2 = sparse_int(g,rho_vec[i+1],rho_vec[i+1-1])
+			inc = int1 + (1-t_cdf(t_vec[i+1]))*int2
+			profit = profit + inc
+		end
+		return -profit
 	end
-	return -profit
 end
 
-function grad!(theta,g_vec)
+function grad!(g_vec,theta)
 	rho_vec = [1; theta[1:N-1]]
 	t_vec = [t_lb; 0.0; theta[N:end] ; t_ub]
 	#price focs
@@ -372,7 +402,7 @@ function grad!(theta,g_vec)
 		g_vec[i+N-1-1] = -res_t
 	end
 end
-function hess!(theta,hess_mat)
+function hess!(hess_mat,theta)
 	rho_vec = [1; theta[1:N-1]]
 	t_vec = [t_lb; 0.0 ;theta[N:end] ; t_ub]
 	#rho rho part of jac
@@ -432,7 +462,7 @@ function hess!(theta,hess_mat)
 			end
 		end
 	end
-end 
+end
 #=
 #checking grad/hess
 testx = [3/5,1/5,1/5]
@@ -463,6 +493,17 @@ x0 = [1/2,1/3,1/2]
 @time solution = Optim.optimize(obj_func,grad!,hess!,x0,method=NewtonTrustRegion(),show_trace=false)
 println(solution)
 println(Optim.minimizer(solution))
+println("Profits: ",-obj_func(Optim.minimizer(solution)))
+
+solution = Optim.optimize(obj_func,x0,method=NelderMead())
+println(solution)
+println(Optim.minimizer(solution))
+println("Profits: ",-obj_func(Optim.minimizer(solution)))
+
+solution = Optim.optimize(obj_func,x0,method=SimulatedAnnealing(),iterations=500000)
+println(solution)
+println(Optim.minimizer(solution))
+println("Profits: ",-obj_func(Optim.minimizer(solution)))
 
 #=
 #### JuMP solution
@@ -623,7 +664,7 @@ function hess!(hess_mat,theta)
 		for j = 1:N-1
 			if j == i - 1
 				res = ((rho_vec[i+1-1] - c)*dd_dp(rho_vec[i+1-1],t_vec[i+1]) + (1 - t_cdf(t_vec[i+1]))/(t_pdf(t_vec[i+1]+pert))*dd_dt(rho_vec[i+1-1],t_vec[i+1]))
-				hess_mat[i+N-1,j] = -res 
+				hess_mat[i+N-1,j] = -res
 			elseif j == i
 				res = ((rho_vec[i+1] - c)*dd_dp(rho_vec[i+1],t_vec[i+1]) + (1-t_cdf(t_vec[i+1]))/(t_pdf(t_vec[i+1]+pert))*dd_dt(rho_vec[i+1],t_vec[i+1]))
 				hess_mat[i+N-1,j] = res #not sure why no neg here
@@ -674,7 +715,7 @@ hess!(htest,testx)
 println("Numerical Hessian: ", (gtest1 - gtest2)/(2*step))
 println(htest)
 =#
-
+#=
 type WilsonNLP <: MathProgBase.AbstractNLPEvaluator
 end
 
@@ -716,7 +757,7 @@ function MathProgBase.eval_hesslag(d::WilsonNLP, H, x, σ, μ)
 	hess!(test_mat,x)
 	H[1] = σ * test_mat[1,1] #1,1
 	H[2] = σ * test_mat[2,1] #2,1
-	H[3] = σ * test_mat[2,2] #2,2	
+	H[3] = σ * test_mat[2,2] #2,2
 	H[4] = σ * test_mat[3,1] #3,1
 	H[5] = σ * test_mat[3,2] #3,2
 	H[6] = σ * test_mat[3,3] #3.3
@@ -738,11 +779,12 @@ function num_sol(solver=IpoptSolver(print_level=0))
 	MathProgBase.loadproblem!(m,4,1,l,u,lb,ub,:Min,WilsonNLP())
 	start = [1/2,1/3,0.1,1/3]
 	MathProgBase.setwarmstart!(m,start)
-	
+
 	MathProgBase.optimize!(m)
 	x = MathProgBase.getsolution(m)
 	println(x)
 end
 
 num_sol()
-=#
+
+=# =#
