@@ -184,6 +184,35 @@ function wholesaler_profit(ps::PriceSched, params::WholesaleParams, product::Liq
     end
   end
   return profit
+  #=
+  #### Linear version. Only for checking with Wilson Problem
+  M = 1.0 # normalizing constant. Shouldn't affect price schedule, just scale of profits
+  lambda_vec = [ps.t_cuts; 1.0] # need to put in upper boundary values
+  rho_vec = ps.rhos # no boundary here, will deal with in iterator
+  N = params.N
+  # defining some functions for convience
+  s(p) = max((1-p),0.0)
+  est_pdf(x) = ks_dens(x,params.a,params.b)
+  est_cdf(x) = ks_dist(x,params.a,params.b)
+  profit = 0.0
+  for i = 1:N-1
+    k = i # dealing with indexing
+    f(l) =  l*est_pdf(l)
+    int = sparse_int(f,lambda_vec[k],lambda_vec[k+1])
+    if (k == 1)
+      ps1 = (1 + (rho_vec[k]))/2
+      inc = ((rho_vec[k] - params.c)*M*s(ps1))*int + (1-est_cdf(lambda_vec[k]))*lambda_vec[k]*M*((ps1 - rho_vec[k])*s(ps1) - 0.0)
+      profit = profit + inc
+    else
+      # Pre-calculating some stuff to avoid repeated calls to p_star
+      ps1 = (1 + (rho_vec[k]))/2
+      ps2 = (1 + (rho_vec[k-1]))/2
+      inc = ((rho_vec[k] - params.c)*M*s(ps1))*int + (1-est_cdf(lambda_vec[k]))*lambda_vec[k]*M*((ps1 - rho_vec[k])*s(ps1) - (ps2 - rho_vec[k-1])*s(ps2))
+      profit = profit + inc
+    end
+  end
+  return profit
+  =#
 end
 
 function optimal_price_sched(params::WholesaleParams, product::Liquor,coefs::Array{DemandCoefs,1},weights::Array{Float64,1},mkt::Market)
@@ -191,17 +220,18 @@ function optimal_price_sched(params::WholesaleParams, product::Liquor,coefs::Arr
   cost as well as the parameters of the Kumaraswamy distribution. =#
   N = params.N
   function g(x::Array{Float64,1})
-    ps = PriceSched(x[1:N-1],x[N:end]) # intializing new price schedule object
-    if !all((0.0 .<= ps.t_cuts .<= 1.0)) | !all((0.0 .<= ps.rhos)) # error checking to limit derivative-free search
+    ps = PriceSched(x[1:N-1],[0.0; x[N:end]]) # intializing new price schedule object. Need to impose constraint here
+    if !all((0.0 .<= ps.t_cuts .<= 1.0)) | !all((0.0 .<= ps.rhos )) # error checking to limit derivative-free search
   		return Inf
   	else
       return -1.0*wholesaler_profit(ps,params,product,coefs,weights,mkt) # return wholesaler profit for price schedule. negative because use minimizer
     end
   end
-  rho_guess = flipdim([i*1.0 for i=1:N-1],1) # generates positive prices that decline
-  t_guess = flipdim([1/(i+1) for i = 1:N-1],1) # generates types between 0 and 1 that increase
+  rho_guess = sort(rand(N-1),rev=true) # prices in 0,1 declining
+  t_guess = sort(rand(N-2)) # generates types between 0 and 1 that increase. One less b/c of constriant
   x0 = [rho_guess; t_guess]
   ps_optim_res = Optim.optimize(g,x0,method=NelderMead())
+  println(ps_optim_res)
   optim_rho = Optim.minimizer(ps_optim_res)[1:N-1]
   optim_t = Optim.minimizer(ps_optim_res)[N:end]
   return PriceSched(optim_rho,optim_t)

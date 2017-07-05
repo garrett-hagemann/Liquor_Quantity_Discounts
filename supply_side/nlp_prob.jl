@@ -53,8 +53,11 @@ function ks_dist(x::Float64,a::Float64,b::Float64)
   if b <= 0.0
     error("Must have b > 0")
   end
-  if (x < 0.0) | (x > 1.0)
-    error("Distribution is defined only on x=[0,1]")
+  if (x < 0.0)
+    return 0.0
+  end
+  if (x > 1.0)
+    return 1.0
   end
   return 1.0 - (1.0-x^a)^b
 end
@@ -67,15 +70,16 @@ function ks_dens(x::Float64,a::Float64,b::Float64)
     error("Must have b > 0")
   end
   if (x < 0.0) | (x > 1.0)
-    error("Density is defined only on x=[0,1]")
+    #error("Density is defined only on x=[0,1]. Tried to evaluate at $x")
+    return 0.0
   end
   return a*b*x^(a-1.0)*(1.0-x^a)^(b-1.0)
 end
 
 
-a = 2.0
-b = 2.0
-c = 0.0
+a = 1.0
+b = 1.0
+c = .1
 
 
 #t_pdf(x) = pdf(Beta(a,b),x)
@@ -486,7 +490,7 @@ hess!(testx,htest)
 println("Numerical Hessian: ", (gtest1 - gtest2)/(2*step))
 println(htest)
 =#
-x0 = [1/2,1/3,1/2]
+x0 = [1/2, 1/3,1/4]
 @time solution = Optim.optimize(obj_func,grad!,hess!,x0,method=NewtonTrustRegion(),show_trace=false)
 @time solution = Optim.optimize(obj_func,grad!,hess!,x0,method=NewtonTrustRegion(),show_trace=false)
 @time solution = Optim.optimize(obj_func,grad!,hess!,x0,method=NewtonTrustRegion(),show_trace=false)
