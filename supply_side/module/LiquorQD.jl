@@ -28,13 +28,13 @@ end
 mutable struct PriceSched # type to hold a price schedule
   rhos::Array{Float64,1} # price options
   t_cuts::Array{Float64,1} # Type cutoffs (lambdas)
-  N::Int64 # Parts in tariff. An N-part tariff has N-1 prices, FF, etc.
 end
 
 mutable struct WholesaleParams # type to hold wholesaler parameters
   c::Float64 # marginal cost for wholesaler
   a::Float64 # a parameter for the Kumaraswamy distribution faced by wholesaler
   b::Float64 # b parameter for the Kumaraswamy distribution faced by wholesaler
+  N::Int64 # Number of segments wholesaler wants to offer. Need it here and in price schedule
 end
 
 function ks_dist(x::Float64,a::Float64,b::Float64)
@@ -44,8 +44,11 @@ function ks_dist(x::Float64,a::Float64,b::Float64)
   if b <= 0.0
     error("Must have b > 0")
   end
-  if (x < 0.0) | (x > 1.0)
-    error("Distribution is defined only on x=[0,1]")
+  if (x < 0.0)
+    return 0.0
+  end
+  if (x > 1.0)
+    return 1.0
   end
   return 1.0 - (1.0-x^a)^b
 end
@@ -58,7 +61,8 @@ function ks_dens(x::Float64,a::Float64,b::Float64)
     error("Must have b > 0")
   end
   if (x < 0.0) | (x > 1.0)
-    error("Density is defined only on x=[0,1]")
+    #error("Density is defined only on x=[0,1]. Tried to evaluate at $x")
+    return 0.0
   end
   return a*b*x^(a-1.0)*(1.0-x^a)^(b-1.0)
 end
@@ -153,37 +157,61 @@ function p_star(mc::Float64,product::Liquor,coefs::Array{DemandCoefs,1},weights:
     return old_p
 end
 
-function wholesaler_profit(ps::PriceSched, params::WolesaleParams, product::Liquor,coefs::Array{DemandCoefs,1},weights::Array{Float64,1},mkt::Market)
+function wholesaler_profit(ps::PriceSched, params::WholesaleParams, product::Liquor,coefs::Array{DemandCoefs,1},weights::Array{Float64,1},mkt::Market)
   M = 10000.0 # normalizing constant. Shouldn't affect price schedule, just scale of profits
-  lambda_vec = ps.t_cuts
-  rho_vec = ps.rhos
+  lambda_vec = [ps.t_cuts; 1.0] # need to put in upper boundary values
+  rho_vec = ps.rhos # no boundary here, will deal with in iterator
+  N = params.N
   # defining some functions for convience
   s(p) = share(p,product,coefs,weights,mkt)
   est_pdf(x) = ks_dens(x,params.a,params.b)
   est_cdf(x) = ks_dist(x,params.a,params.b)
   profit = 0.0
   for i = 1:N-1
-    k = i+1 # dealing with indexing
+    k = i # dealing with indexing
     f(l) =  l*est_pdf(l)
     int = sparse_int(f,lambda_vec[k],lambda_vec[k+1])
-    # Pre-calculating some stuff to avoid repeated calls to p_star
-    ps1 = p_star(rho_vec[k],product,coefs,weights,mkt)
-    ps2 = p_star(rho_vec[k-1],product,coefs,weights,mkt)
-    inc = ((rho_vec[k] - params.c)*M*s(ps1))*int + (1-est_cdf(lambda_vec[k]))*lambda_vec[k]*M((ps1 - rho_vec[k])*s(ps1) - (ps2 - rho_vec[k-1])*s(ps2))
-    profit = profit + inc
+    if (k == 1)
+      ps1 = p_star(rho_vec[k],product,coefs,weights,mkt)
+      inc = ((rho_vec[k] - params.c)*M*s(ps1))*int + (1-est_cdf(lambda_vec[k]))*lambda_vec[k]*M*((ps1 - rho_vec[k])*s(ps1) - 0.0)
+      profit = profit + inc
+    else
+      # Pre-calculating some stuff to avoid repeated calls to p_star
+      ps1 = p_star(rho_vec[k],product,coefs,weights,mkt)
+      ps2 = p_star(rho_vec[k-1],product,coefs,weights,mkt)
+      inc = ((rho_vec[k] - params.c)*M*s(ps1))*int + (1-est_cdf(lambda_vec[k]))*lambda_vec[k]*M*((ps1 - rho_vec[k])*s(ps1) - (ps2 - rho_vec[k-1])*s(ps2))
+      profit = profit + inc
+    end
   end
-  return -profit # return negative because we want to use minimizer
+  return profit
 end
 
-function optimal_price_sched(params::Array{Float64,1},N::Int)
+function optimal_price_sched(params::WholesaleParams, product::Liquor,coefs::Array{DemandCoefs,1},weights::Array{Float64,1},mkt::Market)
   #= params contains the parameters for the wholesaler. This means the marginal
   cost as well as the parameters of the Kumaraswamy distribution. =#
+  N = params.N
+  function g(x::Array{Float64,1})
+    ps = PriceSched(x[1:N-1],x[N:end]) # intializing new price schedule object
+    if !all((0.0 .<= ps.t_cuts .<= 1.0)) | !all((0.0 .<= ps.rhos)) # error checking to limit derivative-free search
+  		return Inf
+  	else
+      return -1.0*wholesaler_profit(ps,params,product,coefs,weights,mkt) # return wholesaler profit for price schedule. negative because use minimizer
+    end
+  end
+  rho_guess = flipdim([i*1.0 for i=1:N-1],1) # generates positive prices that decline
+  t_guess = flipdim([1/(i+1) for i = 1:N-1],1) # generates types between 0 and 1 that increase
+  x0 = [rho_guess; t_guess]
+  ps_optim_res = Optim.optimize(g,x0,method=NelderMead())
+  optim_rho = Optim.minimizer(ps_optim_res)[1:N-1]
+  optim_t = Optim.minimizer(ps_optim_res)[N:end]
+  return PriceSched(optim_rho,optim_t)
 end
 
 
 # Export statements
 
-export Liquor, Market, DemandCoefs, ks_dist, ks_dens, sparse_int, share, d_share,
-  p_star
+export Liquor, Market, DemandCoefs, WholesaleParams, PriceSched
+export ks_dist, ks_dens, sparse_int, share, d_share,
+  p_star, wholesaler_profit, optimal_price_sched
 
 end
