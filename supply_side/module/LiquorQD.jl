@@ -220,28 +220,50 @@ function optimal_price_sched(params::WholesaleParams, product::Liquor,coefs::Arr
   cost as well as the parameters of the Kumaraswamy distribution. =#
   N = params.N
   function g(x::Array{Float64,1})
-    ps = PriceSched(x[1:N-1],[0.0; x[N:end]]) # intializing new price schedule object. Need to impose constraint here
+    ps = PriceSched(x[1:N-1],[0.0; x[N:end]]) # intializing new price schedule object. Need to impose constrained
     if !all((0.0 .<= ps.t_cuts .<= 1.0)) | !all((0.0 .<= ps.rhos )) # error checking to limit derivative-free search
   		return Inf
   	else
       return -1.0*wholesaler_profit(ps,params,product,coefs,weights,mkt) # return wholesaler profit for price schedule. negative because use minimizer
     end
   end
-  rho_guess = sort(rand(N-1),rev=true) # prices in 0,1 declining
-  t_guess = sort(rand(N-2)) # generates types between 0 and 1 that increase. One less b/c of constriant
+  rho_guess = sort(rand(N-1),rev=true) # prices in 0,1 declining. Scaling up seems to have no effect on solutions (which is good)
+  t_guess = sort(rand(N-2)) # generates types between 0 and 1 that increase. One less b/c of constrained
   x0 = [rho_guess; t_guess]
   ps_optim_res = Optim.optimize(g,x0,method=NelderMead())
   println(ps_optim_res)
   optim_rho = Optim.minimizer(ps_optim_res)[1:N-1]
   optim_t = Optim.minimizer(ps_optim_res)[N:end]
-  return PriceSched(optim_rho,optim_t)
+  return PriceSched(optim_rho,[0.0; optim_t]) # constrained
 end
+
+function dev_gen(ps::PriceSched,δ::Float64)
+  #= returns deviations of a price schedule. The deviations constitute all price
+  schedules where one or more elements is multiplied by 1+δ or 1-δ. Function
+  should output array of price schedule objects =#
+  N = length(ps.rhos) + 1
+  println()
+  dev_steps = [1+δ,1.0,1-δ] # deviation amounts
+  dev_poss = fill(dev_steps,2*(N-1)) # deviation possibilities for each ps element
+  ps_vec = [ps.rhos ; ps.t_cuts] # price schedule in vector form so we can manipulate it
+  dev_cart_prod = Iterators.product(dev_poss...) # cartesian product of elems in dev_poss. Each is a possible deviation vector. Iterators is in base
+  dev_cart_prod_filter = Iterators.filter(x->(x!=tuple(ones(2*(N-1)))...),dev_cart_prod) # removing deviation vector of all ones (i.e. unperturbed price schedule)
+  dev_ps = map(x->ps_vec.*x,dev_cart_prod_filter) # generating perturbed price schedules
+  output = PriceSched[] # initializing empty arry of price schedules.
+  for s in dev_ps
+    push!(output,PriceSched(s[1:N-1],s[N:end]))
+  end
+  return output
+end
+
+
+
 
 
 # Export statements
 
 export Liquor, Market, DemandCoefs, WholesaleParams, PriceSched
 export ks_dist, ks_dens, sparse_int, share, d_share,
-  p_star, wholesaler_profit, optimal_price_sched
+  p_star, wholesaler_profit, optimal_price_sched, dev_gen
 
 end

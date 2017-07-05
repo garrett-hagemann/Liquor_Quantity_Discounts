@@ -32,5 +32,12 @@ println("Optimal price at $test_mc: ", ps_res)
 test_w_params = WholesaleParams(0.0,1.0,1.0,3)
 test_ps = optimal_price_sched(test_w_params,test_prod1,[test_coefs],test_weights,test_mkt)
 println("Optimal price schedule: ", test_ps)
-test_ps.t_cuts = [0.0 ; test_ps.t_cuts] # appending constrained value
 println("Profit at optimal schedule: ", wholesaler_profit(test_ps,test_w_params,test_prod1,[test_coefs],test_weights,test_mkt))
+
+# testing deviation generation
+test_δ = 0.2
+test_devs = dev_gen(test_ps,test_δ)
+println("Deviated price schedules appear below")
+for s in test_devs
+  println(s)
+end

@@ -77,8 +77,8 @@ function ks_dens(x::Float64,a::Float64,b::Float64)
 end
 
 
-a = 1.0
-b = 1.0
+a = 3.0
+b = 3.0
 c = .1
 
 
