@@ -29,15 +29,23 @@ ps_res = p_star(test_mc,test_prod1,[test_coefs],test_weights,test_mkt)
 println("Optimal price at $test_mc: ", ps_res)
 
 # Testing price schedule optimization
-test_w_params = WholesaleParams(0.0,1.0,1.0,3)
-test_ps = optimal_price_sched(test_w_params,test_prod1,[test_coefs],test_weights,test_mkt)
+test_w_params = WholesaleParams(3.0,2.0,2.0)
+test_N = 3
+test_ps = optimal_price_sched(test_w_params,test_N,test_prod1,[test_coefs],test_weights,test_mkt)
 println("Optimal price schedule: ", test_ps)
 println("Profit at optimal schedule: ", wholesaler_profit(test_ps,test_w_params,test_prod1,[test_coefs],test_weights,test_mkt))
 
 # testing deviation generation
-test_δ = 0.2
+test_δ = 0.05
 test_devs = dev_gen(test_ps,test_δ)
-println("Deviated price schedules appear below")
-for s in test_devs
-  println(s)
-end
+
+# testing moment obj function evaluation
+test_w_params2 = WholesaleParams(2.0,1.0,3.0)
+test_Q = moment_obj_func(test_ps,test_devs,test_w_params,test_prod1,[test_coefs],test_weights,test_mkt)
+println("Q(true params) = ", test_Q) # should b 0
+test_Q2 = moment_obj_func(test_ps,test_devs,test_w_params2,test_prod1,[test_coefs],test_weights,test_mkt)
+println("Q(other params) = ", test_Q2) # should be > 0
+
+# testing moment optimization to recover params
+test_recovered_params = optimize_moment(test_ps,test_devs,test_prod1,[test_coefs],test_weights,test_mkt,10000)
+println("Recovered Parameters: ", test_recovered_params)

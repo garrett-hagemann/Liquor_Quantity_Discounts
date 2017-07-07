@@ -28,13 +28,13 @@ end
 mutable struct PriceSched # type to hold a price schedule
   rhos::Array{Float64,1} # price options
   t_cuts::Array{Float64,1} # Type cutoffs (lambdas)
+  N::Int64 # number of options. A N part tariff as N-1 prices
 end
 
 mutable struct WholesaleParams # type to hold wholesaler parameters
   c::Float64 # marginal cost for wholesaler
   a::Float64 # a parameter for the Kumaraswamy distribution faced by wholesaler
   b::Float64 # b parameter for the Kumaraswamy distribution faced by wholesaler
-  N::Int64 # Number of segments wholesaler wants to offer. Need it here and in price schedule
 end
 
 function ks_dist(x::Float64,a::Float64,b::Float64)
@@ -161,7 +161,7 @@ function wholesaler_profit(ps::PriceSched, params::WholesaleParams, product::Liq
   M = 10000.0 # normalizing constant. Shouldn't affect price schedule, just scale of profits
   lambda_vec = [ps.t_cuts; 1.0] # need to put in upper boundary values
   rho_vec = ps.rhos # no boundary here, will deal with in iterator
-  N = params.N
+  N = ps.N
   # defining some functions for convience
   s(p) = share(p,product,coefs,weights,mkt)
   est_pdf(x) = ks_dens(x,params.a,params.b)
@@ -215,12 +215,11 @@ function wholesaler_profit(ps::PriceSched, params::WholesaleParams, product::Liq
   =#
 end
 
-function optimal_price_sched(params::WholesaleParams, product::Liquor,coefs::Array{DemandCoefs,1},weights::Array{Float64,1},mkt::Market)
+function optimal_price_sched(params::WholesaleParams, N::Int64, product::Liquor,coefs::Array{DemandCoefs,1},weights::Array{Float64,1},mkt::Market)
   #= params contains the parameters for the wholesaler. This means the marginal
   cost as well as the parameters of the Kumaraswamy distribution. =#
-  N = params.N
   function g(x::Array{Float64,1})
-    ps = PriceSched(x[1:N-1],[0.0; x[N:end]]) # intializing new price schedule object. Need to impose constrained
+    ps = PriceSched(x[1:N-1],[0.0; x[N:end]],N) # intializing new price schedule object. Need to impose constrained
     if !all((0.0 .<= ps.t_cuts .<= 1.0)) | !all((0.0 .<= ps.rhos )) # error checking to limit derivative-free search
   		return Inf
   	else
@@ -229,33 +228,62 @@ function optimal_price_sched(params::WholesaleParams, product::Liquor,coefs::Arr
   end
   rho_guess = sort(rand(N-1),rev=true) # prices in 0,1 declining. Scaling up seems to have no effect on solutions (which is good)
   t_guess = sort(rand(N-2)) # generates types between 0 and 1 that increase. One less b/c of constrained
-  x0 = [rho_guess; t_guess]
+  hs_x0 = [rho_guess; t_guess]
+  hs_res = Optim.optimize(g,hs_x0,method=SimulatedAnnealing(),iterations=10000) # taking 10000 SA steps to get good guess. stabalizes the solution
+  x0 = Optim.minimizer(hs_res)
   ps_optim_res = Optim.optimize(g,x0,method=NelderMead())
-  println(ps_optim_res)
   optim_rho = Optim.minimizer(ps_optim_res)[1:N-1]
   optim_t = Optim.minimizer(ps_optim_res)[N:end]
-  return PriceSched(optim_rho,[0.0; optim_t]) # constrained
+  return PriceSched(optim_rho,[0.0; optim_t],N) # constrained
 end
 
 function dev_gen(ps::PriceSched,δ::Float64)
   #= returns deviations of a price schedule. The deviations constitute all price
   schedules where one or more elements is multiplied by 1+δ or 1-δ. Function
   should output array of price schedule objects =#
-  N = length(ps.rhos) + 1
-  println()
+  N = ps.N
   dev_steps = [1+δ,1.0,1-δ] # deviation amounts
   dev_poss = fill(dev_steps,2*(N-1)) # deviation possibilities for each ps element
   ps_vec = [ps.rhos ; ps.t_cuts] # price schedule in vector form so we can manipulate it
   dev_cart_prod = Iterators.product(dev_poss...) # cartesian product of elems in dev_poss. Each is a possible deviation vector. Iterators is in base
-  dev_cart_prod_filter = Iterators.filter(x->(x!=tuple(ones(2*(N-1)))...),dev_cart_prod) # removing deviation vector of all ones (i.e. unperturbed price schedule)
+  dev_cart_prod_filter = Iterators.filter(x->(x!=tuple(ones(2*(N-1))...)),dev_cart_prod) # removing deviation vector of all ones (i.e. unperturbed price schedule)
   dev_ps = map(x->ps_vec.*x,dev_cart_prod_filter) # generating perturbed price schedules
   output = PriceSched[] # initializing empty arry of price schedules.
-  for s in dev_ps
-    push!(output,PriceSched(s[1:N-1],s[N:end]))
+  Threads.@threads for s in dev_ps  # potentially very many deviations. Scales at the rate of (2*(N-1))^3 - 1. Threads may be faster
+    push!(output,PriceSched(s[1:N-1],s[N:end],N))
   end
   return output
 end
 
+function moment_obj_func(ps::PriceSched, devs::Array{PriceSched,1},params::WholesaleParams,product::Liquor,coefs::Array{DemandCoefs,1},weight::Array{Float64,1},mkt::Market)
+  # calculates the value of the objective function for a given set of deviations.
+  wp(x::PriceSched) = wholesaler_profit(x,params,product,coefs,weight,mkt)
+  obs_profit = wp(ps)
+  if obs_profit < 0.0
+    res = Inf
+  else
+    #dev_profit = max.(map(wp,devs),0.0) # likewise with all deviations. Use max.() because array
+    dev_profit = map(wp,devs) # likewise with all deviations. Use max.() because array
+    nu = min.(obs_profit - dev_profit,0.0).^2 # if dev profit is greater, then you get a positive value for that deviation.
+    res = sum(nu)
+  end
+  return res
+end
+
+function optimize_moment(ps::PriceSched, devs::Array{PriceSched,1},product::Liquor,coefs::Array{DemandCoefs,1},weight::Array{Float64,1},mkt::Market,iters::Int64)
+  function Q(x::Array{Float64,1})
+    theta = WholesaleParams(x...)
+    if (theta.b <= 0.0 ) | (theta.c < 0.0) | (theta.a < 1.0) # constraining SA search
+      return Inf
+    else
+      return moment_obj_func(ps,devs,theta,product,coefs,weight,mkt)
+    end
+  end
+  x0 = [0.0,1.0,1.0] # inital guess of 0 mc and uniform dist
+  moment_res = Optim.optimize(Q,x0,method=SimulatedAnnealing(), store_trace=true, iterations=iters)
+  moment_res_min = Optim.minimizer(moment_res)
+  return WholesaleParams(moment_res_min...)
+end
 
 
 
@@ -264,6 +292,7 @@ end
 
 export Liquor, Market, DemandCoefs, WholesaleParams, PriceSched
 export ks_dist, ks_dens, sparse_int, share, d_share,
-  p_star, wholesaler_profit, optimal_price_sched, dev_gen
+  p_star, wholesaler_profit, optimal_price_sched, dev_gen, moment_obj_func,
+  optimize_moment
 
 end
