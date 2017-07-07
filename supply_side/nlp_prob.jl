@@ -1,4 +1,4 @@
-using ForwardDiff, Distributions, Roots, Optim
+using ForwardDiff, Distributions, Roots, Optim, NLsolve
 
 function sparse_int(f::Function, a::Number, b::Number)
 	#= Implements sparse grid quadrature from sparsegrids.de
@@ -77,9 +77,9 @@ function ks_dens(x::Float64,a::Float64,b::Float64)
 end
 
 
-a = 3.0
-b = 3.0
-c = .1
+a = 4.0
+b = 4.0
+c = 0.25
 
 
 #t_pdf(x) = pdf(Beta(a,b),x)
@@ -266,25 +266,29 @@ end
 @time rec_solve()
 @time rec_solve()
 =#
-#=
+
 ##### optimizer solution
 # Unconstrained problem
 function obj_func(theta)
-	rho_vec = [1; theta[1:N-1]]
-	t_vec = [t_lb; theta[N:end] ; t_ub]
-	profit = 0.0
-	for i = 1:N-1
-		f(t) = (rho_vec[i+1] - c)*d(rho_vec[i+1],t)
-		int1 = sparse_int(f,t_vec[i+1],t_vec[i+1+1])
-		g(p) = d(p,t_vec[i+1])
-		int2 = sparse_int(g,rho_vec[i+1],rho_vec[i+1-1])
-		inc = int1 + (1-t_cdf(t_vec[i+1]))*int2
-		profit = profit + inc
+	if !all((0 .<= theta .<= 1)) # if not all elements in [0,1]
+		return Inf
+	else
+		rho_vec = [1; theta[1:N-1]]
+		t_vec = [t_lb; theta[N:end] ; t_ub]
+		profit = 0.0
+		for i = 1:N-1
+			f(t) = (rho_vec[i+1] - c)*d(rho_vec[i+1],t)
+			int1 = sparse_int(f,t_vec[i+1],t_vec[i+1+1])
+			g(p) = d(p,t_vec[i+1])
+			int2 = sparse_int(g,rho_vec[i+1],rho_vec[i+1-1])
+			inc = int1 + (1-t_cdf(t_vec[i+1]))*int2
+			profit = profit + inc
+		end
+		return -profit
 	end
-	return -profit
 end
 
-function grad!(theta,g_vec)
+function grad!(g_vec,theta)
 	rho_vec = [1; theta[1:N-1]]
 	t_vec = [t_lb; theta[N:end] ; t_ub]
 	#price focs
@@ -297,7 +301,7 @@ function grad!(theta,g_vec)
 		g_vec[i+N-1] = -res_t
 	end
 end
-function hess!(theta,hess_mat)
+function hess!(hess_mat,theta)
 	rho_vec = [1; theta[1:N-1]]
 	t_vec = [t_lb; theta[N:end] ; t_ub]
 	#rho rho part of jac
@@ -359,10 +363,14 @@ function hess!(theta,hess_mat)
 	end
 end
 x0 = rand(2*(N-1))
-@time solution = Optim.optimize(obj_func,grad!,hess!,x0,method=NewtonTrustRegion(),show_trace=false)
+solution = Optim.optimize(obj_func,grad!,hess!,x0,method=NelderMead(),show_trace=false, iterations=10000)
+println(solution)
+x0 = Optim.minimizer(solution)
+solution = Optim.optimize(obj_func,grad!,hess!,x0,method=Newton(),show_trace=false)
 println(solution)
 println(Optim.minimizer(solution))
-=#
+obs_p = Optim.minimizer(solution)[1:N-1]
+obs_t = Optim.minimizer(solution)[N:end]
 #=
 x0 = rand(2*(N-1))
 @time solution = optimize(obj_func,grad!,hess!,x0,method=Newton(),show_trace=false)
@@ -490,7 +498,7 @@ hess!(testx,htest)
 println("Numerical Hessian: ", (gtest1 - gtest2)/(2*step))
 println(htest)
 =#
-x0 = [1/2, 1/3,1/4]
+x0 = rand(2*(N-1)-1)
 @time solution = Optim.optimize(obj_func,grad!,hess!,x0,method=NewtonTrustRegion(),show_trace=false)
 @time solution = Optim.optimize(obj_func,grad!,hess!,x0,method=NewtonTrustRegion(),show_trace=false)
 @time solution = Optim.optimize(obj_func,grad!,hess!,x0,method=NewtonTrustRegion(),show_trace=false)
@@ -508,6 +516,47 @@ solution = Optim.optimize(obj_func,x0,method=SimulatedAnnealing(),iterations=500
 println(solution)
 println(Optim.minimizer(solution))
 println("Profits: ",-obj_func(Optim.minimizer(solution)))
+
+## Identification test
+#= the goal of this test is to take the observed price schedule and see if the parameters
+can be recovered by solving the FOCs for 0 as a function of the params. =#
+id_N = N
+p(i,n) = 1 - i/(n - 1/2)
+t(i,n) = (i - .5)/(n-.5)
+
+p_vec = [1.0; [p(i,id_N) for i = 1:(id_N-1)]]
+t_vec = [t_lb ; [t(i,id_N) for i = 1:(id_N-1)] ; t_ub]
+println(p_vec)
+println(t_vec)
+
+function id_focs(theta)
+	if (theta[2] < 1.0) | (theta[3] < 0.0) | (theta[1] < 0.0)
+		res = Inf
+	else
+		ic = theta[1]
+		i_pdf(x) = ks_dens(x,theta[2],theta[3])
+		i_cdf(x) = ks_dist(x,theta[2],theta[3])
+		rho_vec = [1.0; obs_p]
+		t_vec = [t_lb; obs_t ; t_ub]
+		#price focs
+		res = 0.0
+		for i = 1:id_N-1 # note index is shifted up by 1 to deal with 1 indexing
+			f(t) = ((rho_vec[i+1] - ic)*dd_dp(rho_vec[i+1],t) + (1 - i_cdf(t))/i_pdf(t)*dd_dt(rho_vec[i+1],t))
+			res_rho = sparse_int(f,t_vec[i+1],t_vec[i+1+1])
+			g(p) = ((p - ic)*dd_dp(p,t_vec[i+1]) + (1-i_cdf(t_vec[i+1]))/i_pdf(t_vec[i+1])*dd_dt(p,t_vec[i+1]))
+			res_t = sparse_int(g,rho_vec[i+1],rho_vec[i+1-1])
+			res = res_rho^2 + res_t^2 + res
+		end
+	end
+	return res
+end
+
+x0 = [0.0,1.5,1.5]
+println(id_focs([c,b,a]))
+solution = Optim.optimize(id_focs,x0,method=NelderMead(), g_tol=1e-12)
+println(solution)
+println(Optim.minimizer(solution))
+
 
 #=
 #### JuMP solution
