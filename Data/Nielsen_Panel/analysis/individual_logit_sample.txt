@@ -3,278 +3,183 @@
        log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\Nielsen_Panel\analysis\individual_log
 > it_sample.txt
   log type:  text
- opened on:  16 May 2017, 19:07:17
+ opened on:  10 Jul 2017, 17:55:20
+
+. 
+. local rebuild_data = 0 // set to 1 to rebuild data from scratch. Very slow
 
 . 
 . set seed 317596364  // seed taken from random.org
 
 . 
 . 
-. local years = "2008" //2009 2010 2011 2012 2013 2014"
+. local years = "2011" // "2008 2009 2010 2011 2012 2013 2014"
 
+. if `rebuild_data' { 
+.         /* trimming down UPC file so be smaller so merging is easier */
+.         use liquor_upcs
 . 
-. /* trimming down UPC file so be smaller so merging is easier */
-. use liquor_upcs
-
+.         /* generating varibles that we want */
+.         //dropping unwanted types of products
+.         drop if product_module_descr == "COOLERS - REMAINING"
+.         drop if product_module_descr == "ALOCOHOLIC COCKTAILS"
 . 
-. /* generating varibles that we want */
-. //dropping unwanted types of products
-. drop if product_module_descr == "COOLERS - REMAINING"
-(2369 observations deleted)
-
-. drop if product_module_descr == "ALOCOHOLIC COCKTAILS"
-(0 observations deleted)
-
+.         // Liquor type dummies
+.         gen d_g_gin = (product_module_descr == "GIN")
+.         gen d_g_vod = (product_module_descr == "VODKA")
+.         gen d_g_rum = (product_module_descr == "RUM")
+.         gen d_g_sch = (product_module_descr == "SCOTCH")
+.         gen d_g_brb = regexm(product_module_descr, "BOURBON")
+.         gen d_g_whs = regexm(product_module_descr, "WHISKEY")
+.         gen d_g_teq = (product_module_descr == "TEQUILA") 
+.         gen d_g_otr = (d_g_gin == 0 & d_g_vod == 0 & d_g_rum == 0 & d_g_sch == 0 & d_g_brb == 0 & d_g_whs ==
+>  0 & d_g_teq == 0)
 . 
-. // Liquor type dummies
-. gen d_g_gin = (product_module_descr == "GIN")
-
-. gen d_g_vod = (product_module_descr == "VODKA")
-
-. gen d_g_rum = (product_module_descr == "RUM")
-
-. gen d_g_sch = (product_module_descr == "SCOTCH")
-
-. gen d_g_brb = regexm(product_module_descr, "BOURBON")
-
-. gen d_g_whs = regexm(product_module_descr, "WHISKEY")
-
-. gen d_g_teq = (product_module_descr == "TEQUILA") 
-
-. gen d_g_otr = (d_g_gin == 0 & d_g_vod == 0 & d_g_rum == 0 & d_g_sch == 0 & d_g_brb == 0 & d_g_whs == 0 & d_g
-> _teq == 0)
-
+.         // Size dummies
+.         gen d_s_350ML = (size1_amount == 350)
+.         gen d_s_750ML = (size1_amount == 750)
+.         gen d_s_1L = (size1_amount == 1)
+.         gen d_s_175L = (size1_amount == 1.75) 
 . 
-. // Size dummies
-. gen d_s_350ML = (size1_amount == 350)
-
-. gen d_s_750ML = (size1_amount == 750)
-
-. gen d_s_1L = (size1_amount == 1)
-
-. gen d_s_175L = (size1_amount == 1.75) 
-
+.         /* Generating proof */
+.         gen proof = regexs(1) if regexm(upc_descr , "([0-9]?[0-9][0-9][.]?[0-9]?[0-9]?)P")
+.         destring proof, replace
 . 
-. /* Generating proof */
-. gen proof = regexs(1) if regexm(upc_descr , "([0-9]?[0-9][0-9][.]?[0-9]?[0-9]?)P")
-(858 missing values generated)
-
-. destring proof, replace
-proof has all characters numeric; replaced as double
-(858 missing values generated)
-
+.         /* imported flag */
+.         gen imported = regexm(upc_descr , " IM ")
+.         replace imported = 1 if regexm(upc_descr, " PRD ") & d_g_rum == 1 // PRD is Puerto Rico Distilled
+.         replace imported = 1 if d_g_sch == 1 // All scotch is imported
+.         replace imported = 1 if d_g_teq == 1 // all tequila is imported
 . 
-. /* imported flag */
-. gen imported = regexm(upc_descr , " IM ")
-
-. replace imported = 1 if regexm(upc_descr, " PRD ") & d_g_rum == 1 // PRD is Puerto Rico Distilled
-(10 real changes made)
-
-. replace imported = 1 if d_g_sch == 1 // All scotch is imported
-(212 real changes made)
-
-. replace imported = 1 if d_g_teq == 1 // all tequila is imported
-(2180 real changes made)
-
+.         // imputing proof for products which the regex didn't work
+.         reg proof d_g_* imported, nocons
+.         predict proof_hat, xb
+.         replace proof = proof_hat if proof == .
 . 
-. // imputing proof for products which the regex didn't work
-. reg proof d_g_* imported, nocons
-
-      Source |       SS       df       MS              Number of obs =   29218
--------------+------------------------------           F(  9, 29209) =48599.81
-       Model |   141617440     9  15735271.1           Prob > F      =  0.0000
-    Residual |  9457065.01 29209  323.772297           R-squared     =  0.9374
--------------+------------------------------           Adj R-squared =  0.9374
-       Total |   151074505 29218  5170.59706           Root MSE      =  17.994
-
-------------------------------------------------------------------------------
-       proof |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
--------------+----------------------------------------------------------------
-     d_g_gin |   79.34282   .5230145   151.70   0.000     78.31769    80.36795
-     d_g_vod |   70.34937   .2671577   263.33   0.000     69.82573    70.87301
-     d_g_rum |   71.64215   .3120517   229.58   0.000     71.03052    72.25379
-     d_g_sch |   73.83041     .52018   141.93   0.000     72.81083    74.84998
-     d_g_brb |    84.6113    .375194   225.51   0.000     83.87591     85.3467
-     d_g_whs |   73.63109   .4988544   147.60   0.000     72.65331    74.60886
-     d_g_teq |   68.23441   .5051852   135.07   0.000     67.24422    69.22459
-     d_g_otr |   50.24454   .1774196   283.20   0.000     49.89679    50.59229
-    imported |   10.89421   .3233422    33.69   0.000     10.26044    11.52797
-------------------------------------------------------------------------------
-
-. predict proof_hat, xb
-
-. replace proof = proof_hat if proof == .
-(858 real changes made)
-
+.         keep upc upc_ver d_g_* d_s_* proof imported upc_descr
 . 
-. keep upc upc_ver d_g_* d_s_* proof imported 
-
+.         tempfile small_upc_file
+.         save `small_upc_file'
 . 
-. tempfile small_upc_file
-
-. save `small_upc_file'
-file C:\Users\garre\AppData\Local\Temp\ST_02000001.tmp saved
-
-. 
-. foreach year in `years'{
+.         foreach year in `years'{
   2. 
-.         import delimited using "../nielsen_extracts/HMS/`year'/Annual_Files/purchases_`year'.tsv", clear col
-> range(1:5)
-  3.         // Getting just NYS purchases
-.         merge m:1 trip_code_uc using ny_trips_`year', gen(_merge_trips) keep(3)
-  4.         gen NYC = (fips_county_descr == "BRONX" | fips_county_descr == "NEW YORK" | fips_county_descr == 
-> "KINGS" | fips_county_descr == "QUEENS" | fips_county_descr == "RICHMOND")
-  5.         keep if NYC == 1
-  6.         
-.         // Identifying liquor purchases
-.         merge m:1 upc upc_ver_uc using `small_upc_file', gen(_merge_upcs) keep(1 3) // keeps all purchases, 
-> drops unused liquor UPCs
-  7.         
-.         // Keeping just one purchase for non-liquor trips
-.         egen max_merge = max(_merge_upcs), by(trip_code_uc) // largest merge code. Should be 3
-  8.         gen liquor_trip = (max_merge == 3) // trips where one of the UPCs is a liquor UPC
-  9.         drop if liquor_trip == 1 & _merge_upcs == 1 // dropping non-liquor records for liquor trips
+.                 import delimited using "../nielsen_extracts/HMS/`year'/Annual_Files/purchases_`year'.tsv", c
+> lear colrange(1:5)
+  3.                 // Getting just NYS purchases
+.                 merge m:1 trip_code_uc using ny_trips_`year', gen(_merge_trips) keep(3)
+  4.                 gen NYC = (fips_county_descr == "BRONX" | fips_county_descr == "NEW YORK" | fips_county_d
+> escr == "KINGS" | fips_county_descr == "QUEENS" | fips_county_descr == "RICHMOND")
+  5.                 keep if NYC == 1
+  6.                 
+.                 // Identifying liquor purchases
+.                 merge m:1 upc upc_ver_uc using `small_upc_file', gen(_merge_upcs) keep(1 3) // keeps all pur
+> chases, drops unused liquor UPCs
+  7.                 
+.                 // Keeping just one purchase for non-liquor trips
+.                 egen max_merge = max(_merge_upcs), by(trip_code_uc) // largest merge code. Should be 3
+  8.                 gen liquor_trip = (max_merge == 3) // trips where one of the UPCs is a liquor UPC
+  9.                 drop if liquor_trip == 1 & _merge_upcs == 1 // dropping non-liquor records for liquor tri
+> ps
  10. 
-.         bys trip_code_uc: gen trip_order = _n // ordering purchases within trips. Doesn't matter if sort is 
-> stable. Just need one record for each non-liquor trip
- 11.         
-.         drop if liquor_trip == 0 & trip_order > 1 // dropping additional purchases from non-liquor trips
- 12.         
-.         tempfile obs`year'
- 13.         save `obs`year''
- 14. }
-(5 vars, 64527995 obs)
-
-    Result                           # of obs.
-    -----------------------------------------
-    not matched                             0
-    matched                         3,834,206  (_merge_trips==3)
-    -----------------------------------------
-(3200748 observations deleted)
-
-    Result                           # of obs.
-    -----------------------------------------
-    not matched                       631,559
-        from master                   631,559  (_merge_upcs==1)
-        from using                          0  (_merge_upcs==2)
-
-    matched                             1,899  (_merge_upcs==3)
-    -----------------------------------------
-(990 observations deleted)
-(507016 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_02000002.tmp saved
+.                 bys trip_code_uc: gen trip_order = _n // ordering purchases within trips. Doesn't matter if 
+> sort is stable. Just need one record for each non-liquor trip
+ 11.                 
+.                 drop if liquor_trip == 0 & trip_order > 1 // dropping additional purchases from non-liquor t
+> rips
+ 12.                 
+.                 tempfile obs`year'
+ 13.                 save `obs`year''
+ 14.         }
+. 
+.         clear
+. 
+.         foreach year in `years'{
+  2.                 append using `obs`year''
+  3.         }
+. 
+.         gen date_d = date(purchase_date, "YMD") // daily date
+.         format date_d %td
+. 
+.         gen date_m = mofd(date_d) // monthly date
+.         format date_m %tm
+. 
+.         gen price = total_price_paid / quantity
+. 
+.         gen white = (race == 1)
+. 
+.         gen choice = 1 // all these records are actual choices
+. 
+.         local J = 100
+.         // getting top J UPCs
+.         preserve
+.                 drop if liquor_trip == 0 // keeping only liquor purchases
+.                 contract upc, freq(upc_purchases)
+.                 gen rev = -upc_purchases
+.                 sort rev
+.                 keep in 1/`J' // keeping top J products
+.                 gen product = _n
+.                 save top_upc_individual, replace
+.         restore
+. 
+.         merge m:1 upc using top_upc_individual, gen(_merge_top) assert(1 3)
+. 
+.         replace product = 0 if _merge_top == 1 & liquor_trip == 0 // outside option
+.         replace product = (`J'+1) if _merge_top == 1 & liquor_trip == 1 // all other products
+. 
+. 
+. 
+.         gen case = _n // Each "purchase" is a case. Now need to construct alternatives
+.         save prod_chars_individual, replace
+. }
 
 . 
 . clear
 
-. 
-. foreach year in `years'{
-  2.         append using `obs`year''
-  3. }
+. use prod_chars_individual
 
-. 
-. gen date_d = date(purchase_date, "YMD") // daily date
-
-. format date_d %td
-
-. 
-. gen date_m = mofd(date_d) // monthly date
-
-. format date_m %tm
-
-. 
-. gen price = total_price_paid / quantity
-
-. 
-. gen white = (race == 1)
-
-. 
-. gen choice = 1 // all these records are actual choices
-
-. 
-. local J = 100
-
-. // getting top J UPCs
 . preserve
 
-.         drop if liquor_trip == 0 // keeping only liquor purchases
-(123553 observations deleted)
+.         drop if product == 0
+(133148 observations deleted)
 
-.         contract upc, freq(upc_purchases)
+.         egen mkt = group(date_m)
 
-.         gen rev = -upc_purchases
-
-.         sort rev
-
-.         keep in 1/`J' // keeping top J products
-(437 observations deleted)
-
-.         gen product = _n
-
-.         keep upc product
-
-.         tempfile top_upc
-
-.         save `top_upc'
-file C:\Users\garre\AppData\Local\Temp\ST_02000004.tmp saved
+.         export delim using "product_chars.csv", replace
+(note: file product_chars.csv not found)
+file product_chars.csv saved
 
 . restore
 
-. 
-. merge m:1 upc using `top_upc', gen(_merge_top) assert(1 3)
-
-    Result                           # of obs.
-    -----------------------------------------
-    not matched                       124,192
-        from master                   124,192  (_merge_top==1)
-        from using                          0  (_merge_top==2)
-
-    matched                             1,260  (_merge_top==3)
-    -----------------------------------------
-
-. 
-. replace product = 0 if _merge_top == 1 & liquor_trip == 0 // outside option
-(123553 real changes made)
-
-. replace product = (`J'+1) if _merge_top == 1 & liquor_trip == 1 // all other products
-(639 real changes made)
-
-. 
-. 
-. 
-. gen case = _n // Each "purchase" is a case. Now need to construct alternatives
-
-. 
 . 
 . /* Generating population & sample weights then sampling fewer of the outside
 > option purchases. This should substantially reduce the number of observations
 > in the data set. Note that weights apply to products not people. */
 . 
 . count
-125452
+134655
 
 . disp "Original case count: " r(N)
-Original case count: 125452
+Original case count: 134655
 
 . egen pop_weight = count(case), by(product)
 
 . replace pop_weight = pop_weight / _N // converting to percents
-(125452 real changes made)
+(134655 real changes made)
 
 . 
 . count if product == `J'+1
-  639
+   76
 
 . local liq_N = r(N)
 
 . sample `liq_N' if product == 0, count // 
-(122914 observations deleted)
+(133072 observations deleted)
 
 . 
 . egen sample_weight = count(case), by(product)
 
 . replace sample_weight = sample_weight / _N // converting to percents
-(2538 real changes made)
+(1583 real changes made)
 
 . 
 . // end of sampling code
@@ -286,11 +191,11 @@ Original case count: 125452
 . tempfile all_choices
 
 . save `all_choices'
-file C:\Users\garre\AppData\Local\Temp\ST_02000005.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_06000003.tmp saved
 
 . 
 . levelsof date_m, local(months)
-575 576 577 578 579 580 581 582 583 584 585 586 587
+611 612 613 614 615 616 617 618 619 620 621 622 623
 
 . foreach m of local months {
   2.         keep if date_m == `m'
@@ -323,227 +228,227 @@ file C:\Users\garre\AppData\Local\Temp\ST_02000005.tmp saved
  18.         clear
  19.         use `all_choices'
  20. }
-(2518 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_02000006.tmp saved
-(260 real changes made)
-(20 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_02000007.tmp saved
-(6 observations deleted)
+(1533 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_06000004.tmp saved
+(1050 real changes made)
+(50 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_06000005.tmp saved
+(28 observations deleted)
 
     Result                           # of obs.
     -----------------------------------------
     not matched                             0
 
-    matched                               260
+    matched                             1,050
         not updated                         0  (_merge_alts==3)
         missing updated                     0  (_merge_alts==4)
-        nonmissing conflict               260  (_merge_alts==5)
+        nonmissing conflict             1,050  (_merge_alts==5)
     -----------------------------------------
-file C:\Users\garre\AppData\Local\Temp\ST_02000008.tmp saved
-(2365 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_02000009.tmp saved
-(7093 real changes made)
-(173 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_0200000a.tmp saved
-(131 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_06000006.tmp saved
+(1442 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_06000007.tmp saved
+(6204 real changes made)
+(141 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_06000008.tmp saved
+(96 observations deleted)
 
     Result                           # of obs.
     -----------------------------------------
     not matched                             0
 
-    matched                             7,093
+    matched                             6,204
         not updated                         0  (_merge_alts==3)
         missing updated                     0  (_merge_alts==4)
-        nonmissing conflict             7,093  (_merge_alts==5)
+        nonmissing conflict             6,204  (_merge_alts==5)
     -----------------------------------------
-file C:\Users\garre\AppData\Local\Temp\ST_0200000b.tmp saved
-(2349 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_0200000c.tmp saved
-(9072 real changes made)
-(189 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_0200000d.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_06000009.tmp saved
+(1487 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0600000a.tmp saved
+(3648 real changes made)
+(96 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0600000b.tmp saved
+(57 observations deleted)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+
+    matched                             3,648
+        not updated                         0  (_merge_alts==3)
+        missing updated                     0  (_merge_alts==4)
+        nonmissing conflict             3,648  (_merge_alts==5)
+    -----------------------------------------
+file C:\Users\garre\AppData\Local\Temp\ST_0600000c.tmp saved
+(1480 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0600000d.tmp saved
+(4532 real changes made)
+(103 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0600000e.tmp saved
+(58 observations deleted)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+
+    matched                             4,532
+        not updated                         0  (_merge_alts==3)
+        missing updated                     0  (_merge_alts==4)
+        nonmissing conflict             4,532  (_merge_alts==5)
+    -----------------------------------------
+file C:\Users\garre\AppData\Local\Temp\ST_0600000f.tmp saved
+(1459 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0600000g.tmp saved
+(4836 real changes made)
+(124 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0600000h.tmp saved
+(84 observations deleted)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+
+    matched                             4,836
+        not updated                         0  (_merge_alts==3)
+        missing updated                     0  (_merge_alts==4)
+        nonmissing conflict             4,836  (_merge_alts==5)
+    -----------------------------------------
+file C:\Users\garre\AppData\Local\Temp\ST_0600000i.tmp saved
+(1443 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0600000j.tmp saved
+(6860 real changes made)
 (140 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0600000k.tmp saved
+(90 observations deleted)
 
     Result                           # of obs.
     -----------------------------------------
     not matched                             0
 
-    matched                             9,072
+    matched                             6,860
         not updated                         0  (_merge_alts==3)
         missing updated                     0  (_merge_alts==4)
-        nonmissing conflict             9,072  (_merge_alts==5)
+        nonmissing conflict             6,860  (_merge_alts==5)
     -----------------------------------------
-file C:\Users\garre\AppData\Local\Temp\ST_0200000e.tmp saved
-(2352 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_0200000f.tmp saved
-(9114 real changes made)
-(186 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_0200000g.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0600000l.tmp saved
+(1440 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0600000m.tmp saved
+(6864 real changes made)
+(143 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0600000n.tmp saved
+(94 observations deleted)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+
+    matched                             6,864
+        not updated                         0  (_merge_alts==3)
+        missing updated                     0  (_merge_alts==4)
+        nonmissing conflict             6,864  (_merge_alts==5)
+    -----------------------------------------
+file C:\Users\garre\AppData\Local\Temp\ST_0600000o.tmp saved
+(1478 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0600000p.tmp saved
+(4200 real changes made)
+(105 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0600000q.tmp saved
+(64 observations deleted)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+
+    matched                             4,200
+        not updated                         0  (_merge_alts==3)
+        missing updated                     0  (_merge_alts==4)
+        nonmissing conflict             4,200  (_merge_alts==5)
+    -----------------------------------------
+file C:\Users\garre\AppData\Local\Temp\ST_0600000r.tmp saved
+(1447 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0600000s.tmp saved
+(6392 real changes made)
 (136 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0600000t.tmp saved
+(88 observations deleted)
 
     Result                           # of obs.
     -----------------------------------------
     not matched                             0
 
-    matched                             9,114
+    matched                             6,392
         not updated                         0  (_merge_alts==3)
         missing updated                     0  (_merge_alts==4)
-        nonmissing conflict             9,114  (_merge_alts==5)
+        nonmissing conflict             6,392  (_merge_alts==5)
     -----------------------------------------
-file C:\Users\garre\AppData\Local\Temp\ST_0200000h.tmp saved
-(2329 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_0200000i.tmp saved
-(12749 real changes made)
-(209 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_0200000j.tmp saved
-(147 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0600000u.tmp saved
+(1488 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0600000v.tmp saved
+(3705 real changes made)
+(95 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0600000w.tmp saved
+(55 observations deleted)
 
     Result                           # of obs.
     -----------------------------------------
     not matched                             0
 
-    matched                            12,749
+    matched                             3,705
         not updated                         0  (_merge_alts==3)
         missing updated                     0  (_merge_alts==4)
-        nonmissing conflict            12,749  (_merge_alts==5)
+        nonmissing conflict             3,705  (_merge_alts==5)
     -----------------------------------------
-file C:\Users\garre\AppData\Local\Temp\ST_0200000k.tmp saved
-(2318 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_0200000l.tmp saved
-(11880 real changes made)
-(220 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_0200000m.tmp saved
-(165 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0600000x.tmp saved
+(1465 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_06000010.tmp saved
+(5074 real changes made)
+(118 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_06000011.tmp saved
+(74 observations deleted)
 
     Result                           # of obs.
     -----------------------------------------
     not matched                             0
 
-    matched                            11,880
+    matched                             5,074
         not updated                         0  (_merge_alts==3)
         missing updated                     0  (_merge_alts==4)
-        nonmissing conflict            11,880  (_merge_alts==5)
+        nonmissing conflict             5,074  (_merge_alts==5)
     -----------------------------------------
-file C:\Users\garre\AppData\Local\Temp\ST_0200000n.tmp saved
-(2336 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_0200000o.tmp saved
-(10706 real changes made)
-(202 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_0200000p.tmp saved
-(148 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_06000012.tmp saved
+(1430 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_06000013.tmp saved
+(5814 real changes made)
+(153 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_06000014.tmp saved
+(114 observations deleted)
 
     Result                           # of obs.
     -----------------------------------------
     not matched                             0
 
-    matched                            10,706
+    matched                             5,814
         not updated                         0  (_merge_alts==3)
         missing updated                     0  (_merge_alts==4)
-        nonmissing conflict            10,706  (_merge_alts==5)
+        nonmissing conflict             5,814  (_merge_alts==5)
     -----------------------------------------
-file C:\Users\garre\AppData\Local\Temp\ST_0200000q.tmp saved
-(2338 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_0200000r.tmp saved
-(10600 real changes made)
-(200 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_0200000s.tmp saved
-(146 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_06000015.tmp saved
+(1404 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_06000016.tmp saved
+(7697 real changes made)
+(179 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_06000017.tmp saved
+(135 observations deleted)
 
     Result                           # of obs.
     -----------------------------------------
     not matched                             0
 
-    matched                            10,600
+    matched                             7,697
         not updated                         0  (_merge_alts==3)
         missing updated                     0  (_merge_alts==4)
-        nonmissing conflict            10,600  (_merge_alts==5)
+        nonmissing conflict             7,697  (_merge_alts==5)
     -----------------------------------------
-file C:\Users\garre\AppData\Local\Temp\ST_0200000t.tmp saved
-(2300 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_0200000u.tmp saved
-(14042 real changes made)
-(238 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_0200000v.tmp saved
-(178 observations deleted)
-
-    Result                           # of obs.
-    -----------------------------------------
-    not matched                             0
-
-    matched                            14,042
-        not updated                         0  (_merge_alts==3)
-        missing updated                     0  (_merge_alts==4)
-        nonmissing conflict            14,042  (_merge_alts==5)
-    -----------------------------------------
-file C:\Users\garre\AppData\Local\Temp\ST_0200000w.tmp saved
-(2315 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_0200000x.tmp saved
-(10481 real changes made)
-(223 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_02000010.tmp saved
-(175 observations deleted)
-
-    Result                           # of obs.
-    -----------------------------------------
-    not matched                             0
-
-    matched                            10,481
-        not updated                         0  (_merge_alts==3)
-        missing updated                     0  (_merge_alts==4)
-        nonmissing conflict            10,481  (_merge_alts==5)
-    -----------------------------------------
-file C:\Users\garre\AppData\Local\Temp\ST_02000011.tmp saved
-(2342 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_02000012.tmp saved
-(9996 real changes made)
-(196 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_02000013.tmp saved
-(144 observations deleted)
-
-    Result                           # of obs.
-    -----------------------------------------
-    not matched                             0
-
-    matched                             9,996
-        not updated                         0  (_merge_alts==3)
-        missing updated                     0  (_merge_alts==4)
-        nonmissing conflict             9,996  (_merge_alts==5)
-    -----------------------------------------
-file C:\Users\garre\AppData\Local\Temp\ST_02000014.tmp saved
-(2289 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_02000015.tmp saved
-(13446 real changes made)
-(249 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_02000016.tmp saved
-(194 observations deleted)
-
-    Result                           # of obs.
-    -----------------------------------------
-    not matched                             0
-
-    matched                            13,446
-        not updated                         0  (_merge_alts==3)
-        missing updated                     0  (_merge_alts==4)
-        nonmissing conflict            13,446  (_merge_alts==5)
-    -----------------------------------------
-file C:\Users\garre\AppData\Local\Temp\ST_02000017.tmp saved
-(2305 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_02000018.tmp saved
-(12116 real changes made)
-(233 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_02000019.tmp saved
-(180 observations deleted)
-
-    Result                           # of obs.
-    -----------------------------------------
-    not matched                             0
-
-    matched                            12,116
-        not updated                         0  (_merge_alts==3)
-        missing updated                     0  (_merge_alts==4)
-        nonmissing conflict            12,116  (_merge_alts==5)
-    -----------------------------------------
-file C:\Users\garre\AppData\Local\Temp\ST_0200001a.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_06000018.tmp saved
 
 . 
 . clear
@@ -569,21 +474,21 @@ file C:\Users\garre\AppData\Local\Temp\ST_0200001a.tmp saved
 . foreach var of varlist d_*_* proof import price {
   2.         replace `var' = 0 if product == 0 
   3. }
-(2538 real changes made)
-(2538 real changes made)
-(2538 real changes made)
-(2538 real changes made)
-(2538 real changes made)
-(2538 real changes made)
-(2538 real changes made)
-(2538 real changes made)
-(2538 real changes made)
-(2538 real changes made)
-(2538 real changes made)
-(2538 real changes made)
-(2538 real changes made)
-(2538 real changes made)
-(2538 real changes made)
+(1533 real changes made)
+(1533 real changes made)
+(1533 real changes made)
+(1533 real changes made)
+(1533 real changes made)
+(1533 real changes made)
+(1533 real changes made)
+(1533 real changes made)
+(1533 real changes made)
+(1533 real changes made)
+(1533 real changes made)
+(1533 real changes made)
+(1533 real changes made)
+(1533 real changes made)
+(1533 real changes made)
 
 . 
 . /* sampling alternatives within cases to further reduce data set size. Should be OK for Logit.
@@ -595,9 +500,9 @@ file C:\Users\garre\AppData\Local\Temp\ST_0200001a.tmp saved
 . foreach var of varlist household_income white NYC {
   2.         bys case (`var'): replace `var' = `var'[1] if missing(`var')
   3. }
-(131555 real changes made)
-(131555 real changes made)
-(131555 real changes made)
+(66876 real changes made)
+(66876 real changes made)
+(66876 real changes made)
 
 . 
 . compress // making dataset smaller
@@ -619,7 +524,7 @@ file C:\Users\garre\AppData\Local\Temp\ST_0200001a.tmp saved
   product was float now int
   NYC was float now byte
   white was float now byte
-  (6,972,836 bytes saved)
+  (3,559,868 bytes saved)
 
 . 
 . //drop if date_m < tm(2008m1)
@@ -634,5 +539,5 @@ file individual_logit_sample.dta saved
        log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\Nielsen_Panel\analysis\individual_log
 > it_sample.txt
   log type:  text
- closed on:  16 May 2017, 19:19:13
+ closed on:  10 Jul 2017, 17:55:23
 --------------------------------------------------------------------------------------------------------------
