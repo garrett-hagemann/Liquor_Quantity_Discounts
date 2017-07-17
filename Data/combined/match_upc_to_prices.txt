@@ -1,8 +1,8 @@
--------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /home/gh8728/Projects/Liquor/Data/combined/match_upc_to_prices.txt
+       log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\combined\match_upc_to_prices.txt
   log type:  text
- opened on:  16 Aug 2016, 12:58:16
+ opened on:  13 Jul 2017, 13:06:43
 
 . 
 . /* This file matches the nielsen UPCs to the NYS price schedule data.
@@ -12,28 +12,27 @@
 . 
 . /* importing hand matches */
 . import delimited using upc_crosswalk_checked.csv
-(9 vars, 5767 obs)
+(7 vars, 590 obs)
 
-. keep if checked == 1 // keeping hand checked records
-(3,016 observations deleted)
-
-. 
-. drop similscore neg_similscore brand_string* notes
+. keep if checked == 1 // keeping hand checked records. Ignores multiple matches
+(406 observations deleted)
 
 . 
-. /* merging top_1000_upc info back in */
-. local upc_file = "../Nielsen_Panel/analysis/blp_sample.dta"
+. drop similscore neg_similscore brand_string1
 
-. merge 1:m upc_id using `upc_file', keep(2 3) gen(_merge_matched)
-(note: variable upc_id was int, now float to accommodate using data's values)
+. 
+. /* merging top upc info back in */
+. 
+. merge 1:m upc_id brand_string using upc_file, keep(2 3) gen(_merge_matched)
+(note: variable brand_string was str60, now str64 to accommodate using data's values)
 
     Result                           # of obs.
     -----------------------------------------
-    not matched                        28,873
+    not matched                         1,113
         from master                         0  (_merge_matched==1)
-        from using                     28,873  (_merge_matched==2)
+        from using                      1,113  (_merge_matched==2)
 
-    matched                             4,041  (_merge_matched==3)
+    matched                               394  (_merge_matched==3)
     -----------------------------------------
 
 . 
@@ -45,29 +44,28 @@
 
 .         drop _merge
 
-.         reshape wide disc_p disc_q disc_dollars actual_p tariff norm_p norm_tariff, i(record_num) j(o
-> ption)
-(note: j = 0 1 2 3 4 5 6 7 8 9 10 11)
+.         reshape wide disc_p disc_q disc_dollars actual_p tariff norm_p norm_tariff, i(record_num) j(option)
+(note: j = 0 1 2 3 4 5 6 7 8 9)
 
 Data                               long   ->   wide
 -----------------------------------------------------------------------------
-Number of obs.                  1.1e+06   ->  319533
-Number of variables                  33   ->     109
-j variable (12 values)           option   ->   (dropped)
+Number of obs.                   898454   ->  258453
+Number of variables                  33   ->      95
+j variable (10 values)           option   ->   (dropped)
 xij variables:
-                                 disc_p   ->   disc_p0 disc_p1 ... disc_p11
-                                 disc_q   ->   disc_q0 disc_q1 ... disc_q11
-                           disc_dollars   ->   disc_dollars0 disc_dollars1 ... disc_dollars11
-                               actual_p   ->   actual_p0 actual_p1 ... actual_p11
-                                 tariff   ->   tariff0 tariff1 ... tariff11
-                                 norm_p   ->   norm_p0 norm_p1 ... norm_p11
-                            norm_tariff   ->   norm_tariff0 norm_tariff1 ... norm_tariff11
+                                 disc_p   ->   disc_p0 disc_p1 ... disc_p9
+                                 disc_q   ->   disc_q0 disc_q1 ... disc_q9
+                           disc_dollars   ->   disc_dollars0 disc_dollars1 ... disc_dollars9
+                               actual_p   ->   actual_p0 actual_p1 ... actual_p9
+                                 tariff   ->   tariff0 tariff1 ... tariff9
+                                 norm_p   ->   norm_p0 norm_p1 ... norm_p9
+                            norm_tariff   ->   norm_tariff0 norm_tariff1 ... norm_tariff9
 -----------------------------------------------------------------------------
 
 .         tempfile ps
 
 .         save `ps'
-file /tmp/St33095.000002 saved
+file C:\Users\garre\AppData\Local\Temp\ST_07000002.tmp saved
 
 . restore
 
@@ -77,27 +75,25 @@ file /tmp/St33095.000002 saved
 
     Result                           # of obs.
     -----------------------------------------
-    not matched                        28,873
-        from master                    28,873  (_merge_ps==1)
+    not matched                         1,113
+        from master                     1,113  (_merge_ps==1)
         from using                          0  (_merge_ps==2)
 
-    matched                             4,041  (_merge_ps==3)
+    matched                               394  (_merge_ps==3)
     -----------------------------------------
 
 . 
-. /*
-> local purchases "../Nielsen_Panel/analysis/blp_sample.dta"
-> merge 1:m upc upc_ver_uc using `purchases', gen(_merge_purchases)
-> drop if _merge_purchases == 1 // Dropping unmatched price data. Keeps all purchases
-> */
-. 
-. save merged_blp_sample, replace
-file merged_blp_sample.dta saved
+. save merged_sample, replace
+file merged_sample.dta saved
+
+. export delimited merged_sample.csv, replace
+(note: file merged_sample.csv not found)
+file merged_sample.csv saved
 
 . 
 . log close
       name:  <unnamed>
-       log:  /home/gh8728/Projects/Liquor/Data/combined/match_upc_to_prices.txt
+       log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\combined\match_upc_to_prices.txt
   log type:  text
- closed on:  16 Aug 2016, 12:59:19
--------------------------------------------------------------------------------------------------------
+ closed on:  13 Jul 2017, 13:06:57
+--------------------------------------------------------------------------------------------------------------

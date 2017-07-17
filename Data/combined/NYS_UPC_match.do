@@ -10,7 +10,6 @@ The fuzzy match uses --matchit-- which is available from SSC. It depends on
 
 capture log close
 clear
-version 14
 set more off
 
 log using "NYS_UPC_match.txt", text replace
@@ -21,7 +20,7 @@ by these categories, due to different wholesalers. However, a quick look
 shows that the difference in the prices is pretty minimal. This is likely
 something that should be fixed */
 
-local years = "2009 2010 2012 2013 2014"
+local years = "2011"
 local months = "1 2 3 4 5 6 7 8 9 10 11 12"
 local sizes = "750ML 1L 1.75L"
 
@@ -66,8 +65,13 @@ foreach year in `years'{
 
 clear
 
-use "../Nielsen_Panel/analysis/ny_liquor_purchases_all_years"
-
+use "../Nielsen_Panel/analysis/prod_chars_individual"
+drop if product == 0 // don't need to match for non liquor purchases
+gen purchase_month = month(date_d)
+gen purchase_year = year(date_d)
+egen upc_id = concat(purchase_month purchase_year product), punct("")
+destring upc_id, replace
+save upc_file
 /* Now we need to separate purchases by month, year, and size to allign
 with the price schedule data. Then we can apply the matching algorithm */
 
@@ -80,9 +84,9 @@ foreach year in `years'{
 				preserve
 					keep if (purchase_month == `month') ///
 					& (purchase_year == `year') ///
-					& (size1_amount == 1.75)	
+					& (d_s_175L)	
 
-					matchit upc_id brand_string using `ps_y`year'_m`month'_s175L', idusing(record_num) txtusing(brand_string) override sim(ngram, 3)
+					matchit upc_id brand_string using `ps_y`year'_m`month'_s175L', idusing(record_num) txtusing(brand_string) override sim(ngram_circ, 2) threshold(0)
 
 					gen neg_similscore = -similscore
 
@@ -103,9 +107,9 @@ foreach year in `years'{
 				preserve
 					keep if (purchase_month == `month') ///
 					& (purchase_year == `year') ///
-					& (size1_amount == 1)	
+					& (d_s_1L)	
 
-					matchit upc_id brand_string using `ps_y`year'_m`month'_s1L', idusing(record_num) txtusing(brand_string) override sim(ngram, 3)
+					matchit upc_id brand_string using `ps_y`year'_m`month'_s1L', idusing(record_num) txtusing(brand_string) override sim(ngram_circ, 2) threshold(0)
 
 					gen neg_similscore = -similscore
 
@@ -125,9 +129,9 @@ foreach year in `years'{
 				preserve
 					keep if (purchase_month == `month') ///
 					& (purchase_year == `year') ///
-					& (size1_amount == 750)	
+					& (d_s_750ML)	
 
-					matchit upc_id brand_string using `ps_y`year'_m`month'_s750ML', idusing(record_num) txtusing(brand_string) override sim(ngram, 3)
+					matchit upc_id brand_string using `ps_y`year'_m`month'_s750ML', idusing(record_num) txtusing(brand_string) override sim(ngram_circ, 2) threshold(0)
 
 					gen neg_similscore = -similscore
 

@@ -4,7 +4,7 @@ set more off
 
 log using "individual_logit_sample.txt", text replace
 
-local rebuild_data = 0 // set to 1 to rebuild data from scratch. Very slow
+local rebuild_data = 1 // set to 1 to rebuild data from scratch. Very slow
 
 set seed 317596364  // seed taken from random.org
 
@@ -49,8 +49,6 @@ if `rebuild_data' {
 	reg proof d_g_* imported, nocons
 	predict proof_hat, xb
 	replace proof = proof_hat if proof == .
-
-	keep upc upc_ver d_g_* d_s_* proof imported upc_descr
 
 	tempfile small_upc_file
 	save `small_upc_file'
@@ -117,14 +115,16 @@ if `rebuild_data' {
 
 
 	gen case = _n // Each "purchase" is a case. Now need to construct alternatives
+	egen brand_string = concat(brand_descr upc_descr size1_amount size1_units), punct(";") // used to match to price schedules
+	egen mkt = group(date_m)
 	save prod_chars_individual, replace
 }
 
 clear
 use prod_chars_individual
+/* outputing csv of product characteristics */
 preserve
 	drop if product == 0
-	egen mkt = group(date_m)
 	export delim using "product_chars.csv", replace
 restore
 

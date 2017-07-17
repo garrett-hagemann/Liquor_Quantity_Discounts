@@ -2,15 +2,22 @@ module LiquorQD
 
 using Optim
 
+mutable struct PriceSched # type to hold a price schedule
+  rhos::Array{Float64,1} # price options
+  t_cuts::Array{Float64,1} # Type cutoffs (lambdas)
+  N::Int64 # number of options. A N part tariff as N-1 prices
+end
+
 mutable struct Liquor # should be thought of as a product. Products have characteristics
   # maybe should add name as well
-  id::Float64
+  id::Int64 # product number
   price::Float64 # price of liquor. Can be changed
   obs_price::Float64 # field so we can reset price to observed
   imported::Bool # imported flag. Should not change
   proof::Float64 # Proof. Should not change
   group_util::Float64 # Utiliy from being in group. i.e. value of d_gin, etc.
   prod_util::Float64 # Product specific utility. i.e. value of d_j
+  ps::Nullable{PriceSched} # holds price schedule for this product. Can be null if no sched matched
 end
 
 mutable struct Market # A market is a collection of liquors
@@ -23,12 +30,6 @@ mutable struct DemandCoefs # type to hold estimated demand coefficients
   price::Float64
   imported::Float64
   proof::Float64
-end
-
-mutable struct PriceSched # type to hold a price schedule
-  rhos::Array{Float64,1} # price options
-  t_cuts::Array{Float64,1} # Type cutoffs (lambdas)
-  N::Int64 # number of options. A N part tariff as N-1 prices
 end
 
 mutable struct WholesaleParams # type to hold wholesaler parameters
@@ -136,13 +137,14 @@ end
 
 function p_star(mc::Float64,product::Liquor,coefs::Array{DemandCoefs,1},weights::Array{Float64,1},mkt::Market)
     # mc = marginal cost. should be in terms of bottles because that's how demand is specified
-
+    #=
     # Optimizer approach
-    #=function g(p::Float64)
+    function g(p::Float64)
       return -(p - mc)*share(p,product,coefs,weights,mkt) # want to return neg of profit because we are going to minimize it
     end
-    p_star_optim = Optim.optimize(g,0.0,100.0,method=Brent(), show_trace = false, extended_trace = false, rel_tol = 1e-6, abs_tol = 1e-6)
-    return Optim.minimizer(p_star_optim)[1]  # gets to scalar instead of vector.=#
+    p_star_optim = Optim.optimize(g,0.0,10.0*mc,method=Brent(), show_trace = false, extended_trace = false, rel_tol = 1e-6, abs_tol = 1e-6)
+    return Optim.minimizer(p_star_optim)[1]  # gets to scalar instead of vector.
+    =#
 
     # Fixed point approach
     g(p::Float64) = -share(p,product,coefs,weights,mkt)/d_share(p,product,coefs,weights,mkt) + mc
@@ -155,9 +157,24 @@ function p_star(mc::Float64,product::Liquor,coefs::Array{DemandCoefs,1},weights:
       old_p = new_p
     end
     return old_p
+
 end
 
-function wholesaler_profit(ps::PriceSched, params::WholesaleParams, product::Liquor,coefs::Array{DemandCoefs,1},weights::Array{Float64,1},mkt::Market)
+function obs_lambdas(rhos::Array{Float64,1},ff::Array{Float64,1},product::Liquor,coefs::Array{DemandCoefs,1},weights::Array{Float64,1},mkt::Market,M::Float64)
+  # function calculates type cutoffs from observed FF and prices
+  obs_t = [0.0] # corresponds to lambda1. Must be zero as A0 = 0 & A1 = 0
+  ps(mc::Float64) = p_star(mc,product,coefs,weights,mkt)
+  s(p::Float64) = share(p, product,coefs,weights,mkt)
+  for k = 2:length(rhos)
+    res = (ff[k] - ff[k-1])/(M*((ps(rhos[k]) - rhos[k])*s(ps(rhos[k])) - (ps(rhos[k-1]) - rhos[k-1])*s(ps(rhos[k-1]))))
+    push!(obs_t,res)
+  end
+  return obs_t
+end
+
+function wholesaler_profit(ps::PriceSched, params::WholesaleParams, product::Liquor,coefs::Array{DemandCoefs,1},weights::Array{Float64,1},mkt::Market,ps_pre::Dict{Int64,Float64}=Dict{Int64,Float64}())
+  #= ps_pre holds pre-calculated values of p_star. This optional argument prevents recalculation as the p_star values
+  don't depend on any wholesaler parameters =#
   M = 10000.0 # normalizing constant. Shouldn't affect price schedule, just scale of profits
   lambda_vec = [ps.t_cuts; 1.0] # need to put in upper boundary values
   rho_vec = ps.rhos # no boundary here, will deal with in iterator
@@ -172,13 +189,22 @@ function wholesaler_profit(ps::PriceSched, params::WholesaleParams, product::Liq
     f(l) =  l*est_pdf(l)
     int = sparse_int(f,lambda_vec[k],lambda_vec[k+1])
     if (k == 1)
-      ps1 = p_star(rho_vec[k],product,coefs,weights,mkt)
+      if isempty(ps_pre)
+        ps1 = p_star(rho_vec[k],product,coefs,weights,mkt)
+      else
+        ps1 = ps_pre[k]
+      end
       inc = ((rho_vec[k] - params.c)*M*s(ps1))*int + (1-est_cdf(lambda_vec[k]))*lambda_vec[k]*M*((ps1 - rho_vec[k])*s(ps1) - 0.0)
       profit = profit + inc
     else
       # Pre-calculating some stuff to avoid repeated calls to p_star
-      ps1 = p_star(rho_vec[k],product,coefs,weights,mkt)
-      ps2 = p_star(rho_vec[k-1],product,coefs,weights,mkt)
+      if isempty(ps_pre)
+        ps1 = p_star(rho_vec[k],product,coefs,weights,mkt)
+        ps2 = p_star(rho_vec[k-1],product,coefs,weights,mkt)
+      else
+        ps1 = ps_pre[k]
+        ps2 = ps_pre[k-1]
+      end
       inc = ((rho_vec[k] - params.c)*M*s(ps1))*int + (1-est_cdf(lambda_vec[k]))*lambda_vec[k]*M*((ps1 - rho_vec[k])*s(ps1) - (ps2 - rho_vec[k-1])*s(ps2))
       profit = profit + inc
     end
@@ -252,37 +278,52 @@ function dev_gen(ps::PriceSched,δ::Float64)
   Threads.@threads for s in dev_ps  # potentially very many deviations. Scales at the rate of (2*(N-1))^3 - 1. Threads may be faster
     push!(output,PriceSched(s[1:N-1],s[N:end],N))
   end
-  return output
+  return output::Array{PriceSched,1}
 end
 
-function moment_obj_func(ps::PriceSched, devs::Array{PriceSched,1},params::WholesaleParams,product::Liquor,coefs::Array{DemandCoefs,1},weight::Array{Float64,1},mkt::Market)
+function moment_obj_func(ps::PriceSched, devs::Array{PriceSched,1},params::WholesaleParams,product::Liquor,coefs::Array{DemandCoefs,1},weight::Array{Float64,1},mkt::Market,ps_pre_array::Array{Dict{Int64,Float64}}=Dict{Int64,Float64}[])
   # calculates the value of the objective function for a given set of deviations.
-  wp(x::PriceSched) = wholesaler_profit(x,params,product,coefs,weight,mkt)
+  wp(x::PriceSched,ps_pre::Dict{Int64,Float64}=Dict{Int64,Float64}()) = wholesaler_profit(x,params,product,coefs,weight,mkt,ps_pre)
   obs_profit = wp(ps)
   if obs_profit < 0.0
     res = Inf
   else
     #dev_profit = max.(map(wp,devs),0.0) # likewise with all deviations. Use max.() because array
-    dev_profit = map(wp,devs) # likewise with all deviations. Use max.() because array
+    dev_profit = map(wp,devs,ps_pre_array) # likewise with all deviations. Use max.() because array
     nu = min.(obs_profit - dev_profit,0.0).^2 # if dev profit is greater, then you get a positive value for that deviation.
     res = sum(nu)
   end
   return res
 end
 
-function optimize_moment(ps::PriceSched, devs::Array{PriceSched,1},product::Liquor,coefs::Array{DemandCoefs,1},weight::Array{Float64,1},mkt::Market,iters::Int64)
+function optimize_moment(ps::PriceSched, devs::Array{PriceSched,1},product::Liquor,coefs::Array{DemandCoefs,1},weight::Array{Float64,1},mkt::Market,iters::Int64,ps_pre_array::Array{Dict{Int64,Float64}}=Dict{Int64,Float64}[])
+
   function Q(x::Array{Float64,1})
-    theta = WholesaleParams(x...)
-    if (theta.b <= 0.0 ) | (theta.c < 0.0) | (theta.a < 1.0) # constraining SA search
+    theta = WholesaleParams(x...) # search all 3 params
+    if (theta.b <= 0.0 ) | (theta.b >= 15.0) | (theta.c < 0.0) | (theta.a < 1.0) # constraining SA search
+      return Inf
+    else
+      return moment_obj_func(ps,devs,theta,product,coefs,weight,mkt,ps_pre_array)
+    end
+  end
+  x0 = [0.0,1.0,1.0] # inital guess of 0 mc and uniform dist
+  moment_res = Optim.optimize(Q,x0,method=SimulatedAnnealing(), store_trace=true, show_trace = false, iterations=iters)
+  moment_res_min = Optim.minimizer(moment_res)
+  return WholesaleParams(moment_res_min...)
+  #=
+  function Q(x::Float64)
+    theta = WholesaleParams(x,1.0,1.0) # search just c
+    if (theta.b <= 0.0 ) | (theta.b >= 30.0) | (theta.c < 0.0) | (theta.a < 1.0) # constraining SA search
       return Inf
     else
       return moment_obj_func(ps,devs,theta,product,coefs,weight,mkt)
     end
   end
-  x0 = [0.0,1.0,1.0] # inital guess of 0 mc and uniform dist
-  moment_res = Optim.optimize(Q,x0,method=SimulatedAnnealing(), store_trace=true, iterations=iters)
+  x0 = 0.0
+  moment_res = Optim.optimize(Q,0.0,10.0, store_trace=true, show_trace = true, iterations=iters)
   moment_res_min = Optim.minimizer(moment_res)
-  return WholesaleParams(moment_res_min...)
+  return WholesaleParams(moment_res_min,1.0,1.0)
+  =#
 end
 
 
@@ -293,6 +334,6 @@ end
 export Liquor, Market, DemandCoefs, WholesaleParams, PriceSched
 export ks_dist, ks_dens, sparse_int, share, d_share,
   p_star, wholesaler_profit, optimal_price_sched, dev_gen, moment_obj_func,
-  optimize_moment
+  optimize_moment, obs_lambdas
 
 end
