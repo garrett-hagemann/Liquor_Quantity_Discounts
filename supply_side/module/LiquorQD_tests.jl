@@ -1,5 +1,6 @@
 include("LiquorQD.jl")
 using LiquorQD
+srand(69510606) #seeding random number gen
 
 # setting up fake products, markets, and coefficients
 test_prod1 = Liquor(1,13.56,13.56,0,90.0,0.0,0.0,nothing) # null price sched
@@ -29,15 +30,16 @@ ps_res = p_star(test_mc,test_prod1,[test_coefs],test_weights,test_mkt)
 println("Optimal price at $test_mc: ", ps_res)
 
 # Testing price schedule optimization
-test_w_params = WholesaleParams(3.0,6.0,6.0)
-test_N = 3
+test_w_params = WholesaleParams(0.0,1.0,1.0)
+test_N = 5
 test_ps = optimal_price_sched(test_w_params,test_N,test_prod1,[test_coefs],test_weights,test_mkt)
 println("Optimal price schedule: ", test_ps)
 println("Profit at optimal schedule: ", wholesaler_profit(test_ps,test_w_params,test_prod1,[test_coefs],test_weights,test_mkt))
-
+box
 # testing deviation generation
 test_δ = 0.025
 test_devs = dev_gen(test_ps,test_δ)
+test_devs = test_devs[rand(1:end,100)] # N random ineqaulities
 
 # pre-calculating optimal retail prices since they don't change with wholesaler params
 test_pre_calc = Dict{Int64,Float64}[]
@@ -54,12 +56,14 @@ test_Q2 = moment_obj_func(test_ps,test_devs,test_w_params2,test_prod1,[test_coef
 println("Q(other params) = ", test_Q2) # should be > 0
 
 # testing moment optimization to recover params
-test_recovered_params = optimize_moment(test_ps,test_devs,test_prod1,[test_coefs],test_weights,test_mkt,10000,test_pre_calc)
+test_recovered_params,test_xtrace,test_ftrace = optimize_moment(test_ps,test_devs,test_prod1,[test_coefs],test_weights,test_mkt,25000,test_pre_calc,x0=[0.0,1.0,1.0])
 println("Recovered Parameters: ", test_recovered_params)
+test_trace = [test_xtrace test_ftrace]
+writedlm("test_dens.csv",test_trace)
 
 # mapping shape of objective functionprintln("b, Q")
 for b = 0.5:.5:20
-  tmp_params = WholesaleParams(b,1.0,1.0)
+  tmp_params = WholesaleParams(b,6.0,6.0)
   res = moment_obj_func(test_ps,test_devs,tmp_params,test_prod1,[test_coefs],test_weights,test_mkt,test_pre_calc)
   print(b,",",res,"\n")
 end

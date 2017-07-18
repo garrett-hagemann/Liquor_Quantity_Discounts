@@ -101,19 +101,29 @@ for m in mkt_ids
     end
   push!(markets_array,tmp_mkt)
 end
-#=
+
 for m in markets_array[1:1]
   for j in m.products[1:1]
     if !isnull(j.ps)
       println("working with product", j)
       tmp_ps = get(j.ps) # becase the ps field is nullable, need to use get
       dev_ps = dev_gen(tmp_ps,0.05)
-      sol = optimize_moment(tmp_ps,dev_ps,j,coef_array,inc_weights,m,1000)
+      dev_ps = dev_ps[rand(1:end,100)] # N random ineqaulities
+      print("Pre-calculating retail prices. ")
+      pre_calc = Dict{Int64,Float64}[]
+      for s in dev_ps
+        tmp_dict = Dict(i => p_star(s.rhos[i],j,coef_array,inc_weights,m) for i in 1:(s.N-1))
+        push!(pre_calc,tmp_dict)
+      end
+      println("Done.")
+      sol,trace = optimize_moment(tmp_ps,dev_ps,j,coef_array,inc_weights,m,25000,pre_calc,x0=[8.0,1.0,1.0])
       println(sol)
+      writedlm("test_trace.csv",trace)
     end
   end
 end
-=#
+
+#=
 m = markets_array[1]
 j = m.products[1]
 tmp_ps = get(j.ps)
@@ -132,3 +142,4 @@ for b = 0.5:.5:20
   res = moment_obj_func(tmp_ps,dev_ps,tmp_params,j,coef_array,inc_weights,m,pre_calc)
   println(b,",",res,"\n")
 end
+=#

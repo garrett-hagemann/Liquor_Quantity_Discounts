@@ -175,6 +175,7 @@ end
 function wholesaler_profit(ps::PriceSched, params::WholesaleParams, product::Liquor,coefs::Array{DemandCoefs,1},weights::Array{Float64,1},mkt::Market,ps_pre::Dict{Int64,Float64}=Dict{Int64,Float64}())
   #= ps_pre holds pre-calculated values of p_star. This optional argument prevents recalculation as the p_star values
   don't depend on any wholesaler parameters =#
+  
   M = 10000.0 # normalizing constant. Shouldn't affect price schedule, just scale of profits
   lambda_vec = [ps.t_cuts; 1.0] # need to put in upper boundary values
   rho_vec = ps.rhos # no boundary here, will deal with in iterator
@@ -215,7 +216,7 @@ function wholesaler_profit(ps::PriceSched, params::WholesaleParams, product::Liq
   M = 1.0 # normalizing constant. Shouldn't affect price schedule, just scale of profits
   lambda_vec = [ps.t_cuts; 1.0] # need to put in upper boundary values
   rho_vec = ps.rhos # no boundary here, will deal with in iterator
-  N = params.N
+  N = ps.N
   # defining some functions for convience
   s(p) = max((1-p),0.0)
   est_pdf(x) = ks_dens(x,params.a,params.b)
@@ -246,7 +247,7 @@ function optimal_price_sched(params::WholesaleParams, N::Int64, product::Liquor,
   cost as well as the parameters of the Kumaraswamy distribution. =#
   function g(x::Array{Float64,1})
     ps = PriceSched(x[1:N-1],[0.0; x[N:end]],N) # intializing new price schedule object. Need to impose constrained
-    if !all((0.0 .<= ps.t_cuts .<= 1.0)) | !all((0.0 .<= ps.rhos )) # error checking to limit derivative-free search
+    if !all((0.0 .<= ps.t_cuts .<= 1.0)) | !all((0.0 .<= ps.rhos)) # error checking to limit derivative-free search
   		return Inf
   	else
       return -1.0*wholesaler_profit(ps,params,product,coefs,weights,mkt) # return wholesaler profit for price schedule. negative because use minimizer
@@ -255,7 +256,7 @@ function optimal_price_sched(params::WholesaleParams, N::Int64, product::Liquor,
   rho_guess = sort(rand(N-1),rev=true) # prices in 0,1 declining. Scaling up seems to have no effect on solutions (which is good)
   t_guess = sort(rand(N-2)) # generates types between 0 and 1 that increase. One less b/c of constrained
   hs_x0 = [rho_guess; t_guess]
-  hs_res = Optim.optimize(g,hs_x0,method=SimulatedAnnealing(),iterations=10000) # taking 10000 SA steps to get good guess. stabalizes the solution
+  hs_res = Optim.optimize(g,hs_x0,method=SimulatedAnnealing(),iterations=1) # taking 25000 SA steps to get good guess. stabalizes the solution
   x0 = Optim.minimizer(hs_res)
   ps_optim_res = Optim.optimize(g,x0,method=NelderMead())
   optim_rho = Optim.minimizer(ps_optim_res)[1:N-1]
@@ -296,20 +297,22 @@ function moment_obj_func(ps::PriceSched, devs::Array{PriceSched,1},params::Whole
   return res
 end
 
-function optimize_moment(ps::PriceSched, devs::Array{PriceSched,1},product::Liquor,coefs::Array{DemandCoefs,1},weight::Array{Float64,1},mkt::Market,iters::Int64,ps_pre_array::Array{Dict{Int64,Float64}}=Dict{Int64,Float64}[])
+function optimize_moment(ps::PriceSched, devs::Array{PriceSched,1},product::Liquor,coefs::Array{DemandCoefs,1},weight::Array{Float64,1},mkt::Market,iters::Int64,ps_pre_array::Array{Dict{Int64,Float64}}=Dict{Int64,Float64}[];x0=[0.0,1.0,1.0])
 
   function Q(x::Array{Float64,1})
     theta = WholesaleParams(x...) # search all 3 params
-    if (theta.b <= 0.0 ) | (theta.b >= 15.0) | (theta.c < 0.0) | (theta.a < 1.0) # constraining SA search
+    if (theta.b <= 0.0 ) | (theta.b >= 10.0) | (theta.c < 0.0) | (theta.a < 1.0) # constraining SA search
       return Inf
     else
       return moment_obj_func(ps,devs,theta,product,coefs,weight,mkt,ps_pre_array)
     end
   end
-  x0 = [0.0,1.0,1.0] # inital guess of 0 mc and uniform dist
-  moment_res = Optim.optimize(Q,x0,method=SimulatedAnnealing(), store_trace=true, show_trace = false, iterations=iters)
+
+  moment_res = Optim.optimize(Q,x0,method=SimulatedAnnealing(), store_trace=true, show_trace = true, extended_trace=true, iterations=iters)
   moment_res_min = Optim.minimizer(moment_res)
-  return WholesaleParams(moment_res_min...)
+  x_trace = Optim.x_trace(moment_res)
+  f_trace = Optim.f_trace(moment_res)
+  return (WholesaleParams(moment_res_min...),x_trace,f_trace)
   #=
   function Q(x::Float64)
     theta = WholesaleParams(x,1.0,1.0) # search just c
