@@ -175,7 +175,7 @@ end
 function wholesaler_profit(ps::PriceSched, params::WholesaleParams, product::Liquor,coefs::Array{DemandCoefs,1},weights::Array{Float64,1},mkt::Market,ps_pre::Dict{Int64,Float64}=Dict{Int64,Float64}())
   #= ps_pre holds pre-calculated values of p_star. This optional argument prevents recalculation as the p_star values
   don't depend on any wholesaler parameters =#
-  
+
   M = 10000.0 # normalizing constant. Shouldn't affect price schedule, just scale of profits
   lambda_vec = [ps.t_cuts; 1.0] # need to put in upper boundary values
   rho_vec = ps.rhos # no boundary here, will deal with in iterator
@@ -195,7 +195,7 @@ function wholesaler_profit(ps::PriceSched, params::WholesaleParams, product::Liq
       else
         ps1 = ps_pre[k]
       end
-      inc = ((rho_vec[k] - params.c)*M*s(ps1))*int + (1-est_cdf(lambda_vec[k]))*lambda_vec[k]*M*((ps1 - rho_vec[k])*s(ps1) - 0.0)
+      inc = ((rho_vec[k] - params.c)*s(ps1))*int + (1-est_cdf(lambda_vec[k]))*lambda_vec[k]*((ps1 - rho_vec[k])*s(ps1) - 0.0)
       profit = profit + inc
     else
       # Pre-calculating some stuff to avoid repeated calls to p_star
@@ -206,11 +206,11 @@ function wholesaler_profit(ps::PriceSched, params::WholesaleParams, product::Liq
         ps1 = ps_pre[k]
         ps2 = ps_pre[k-1]
       end
-      inc = ((rho_vec[k] - params.c)*M*s(ps1))*int + (1-est_cdf(lambda_vec[k]))*lambda_vec[k]*M*((ps1 - rho_vec[k])*s(ps1) - (ps2 - rho_vec[k-1])*s(ps2))
+      inc = ((rho_vec[k] - params.c)*s(ps1))*int + (1-est_cdf(lambda_vec[k]))*lambda_vec[k]*((ps1 - rho_vec[k])*s(ps1) - (ps2 - rho_vec[k-1])*s(ps2))
       profit = profit + inc
     end
   end
-  return profit
+  return profit*M
   #=
   #### Linear version. Only for checking with Wilson Problem
   M = 1.0 # normalizing constant. Shouldn't affect price schedule, just scale of profits
@@ -242,26 +242,61 @@ function wholesaler_profit(ps::PriceSched, params::WholesaleParams, product::Liq
   =#
 end
 
+function ps_opt_g(x::Float64,params::WholesaleParams,N::Int64,product::Liquor,coefs::Array{DemandCoefs,1},weights::Array{Float64,1},mkt::Market)
+  ps = PriceSched([x],[0.0],N) # intializing new price schedule object. Need to impose constrained
+  if !all((0.0 .<= ps.t_cuts .<= 1.0)) | !all((0.0 .<= ps.rhos)) # error checking to limit derivative-free search
+    return Inf
+  else
+    return -1.0*wholesaler_profit(ps,params,product,coefs,weights,mkt) # return wholesaler profit for price schedule. negative because use minimizer
+  end
+end
+
+function ps_opt_g(x::Array{Float64,1},params::WholesaleParams,N::Int64,product::Liquor,coefs::Array{DemandCoefs,1},weights::Array{Float64,1},mkt::Market)
+  ps = PriceSched(x[1:N-1],[0.0; x[N:end]],N) # intializing new price schedule object. Need to impose constrained
+  if !all((0.0 .<= ps.t_cuts .<= 1.0)) | !all((0.0 .<= ps.rhos)) # error checking to limit derivative-free search
+    return Inf
+  else
+    return -1.0*wholesaler_profit(ps,params,product,coefs,weights,mkt) # return wholesaler profit for price schedule. negative because use minimizer
+  end
+end
+
 function optimal_price_sched(params::WholesaleParams, N::Int64, product::Liquor,coefs::Array{DemandCoefs,1},weights::Array{Float64,1},mkt::Market)
   #= params contains the parameters for the wholesaler. This means the marginal
   cost as well as the parameters of the Kumaraswamy distribution. =#
-  function g(x::Array{Float64,1})
-    ps = PriceSched(x[1:N-1],[0.0; x[N:end]],N) # intializing new price schedule object. Need to impose constrained
-    if !all((0.0 .<= ps.t_cuts .<= 1.0)) | !all((0.0 .<= ps.rhos)) # error checking to limit derivative-free search
-  		return Inf
-  	else
-      return -1.0*wholesaler_profit(ps,params,product,coefs,weights,mkt) # return wholesaler profit for price schedule. negative because use minimizer
+  g(x,n) = ps_opt_g(x,params,n,product,coefs,weights,mkt)
+  # need to solve sequence of price schedules
+  res_ps = PriceSched([0.0],[0.0],N) # initalizing so for loop can change it
+  hs_x0 = Float64[] # initalizing so for loop can change it
+  for hs_n = 2:N
+    if hs_n == 2 # special case for N=2 which is a scalar problem in constrained version
+      rho_guess = rand() # prices in (0,1). Scaling up seems to have no effect on solutions (which is good)
+      t_guess = nothing # don't need t_guess because constraint forces only type cutoff to be 0
+      hs_x0 = rho_guess
+      if params.c == 0.0
+        ub = 20.0
+      else
+        ub = 10*params.c
+      end
+      ps_optim_res = Optim.optimize((x)->g(x,hs_n),params.c,ub,show_trace=false)
+      optim_rho = Optim.minimizer(ps_optim_res)
+      res_ps = PriceSched([optim_rho],[0.0],hs_n) # constrained
+      hs_rhos = [optim_rho, (optim_rho - (optim_rho-params.c)/2.0)] # guess for next iteration. Start with optimal price schedule, but include additional price halfway between 0 and minimum price
+      hs_types = [0.5] # best guess for cutoff is 0.5 for n = 3
+      hs_x0 = [hs_rhos ; hs_types] #
+    else
+      #rho_guess = sort(rand(N-1),rev=true) # prices in 0,1 declining. Scaling up seems to have no effect on solutions (which is good)
+      #t_guess = sort(rand(N-2)) # generates types between 0 and 1 that increase. One less b/c of constrained
+      #hs_x0 = [rho_guess; t_guess]
+      ps_optim_res = Optim.optimize((x)->g(x,hs_n),hs_x0,method=NelderMead())
+      optim_rho = Optim.minimizer(ps_optim_res)[1:hs_n-1]
+      optim_t = Optim.minimizer(ps_optim_res)[hs_n:end]
+      res_ps = PriceSched(optim_rho,[0.0; optim_t],hs_n) # constrained
+      hs_rhos = [optim_rho ; (optim_rho[end]-(optim_rho[end]-params.c)/2.0)]
+      hs_types = [optim_t ; (optim_t[end] + (1.0-optim_t[end])/2.0)] # add in another guess at type halfway between last type and 1
+      hs_x0 = [hs_rhos ; hs_types]
     end
   end
-  rho_guess = sort(rand(N-1),rev=true) # prices in 0,1 declining. Scaling up seems to have no effect on solutions (which is good)
-  t_guess = sort(rand(N-2)) # generates types between 0 and 1 that increase. One less b/c of constrained
-  hs_x0 = [rho_guess; t_guess]
-  hs_res = Optim.optimize(g,hs_x0,method=SimulatedAnnealing(),iterations=1) # taking 25000 SA steps to get good guess. stabalizes the solution
-  x0 = Optim.minimizer(hs_res)
-  ps_optim_res = Optim.optimize(g,x0,method=NelderMead())
-  optim_rho = Optim.minimizer(ps_optim_res)[1:N-1]
-  optim_t = Optim.minimizer(ps_optim_res)[N:end]
-  return PriceSched(optim_rho,[0.0; optim_t],N) # constrained
+  return res_ps
 end
 
 function dev_gen(ps::PriceSched,δ::Float64)

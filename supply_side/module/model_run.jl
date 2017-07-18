@@ -108,7 +108,7 @@ for m in markets_array[1:1]
       println("working with product", j)
       tmp_ps = get(j.ps) # becase the ps field is nullable, need to use get
       dev_ps = dev_gen(tmp_ps,0.05)
-      dev_ps = dev_ps[rand(1:end,100)] # N random ineqaulities
+      dev_ps = dev_ps[rand(1:end,100)] # 100 random ineqaulities. Speeds up computation
       print("Pre-calculating retail prices. ")
       pre_calc = Dict{Int64,Float64}[]
       for s in dev_ps
@@ -116,8 +116,9 @@ for m in markets_array[1:1]
         push!(pre_calc,tmp_dict)
       end
       println("Done.")
-      sol,trace = optimize_moment(tmp_ps,dev_ps,j,coef_array,inc_weights,m,25000,pre_calc,x0=[8.0,1.0,1.0])
+      sol,xtrace,ftrace = optimize_moment(tmp_ps,dev_ps,j,coef_array,inc_weights,m,25000,pre_calc,x0=[8.0,1.0,1.0])
       println(sol)
+      trace = [vcat(xtrace'...) ftrace]
       writedlm("test_trace.csv",trace)
     end
   end
