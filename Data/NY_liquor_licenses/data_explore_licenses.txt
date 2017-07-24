@@ -1,8 +1,9 @@
---------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /home/gh8728/Liquor/Data/NY_liquor_licenses/data_explore_licenses.txt
+       log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\NY_liquor_licenses\data_explore_licen
+> ses.txt
   log type:  text
- opened on:  24 Jun 2016, 11:52:46
+ opened on:  21 Jul 2017, 13:38:54
 
 . 
 . local files: dir "./licenses_by_county" files "*.txt"
@@ -17,130 +18,130 @@
   4.         save `s`i''
   5.         local i = `i' + 1
   6. }
-(10 vars, 219 obs)
-file /tmp/St15136.000002 saved
-(10 vars, 366 obs)
-file /tmp/St15136.000003 saved
-(10 vars, 420 obs)
-file /tmp/St15136.000004 saved
-(10 vars, 56 obs)
-file /tmp/St15136.000005 saved
-(10 vars, 63 obs)
-file /tmp/St15136.000006 saved
-(10 vars, 32 obs)
-file /tmp/St15136.000007 saved
-(10 vars, 170 obs)
-file /tmp/St15136.000008 saved
-(10 vars, 108 obs)
-file /tmp/St15136.000009 saved
-(10 vars, 118 obs)
-file /tmp/St15136.00000a saved
-(10 vars, 119 obs)
-file /tmp/St15136.00000b saved
-(10 vars, 96 obs)
-file /tmp/St15136.00000c saved
-(10 vars, 595 obs)
-file /tmp/St15136.00000d saved
-(10 vars, 110 obs)
-file /tmp/St15136.00000e saved
-(10 vars, 67 obs)
-file /tmp/St15136.00000f saved
-(10 vars, 137 obs)
-file /tmp/St15136.00000g saved
-(10 vars, 1817 obs)
-file /tmp/St15136.00000h saved
-(10 vars, 403 obs)
-file /tmp/St15136.00000i saved
-(10 vars, 293 obs)
-file /tmp/St15136.00000j saved
-(10 vars, 52 obs)
-file /tmp/St15136.00000k saved
-(10 vars, 61 obs)
-file /tmp/St15136.00000l saved
-(10 vars, 28 obs)
-file /tmp/St15136.00000m saved
-(10 vars, 20 obs)
-file /tmp/St15136.00000n saved
-(10 vars, 3056 obs)
-file /tmp/St15136.00000o saved
-(10 vars, 32 obs)
-file /tmp/St15136.00000p saved
-(10 vars, 63 obs)
-file /tmp/St15136.00000q saved
-(10 vars, 59 obs)
-file /tmp/St15136.00000r saved
-(10 vars, 75 obs)
-file /tmp/St15136.00000s saved
-(10 vars, 154 obs)
-file /tmp/St15136.00000t saved
-(10 vars, 1042 obs)
-file /tmp/St15136.00000u saved
-(10 vars, 1479 obs)
-file /tmp/St15136.00000v saved
-(10 vars, 59 obs)
-file /tmp/St15136.00000w saved
-(10 vars, 56 obs)
-file /tmp/St15136.00000x saved
-(10 vars, 46 obs)
-file /tmp/St15136.000010 saved
-(10 vars, 211 obs)
-file /tmp/St15136.000011 saved
-(10 vars, 41 obs)
-file /tmp/St15136.000012 saved
-(10 vars, 34 obs)
-file /tmp/St15136.000013 saved
-(10 vars, 241 obs)
-file /tmp/St15136.000014 saved
-(10 vars, 104 obs)
-file /tmp/St15136.000015 saved
-(10 vars, 101 obs)
-file /tmp/St15136.000016 saved
-(10 vars, 72 obs)
-file /tmp/St15136.000017 saved
-(10 vars, 63 obs)
-file /tmp/St15136.000018 saved
-(10 vars, 109 obs)
-file /tmp/St15136.000019 saved
-(10 vars, 52 obs)
-file /tmp/St15136.00001a saved
-(10 vars, 63 obs)
-file /tmp/St15136.00001b saved
-(10 vars, 77 obs)
-file /tmp/St15136.00001c saved
-(10 vars, 18 obs)
-file /tmp/St15136.00001d saved
 (10 vars, 311 obs)
-file /tmp/St15136.00001e saved
-(10 vars, 2316 obs)
-file /tmp/St15136.00001f saved
-(10 vars, 20 obs)
-file /tmp/St15136.00001g saved
-(10 vars, 81 obs)
-file /tmp/St15136.00001h saved
+file C:\Users\garre\AppData\Local\Temp\ST_09000001.tmp saved
+(10 vars, 52 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_09000002.tmp saved
 (10 vars, 1597 obs)
-file /tmp/St15136.00001i saved
+file C:\Users\garre\AppData\Local\Temp\ST_09000003.tmp saved
 (10 vars, 186 obs)
-file /tmp/St15136.00001j saved
-(10 vars, 87 obs)
-file /tmp/St15136.00001k saved
-(10 vars, 184 obs)
-file /tmp/St15136.00001l saved
-(10 vars, 130 obs)
-file /tmp/St15136.00001m saved
+file C:\Users\garre\AppData\Local\Temp\ST_09000004.tmp saved
 (10 vars, 63 obs)
-file /tmp/St15136.00001n saved
+file C:\Users\garre\AppData\Local\Temp\ST_09000005.tmp saved
+(10 vars, 61 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_09000006.tmp saved
+(10 vars, 119 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_09000007.tmp saved
+(10 vars, 75 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_09000008.tmp saved
 (10 vars, 51 obs)
-file /tmp/St15136.00001o saved
-(10 vars, 162 obs)
-file /tmp/St15136.00001p saved
+file C:\Users\garre\AppData\Local\Temp\ST_09000009.tmp saved
+(10 vars, 108 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900000a.tmp saved
+(10 vars, 87 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900000b.tmp saved
+(10 vars, 46 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900000c.tmp saved
+(10 vars, 67 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900000d.tmp saved
+(10 vars, 293 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900000e.tmp saved
 (10 vars, 748 obs)
-file /tmp/St15136.00001q saved
+file C:\Users\garre\AppData\Local\Temp\ST_0900000f.tmp saved
+(10 vars, 77 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900000g.tmp saved
+(10 vars, 63 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900000h.tmp saved
+(10 vars, 59 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900000i.tmp saved
+(10 vars, 52 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900000j.tmp saved
+(10 vars, 63 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900000k.tmp saved
+(10 vars, 20 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900000l.tmp saved
+(10 vars, 63 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900000m.tmp saved
+(10 vars, 137 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900000n.tmp saved
+(10 vars, 3056 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900000o.tmp saved
 (10 vars, 28 obs)
-file /tmp/St15136.00001r saved
-(10 vars, 74 obs)
-file /tmp/St15136.00001s saved
+file C:\Users\garre\AppData\Local\Temp\ST_0900000p.tmp saved
+(10 vars, 56 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900000q.tmp saved
+(10 vars, 63 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900000r.tmp saved
+(10 vars, 595 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900000s.tmp saved
+(10 vars, 59 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900000t.tmp saved
 (10 vars, 1277 obs)
-file /tmp/St15136.00001t saved
+file C:\Users\garre\AppData\Local\Temp\ST_0900000u.tmp saved
+(10 vars, 1817 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900000v.tmp saved
+(10 vars, 170 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900000w.tmp saved
+(10 vars, 219 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900000x.tmp saved
+(10 vars, 420 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_09000010.tmp saved
+(10 vars, 96 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_09000011.tmp saved
+(10 vars, 366 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_09000012.tmp saved
+(10 vars, 28 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_09000013.tmp saved
+(10 vars, 110 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_09000014.tmp saved
+(10 vars, 72 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_09000015.tmp saved
+(10 vars, 104 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_09000016.tmp saved
+(10 vars, 2316 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_09000017.tmp saved
+(10 vars, 154 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_09000018.tmp saved
+(10 vars, 403 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_09000019.tmp saved
+(10 vars, 241 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900001a.tmp saved
+(10 vars, 184 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900001b.tmp saved
+(10 vars, 162 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900001c.tmp saved
+(10 vars, 34 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900001d.tmp saved
+(10 vars, 18 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900001e.tmp saved
+(10 vars, 32 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900001f.tmp saved
+(10 vars, 130 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900001g.tmp saved
+(10 vars, 101 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900001h.tmp saved
+(10 vars, 1479 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900001i.tmp saved
+(10 vars, 109 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900001j.tmp saved
+(10 vars, 41 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900001k.tmp saved
+(10 vars, 74 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900001l.tmp saved
+(10 vars, 211 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900001m.tmp saved
+(10 vars, 118 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900001n.tmp saved
+(10 vars, 56 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900001o.tmp saved
+(10 vars, 81 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900001p.tmp saved
+(10 vars, 1042 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900001q.tmp saved
+(10 vars, 32 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900001r.tmp saved
+(10 vars, 20 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0900001s.tmp saved
 
 . 
 . local i = 0
@@ -149,11 +150,11 @@ file /tmp/St15136.00001t saved
   2.         append using `s`i''
   3.         local i = `i' + 1
   4. }
-(note: variable premisesname was str52, now str54 to accommodate using data's values)
-(note: variable address was str30, now str33 to accommodate using data's values)
-(note: variable city was str17, now str21 to accommodate using data's values)
-(note: variable address was str33, now str34 to accommodate using data's values)
-(note: variable premisesname was str54, now str58 to accommodate using data's values)
+(note: variable premisesname was str32, now str58 to accommodate using data's values)
+(note: variable address was str20, now str30 to accommodate using data's values)
+(note: variable city was str10, now str21 to accommodate using data's values)
+(note: variable zip was str5, now str10 to accommodate using data's values)
+(note: variable address was str30, now str34 to accommodate using data's values)
 
 . 
 . foreach var of varlist _all {
@@ -165,17 +166,17 @@ file /tmp/St15136.00001t saved
 (0 real changes made)
 (0 real changes made)
 (0 real changes made)
-(79 real changes made)
+(71 real changes made)
 (0 real changes made)
 (0 real changes made)
-(48 real changes made)
-(848 real changes made)
-(154 real changes made)
-(1,369 real changes made)
+(43 real changes made)
+(781 real changes made)
+(146 real changes made)
+(1271 real changes made)
 (0 real changes made)
 (0 real changes made)
-(8 real changes made)
-(2,109 real changes made)
+(6 real changes made)
+(2010 real changes made)
 (0 real changes made)
 (0 real changes made)
 (0 real changes made)
@@ -185,7 +186,7 @@ file /tmp/St15136.00001t saved
 . /* keeping only liquor stores */
 . 
 . keep if type == "L"
-(17,781 observations deleted)
+(16755 observations deleted)
 
 . 
 . /* removing zip+4 to just zip */
@@ -197,6 +198,7 @@ file /tmp/St15136.00001t saved
 file ny_liquor_licenses_2016_06.dta saved
 
 . 
+. // stores by zip
 . preserve
 
 .         contract zip
@@ -205,24 +207,24 @@ file ny_liquor_licenses_2016_06.dta saved
 
   Frequency |      Freq.     Percent        Cum.
 ------------+-----------------------------------
-          1 |        380       39.96       39.96
-          2 |        159       16.72       56.68
-          3 |         88        9.25       65.93
-          4 |         75        7.89       73.82
-          5 |         42        4.42       78.23
-          6 |         52        5.47       83.70
-          7 |         18        1.89       85.59
-          8 |         28        2.94       88.54
-          9 |         14        1.47       90.01
-         10 |         20        2.10       92.11
-         11 |         17        1.79       93.90
-         12 |         20        2.10       96.00
-         13 |         12        1.26       97.27
-         14 |          8        0.84       98.11
-         15 |          5        0.53       98.63
-         16 |          2        0.21       98.84
-         17 |          4        0.42       99.26
-         18 |          4        0.42       99.68
+          1 |        393       41.32       41.32
+          2 |        155       16.30       57.62
+          3 |         95        9.99       67.61
+          4 |         75        7.89       75.50
+          5 |         51        5.36       80.86
+          6 |         52        5.47       86.33
+          7 |         24        2.52       88.85
+          8 |         20        2.10       90.96
+          9 |         15        1.58       92.53
+         10 |         11        1.16       93.69
+         11 |         16        1.68       95.37
+         12 |         13        1.37       96.74
+         13 |         12        1.26       98.00
+         14 |          3        0.32       98.32
+         15 |          5        0.53       98.84
+         16 |          1        0.11       98.95
+         17 |          4        0.42       99.37
+         18 |          3        0.32       99.68
          19 |          1        0.11       99.79
          22 |          1        0.11       99.89
          25 |          1        0.11      100.00
@@ -232,10 +234,22 @@ file ny_liquor_licenses_2016_06.dta saved
 . restore
 
 . 
+. // stores in NYC
+. preserve
+
+.         keep if county == "BRON" | county == "RICH" | county == "QUEE" | county == "KING" | county == "NEW"
+(1825 observations deleted)
+
+.         count
+ 1412
+
+. restore
+
 . 
 . log close
       name:  <unnamed>
-       log:  /home/gh8728/Liquor/Data/NY_liquor_licenses/data_explore_licenses.txt
+       log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\NY_liquor_licenses\data_explore_licen
+> ses.txt
   log type:  text
- closed on:  24 Jun 2016, 11:52:47
---------------------------------------------------------------------------------------------------------------------
+ closed on:  21 Jul 2017, 13:38:55
+--------------------------------------------------------------------------------------------------------------

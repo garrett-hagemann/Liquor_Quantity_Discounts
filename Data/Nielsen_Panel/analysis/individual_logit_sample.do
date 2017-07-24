@@ -9,7 +9,7 @@ local rebuild_data = 1 // set to 1 to rebuild data from scratch. Very slow
 set seed 317596364  // seed taken from random.org
 
 
-local years = "2011" // "2008 2009 2010 2011 2012 2013 2014"
+local years = "2011 2012" // "2008 2009 2010 2011 2012 2013 2014"
 if `rebuild_data' { 
 	/* trimming down UPC file so be smaller so merging is easier */
 	use liquor_upcs
@@ -54,12 +54,21 @@ if `rebuild_data' {
 	save `small_upc_file'
 
 	foreach year in `years'{
-
-		import delimited using "../nielsen_extracts/HMS/`year'/Annual_Files/purchases_`year'.tsv", clear colrange(1:5)
-		// Getting just NYS purchases
-		merge m:1 trip_code_uc using ny_trips_`year', gen(_merge_trips) keep(3)
+		
+		use ny_trips_`year', clear
 		gen NYC = (fips_county_descr == "BRONX" | fips_county_descr == "NEW YORK" | fips_county_descr == "KINGS" | fips_county_descr == "QUEENS" | fips_county_descr == "RICHMOND")
 		keep if NYC == 1
+		keep trip_code_uc NYC
+		tempfile tmp_trips
+		save `tmp_trips', replace
+				
+		import delimited using "../nielsen_extracts/HMS/`year'/Annual_Files/purchases_`year'.tsv", clear colrange(1:5)
+		
+		/* first merging in just trip codes to eliminate data set size */
+		
+		merge m:1 trip_code_uc using `tmp_trips', gen(_merge_trips) keep(3)
+		drop _merge_trips
+		merge m:1 trip_code_uc using ny_trips_`year', gen(_merge_trips) keep(3)
 		
 		// Identifying liquor purchases
 		merge m:1 upc upc_ver_uc using `small_upc_file', gen(_merge_upcs) keep(1 3) // keeps all purchases, drops unused liquor UPCs
@@ -111,8 +120,13 @@ if `rebuild_data' {
 
 	replace product = 0 if _merge_top == 1 & liquor_trip == 0 // outside option
 	replace product = (`J'+1) if _merge_top == 1 & liquor_trip == 1 // all other products
-
-
+	replace product = (`J'+2) if product == (`J'+1) & d_g_vod == 1
+	replace product = (`J'+3) if product == (`J'+1) & d_g_sch == 1
+	replace product = (`J'+4) if product == (`J'+1) & d_g_brb == 1
+	replace product = (`J'+5) if product == (`J'+1) & d_g_whs == 1
+	replace product = (`J'+6) if product == (`J'+1) & d_g_teq == 1
+	replace product = (`J'+7) if product == (`J'+1) & d_g_otr == 1
+	replace product = (`J'+8) if product == (`J'+1) & d_g_rum == 1
 
 	gen case = _n // Each "purchase" is a case. Now need to construct alternatives
 	egen brand_string = concat(brand_descr upc_descr size1_amount size1_units), punct(";") // used to match to price schedules
@@ -136,6 +150,8 @@ count
 disp "Original case count: " r(N)
 egen pop_weight = count(case), by(product)
 replace pop_weight = pop_weight / _N // converting to percents
+
+// sampling non-liquor purchases
 
 count if product == `J'+1
 local liq_N = r(N)

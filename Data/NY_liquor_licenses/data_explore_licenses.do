@@ -1,7 +1,6 @@
 capture log close
 clear
 set more off
-version 14
 
 log using "data_explore_licenses.txt", text replace
 
@@ -36,11 +35,17 @@ replace zip = substr(zip, 1,5) if strlen(zip) > 5
 
 save ny_liquor_licenses_2016_06, replace
 
+// stores by zip
 preserve
 	contract zip
 	tab _freq
 restore
 
+// stores in NYC
+preserve
+	keep if county == "BRON" | county == "RICH" | county == "QUEE" | county == "KING" | county == "NEW"
+	count
+restore
 
 log close
 

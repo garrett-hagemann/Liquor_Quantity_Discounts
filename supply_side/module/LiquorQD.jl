@@ -287,7 +287,7 @@ function optimal_price_sched(params::WholesaleParams, N::Int64, product::Liquor,
       #rho_guess = sort(rand(N-1),rev=true) # prices in 0,1 declining. Scaling up seems to have no effect on solutions (which is good)
       #t_guess = sort(rand(N-2)) # generates types between 0 and 1 that increase. One less b/c of constrained
       #hs_x0 = [rho_guess; t_guess]
-      ps_optim_res = Optim.optimize((x)->g(x,hs_n),hs_x0,method=NelderMead())
+      ps_optim_res = Optim.optimize((x)->g(x,hs_n),hs_x0,method=NelderMead(), g_tol=1e-12)
       optim_rho = Optim.minimizer(ps_optim_res)[1:hs_n-1]
       optim_t = Optim.minimizer(ps_optim_res)[hs_n:end]
       res_ps = PriceSched(optim_rho,[0.0; optim_t],hs_n) # constrained
@@ -336,14 +336,15 @@ function optimize_moment(ps::PriceSched, devs::Array{PriceSched,1},product::Liqu
 
   function Q(x::Array{Float64,1})
     theta = WholesaleParams(x...) # search all 3 params
-    if (theta.b <= 0.0 ) | (theta.b >= 10.0) | (theta.c < 0.0) | (theta.a < 1.0) # constraining SA search
+    #if (theta.b <= 0.0 ) | (theta.b >= 10.0) | (theta.c < 0.0) | (theta.a <= 1.0) # constraining SA search
+    if (theta.b <= 0.0 ) | (theta.c < 0.0) | (theta.a <= 1.0) # constraining SA search
       return Inf
     else
       return moment_obj_func(ps,devs,theta,product,coefs,weight,mkt,ps_pre_array)
     end
   end
 
-  moment_res = Optim.optimize(Q,x0,method=SimulatedAnnealing(), store_trace=true, show_trace = true, extended_trace=true, iterations=iters)
+  moment_res = Optim.optimize(Q,x0,method=SimulatedAnnealing(), store_trace=true, show_trace = false, extended_trace=true, iterations=iters)
   moment_res_min = Optim.minimizer(moment_res)
   x_trace = Optim.x_trace(moment_res)
   f_trace = Optim.f_trace(moment_res)

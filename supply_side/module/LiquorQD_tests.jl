@@ -8,7 +8,7 @@ test_prod2 = Liquor(2,9.30,9.30,0,40.0,0.0,0.0,nothing) # null price sched
 
 test_mkt = Market([test_prod1],6,2009)
 
-test_coefs = DemandCoefs(-0.4,0.0,0.0)
+test_coefs = DemandCoefs(-0.12,0.0,0.0)
 test_weights = [1.0]
 
 # testing density functions and integral
@@ -30,7 +30,7 @@ ps_res = p_star(test_mc,test_prod1,[test_coefs],test_weights,test_mkt)
 println("Optimal price at $test_mc: ", ps_res)
 
 # Testing price schedule optimization
-test_w_params = WholesaleParams(3.0,3.0,3.0)
+test_w_params = WholesaleParams(2.0,2.0,2.0)
 test_N = 6
 test_ps = optimal_price_sched(test_w_params,test_N,test_prod1,[test_coefs],test_weights,test_mkt)
 println("Optimal price schedule: ", test_ps)
@@ -38,7 +38,7 @@ println("Profit at optimal schedule: ", wholesaler_profit(test_ps,test_w_params,
 # testing deviation generation
 test_δ = 0.025
 test_devs = dev_gen(test_ps,test_δ)
-test_devs = test_devs[rand(1:end,100)] # N random ineqaulities
+test_devs = test_devs[rand(1:end,200)] # N random ineqaulities
 
 # pre-calculating optimal retail prices since they don't change with wholesaler params
 test_pre_calc = Dict{Int64,Float64}[]

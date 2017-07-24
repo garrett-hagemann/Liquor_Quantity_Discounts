@@ -3,7 +3,7 @@
        log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\Nielsen_Panel\analysis\asclogit_test.
 > txt
   log type:  text
- opened on:  16 May 2017, 19:46:46
+ opened on:  24 Jul 2017, 07:11:27
 
 . 
 . use individual_logit_sample.dta
@@ -14,27 +14,68 @@
 
 . gen byte inc_30_to_70 = (household_income > 15 & household_income <= 23)
 
-. gen byte inc_70_to_100 = (household_income == 26)
+. gen byte inc_70plus = (household_income >= 26)
 
-. gen byte inc_100_plus = (household_income > 26)
+. //gen byte inc_100_plus = (household_income > 26)
+. 
+. gen inc = .
+(123978 missing values generated)
 
+. replace inc = 2500 if household_income == 3
+(903 real changes made)
+
+. replace inc = 6500 if household_income == 4
+(1800 real changes made)
+
+. replace inc = 9000 if household_income == 6
+(2086 real changes made)
+
+. replace inc = 11000 if household_income == 8
+(2104 real changes made)
+
+. replace inc = 13000 if household_income == 10
+(2789 real changes made)
+
+. replace inc = 17500 if household_income == 11
+(3287 real changes made)
+
+. replace inc = 22500 if household_income == 13
+(8506 real changes made)
+
+. replace inc = 27500 if household_income == 15
+(9750 real changes made)
+
+. replace inc = 32500 if household_income == 16
+(4579 real changes made)
+
+. replace inc = 37500 if household_income == 17
+(4832 real changes made)
+
+. replace inc = 42500 if household_income == 18
+(3651 real changes made)
+
+. replace inc = 47500 if household_income == 19
+(3445 real changes made)
+
+. replace inc = 55000 if household_income == 21
+(12445 real changes made)
+
+. replace inc = 65000 if household_income == 23
+(5996 real changes made)
+
+. replace inc = 85000 if household_income == 26
+(30818 real changes made)
+
+. replace inc = 150000 if household_income == 27
+(26987 real changes made)
+
+. 
 . 
 . gen p_x_inc_lt30 = price*inc_lt30
 
 . gen p_x_inc_30_to_70 = price*inc_30_to_70
 
-. gen p_x_inc_70_to_100 = price*inc_70_to_100
-
-. gen p_x_inc_100_plus = price*inc_100_plus
-
-. 
-. gen neg_p_x_inc_lt30 = -p_x_inc_lt30 - 1e-2
-
-. gen neg_p_x_inc_30_to_70 = -p_x_inc_30_to_70 - 1e-2
-
-. gen neg_p_x_inc_70_to_100= -p_x_inc_70_to_100 - 1e-2
-
-. gen neg_p_x_inc_100_plus = -p_x_inc_100_plus - 1e-2
+. gen p_x_inc_70plus = price*inc_70plus
 
 . 
 . gen byte month = month(dofm(date_m))
@@ -96,19 +137,28 @@
 
 . gen proof_x_inc_30_to_70 = proof*inc_30_to_70
 
-. gen proof_x_inc_70_to_100 = proof*inc_70_to_100
+. gen proof_x_inc_70plus = proof*inc_70plus
 
-. gen proof_x_inc_100_plus = proof*inc_100_plus
+. gen proof_x_white = proof*white
 
+. 
 . 
 . // generating imported x income group
 . gen byte imported_x_inc_lt30 = imported*inc_lt30
 
 . gen byte imported_x_inc_30_to_70 = imported*inc_30_to_70
 
-. gen byte imported_x_inc_70_to_100 = imported*inc_70_to_100
+. gen byte imported_x_inc_70plus = imported*inc_70plus
 
-. gen byte imported_x_inc_100_plus = imported*inc_100_plus
+. gen byte imported_x_white = imported*white
+
+. 
+. // white x size
+. gen byte w_x_750ML = white*d_s_750ML
+
+. gen byte w_x_1L = white*d_s_1L
+
+. gen byte w_x_175L = white*d_s_175L
 
 . 
 . //// sampling cases
@@ -130,147 +180,271 @@
 > sample 10 if choice == 0 & product != 0, by(case) count
 > */
 . 
-. /*
-> //generating product dummies
-> foreach i of numlist 1/101{
->         gen byte d_p_`i' = (product == `i')
-> }
-> */
-. 
-. gen holiday = d_m_11 + d_m_12 + d_m_1 // Nov or Dec or Jan
+. //generating product dummies
+. foreach i of numlist 1/108{
+  2.         gen byte d_p_`i' = (product == `i')
+  3. }
 
 . 
-. gen d_q_1 = d_m_1 + d_m_2 + d_m_3
+. 
+. gen byte holiday = d_m_11 + d_m_12 + d_m_1 // Nov or Dec or Jan
 
-. gen d_q_2 = d_m_4 + d_m_5 + d_m_6
+. 
+. gen byte d_q_1 = d_m_1 + d_m_2 + d_m_3
 
-. gen d_q_3 = d_m_7 + d_m_8 + d_m_9
+. gen byte d_q_2 = d_m_4 + d_m_5 + d_m_6
 
-. gen d_q_4 = d_m_10 + d_m_11 + d_m_12
+. gen byte d_q_3 = d_m_7 + d_m_8 + d_m_9
+
+. gen byte d_q_4 = d_m_10 + d_m_11 + d_m_12
 
 . 
 . //export delimited asclogit_test.csv, replace
 . 
-. replace product = 102 if product == 101 & d_g_vod == 1
-(755 real changes made)
+. 
+. gen lip = ln(inc - price)
 
-. replace product = 103 if product == 101 & d_g_sch == 1
-(199 real changes made)
+. gen lip_x_inc_lt30 = lip*inc_lt30
 
-. replace product = 104 if product == 101 & d_g_brb == 1
-(368 real changes made)
+. gen lip_x_inc_30_to_70 = lip*inc_30_to_70
 
-. replace product = 105 if product == 101 & d_g_whs == 1
-(5 real changes made)
-
-. replace product = 106 if product == 101 & d_g_teq == 1
-(18 real changes made)
-
-. replace product = 107 if product == 101 & d_g_otr == 1
-(924 real changes made)
+. gen lip_x_inc_70plus = lip*inc_70plus
 
 . 
-. asclogit choice p_x_* imported proof, case(case) alt(product) base(0) diff nocons
-note: variable p_x_inc_lt30 has 2094 cases that are not alternative-specific: there is no within-case
-       variability
-note: variable p_x_inc_3~70 has 1373 cases that are not alternative-specific: there is no within-case
-       variability
-note: variable p_x_inc_~100 has 1990 cases that are not alternative-specific: there is no within-case
-       variability
-note: variable p_x_inc_10~s has 2157 cases that are not alternative-specific: there is no within-case
-       variability
-
-Iteration 0:   log likelihood = -9182.2733  
-Iteration 1:   log likelihood = -9165.9471  
-Iteration 2:   log likelihood = -9165.8972  
-Iteration 3:   log likelihood = -9165.8972  
-
-Alternative-specific conditional logit         Number of obs      =     134093
-Case variable: case                            Number of cases    =       2538
-
-Alternative variable: product                  Alts per case: min =         14
-                                                              avg =       52.8
-                                                              max =         62
-
-                                                  Wald chi2(6)    =    2109.30
-Log likelihood = -9165.8972                       Prob > chi2     =     0.0000
-
------------------------------------------------------------------------------------
-           choice |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
-------------------+----------------------------------------------------------------
-product           |
-     p_x_inc_lt30 |  -.0627503   .0056328   -11.14   0.000    -.0737904   -.0517102
- p_x_inc_30_to_70 |  -.0219469   .0031429    -6.98   0.000    -.0281068   -.0157869
-p_x_inc_70_to_100 |  -.0226535   .0044471    -5.09   0.000    -.0313697   -.0139374
- p_x_inc_100_plus |  -.0011903   .0049311    -0.24   0.809    -.0108551    .0084745
-         imported |   .1028341   .0519784     1.98   0.048     .0009583    .2047099
-            proof |  -.0248996   .0008179   -30.44   0.000    -.0265025   -.0232966
------------------------------------------------------------------------------------
+. nlogitgen type = product(oo: 0, gin: 27 | 41 | 101, vod: 1 | 3 | 6 | 8 | 11 | 13 | 14 | 15 | 17 | 19 | 20 | 
+> ///
+>         22 | 25 | 31 | 38 | 45 | 46 | 47 | 49 | 51 | 52 | 54 | 57 | 59 | 60 | 66 | 79 | ///
+>         82 | 83 | 85 | 87 | 93 | 96 | 97 | 102, rum: 2 | 16 | 18 | 21 | 24 | 28 | 29 | 34 | ///
+>         37 | 48 | 50 | 53 | 55 | 58 | 67 | 68 | 70 | 71 | 76 | 80 | 84 | 89 | 100 | 108, ///
+>         sch: 30 | 33 | 61 | 90 | 92 | 94 | 103, brb: 7 | 23 | 39 | 42| 73 | 104, ///
+>         whs: 5 | 56 | 91 | 105, teq: 32 | 35 | 65 | 106, otr: 4 | 9 | 10 | 12 | 26 | 36 | ///
+>         40 | 43 | 44 | 62 | 63 | 64 | 69 | 72 | 74 | 75 | 77 | 78 | 81 | 86 | 88 | 95 | 98 | 99 | 107)
+new variable type is generated with 9 groups
+label list lb_type
+lb_type:
+           1 oo
+           2 gin
+           3 vod
+           4 rum
+           5 sch
+           6 brb
+           7 whs
+           8 teq
+           9 otr
 
 . 
+. 
+. keep if year == 2011
+(53899 observations deleted)
+
+. clogit choice lip_x_inc_* imported_x_* proof_x_* d_s_* d_p_*, group(case) iter(150)
+note: d_s_350ML omitted because of collinearity
+note: d_p_18 omitted because of collinearity
+note: d_p_21 omitted because of collinearity
+note: d_p_61 omitted because of collinearity
+note: d_p_64 omitted because of collinearity
+note: d_p_81 omitted because of collinearity
+note: d_p_85 omitted because of collinearity
+note: d_p_87 omitted because of collinearity
+
+Iteration 0:   log likelihood = -5175.4551  
+Iteration 1:   log likelihood = -5156.4526  
+Iteration 2:   log likelihood = -5156.0058  
+Iteration 3:   log likelihood = -5156.0054  
+
+Conditional (fixed-effects) logistic regression   Number of obs   =      70079
+                                                  LR chi2(115)    =    1078.83
+                                                  Prob > chi2     =     0.0000
+Log likelihood = -5156.0054                       Pseudo R2       =     0.0947
+
+-----------------------------------------------------------------------------------------
+                 choice |      Coef.   Std. Err.      z    P>|z|     [95% Conf. Interval]
+------------------------+----------------------------------------------------------------
+         lip_x_inc_lt30 |   425.4726   86.79465     4.90   0.000     255.3583     595.587
+     lip_x_inc_30_to_70 |   291.9735   310.3484     0.94   0.347    -316.2981    900.2452
+       lip_x_inc_70plus |  -370.9079   546.7128    -0.68   0.497    -1442.445    700.6296
+    imported_x_inc_lt30 |  -.7909521   .1870754    -4.23   0.000    -1.157613    -.424291
+imported_x_inc_30_to_70 |  -.3625281     .19492    -1.86   0.063    -.7445643    .0195082
+  imported_x_inc_70plus |   .2174317   .1836883     1.18   0.237    -.1425907    .5774541
+       imported_x_white |  -.6027011   .1304736    -4.62   0.000    -.8584248   -.3469775
+       proof_x_inc_lt30 |   .0030556   .0038988     0.78   0.433     -.004586    .0106972
+   proof_x_inc_30_to_70 |   .0039238   .0042546     0.92   0.356    -.0044151    .0122627
+     proof_x_inc_70plus |   .0045034   .0042136     1.07   0.285    -.0037552    .0127619
+          proof_x_white |   .0014212   .0029759     0.48   0.633    -.0044114    .0072539
+              d_s_350ML |          0  (omitted)
+              d_s_750ML |  -.2199902   .1319351    -1.67   0.095    -.4785781    .0385978
+                 d_s_1L |    .336277   .1465461     2.29   0.022      .049052     .623502
+               d_s_175L |   .3760757   .1527129     2.46   0.014     .0767639    .6753876
+                  d_p_1 |   .8556165   .3994774     2.14   0.032     .0726552    1.638578
+                  d_p_2 |   1.192918   .3868582     3.08   0.002     .4346903    1.951147
+                  d_p_3 |  -.1184152   .4221301    -0.28   0.779     -.945775    .7089447
+                  d_p_4 |   .0293227   .3628584     0.08   0.936    -.6818666     .740512
+                  d_p_5 |  -.2799772   .4522432    -0.62   0.536    -1.166358    .6064032
+                  d_p_6 |   .1231568   .4250424     0.29   0.772     -.709911    .9562245
+                  d_p_7 |   .2433804   .4352083     0.56   0.576    -.6096122    1.096373
+                  d_p_8 |  -.2152439   .4089946    -0.53   0.599    -1.016859    .5863707
+                  d_p_9 |  -.4028344   .4585904    -0.88   0.380    -1.301655    .4959862
+                 d_p_10 |  -.3486434     .46923    -0.74   0.457    -1.268317    .5710305
+                 d_p_11 |   .1740651   .4430652     0.39   0.694    -.6943268    1.042457
+                 d_p_12 |  -.0295931   .4148779    -0.07   0.943    -.8427388    .7835526
+                 d_p_13 |   -.489323   .6450002    -0.76   0.448      -1.7535    .7748541
+                 d_p_14 |  -.5020882   .4524048    -1.11   0.267    -1.388785    .3846088
+                 d_p_15 |   .0282043   .4286595     0.07   0.948    -.8119529    .8683615
+                 d_p_16 |  -.1141542   .4400806    -0.26   0.795    -.9766963    .7483878
+                 d_p_17 |  -.1508569   .4238715    -0.36   0.722    -.9816297    .6799159
+                 d_p_18 |          0  (omitted)
+                 d_p_19 |   .6018577   .3591108     1.68   0.094    -.1019864    1.305702
+                 d_p_20 |  -.7173607   .4807243    -1.49   0.136    -1.659563    .2248417
+                 d_p_21 |          0  (omitted)
+                 d_p_22 |   .0744186   .4425618     0.17   0.866    -.7929865    .9418238
+                 d_p_23 |   .1590834   .4473332     0.36   0.722    -.7176736     1.03584
+                 d_p_24 |  -.3621658   .3797694    -0.95   0.340      -1.1065    .3821686
+                 d_p_25 |   .1752842   .4768118     0.37   0.713    -.7592498    1.109818
+                 d_p_26 |  -.3229181   .5464881    -0.59   0.555    -1.394015    .7481789
+                 d_p_27 |  -.1585512   .6015551    -0.26   0.792    -1.337578    1.020475
+                 d_p_28 |  -.5635899   .4795729    -1.18   0.240    -1.503536    .3763558
+                 d_p_29 |  -.4479751    .549448    -0.82   0.415    -1.524873    .6289232
+                 d_p_30 |  -.3453474   .5597022    -0.62   0.537    -1.442344    .7516488
+                 d_p_31 |  -.1189265   .4767802    -0.25   0.803    -1.053399    .8155455
+                 d_p_32 |  -.4919242   .4975866    -0.99   0.323    -1.467176    .4833276
+                 d_p_33 |  -.5161799   .6756908    -0.76   0.445     -1.84051    .8081497
+                 d_p_34 |  -.8418854   .5579928    -1.51   0.131    -1.935531    .2517604
+                 d_p_35 |  -.4354805   .4921812    -0.88   0.376    -1.400138    .5291769
+                 d_p_36 |  -.7157176    .754514    -0.95   0.343    -2.194538    .7631027
+                 d_p_37 |  -.7154003   .7990722    -0.90   0.371    -2.281553    .8507525
+                 d_p_38 |   .0378847   .4848112     0.08   0.938    -.9123277    .9880971
+                 d_p_39 |  -.4150582   .4719284    -0.88   0.379    -1.340021    .5099044
+                 d_p_40 |  -.0565234   .4689841    -0.12   0.904    -.9757155    .8626686
+                 d_p_41 |   1.367542   .4779599     2.86   0.004     .4307575    2.304326
+                 d_p_42 |  -.6012554   .5685189    -1.06   0.290    -1.715532    .5130211
+                 d_p_43 |   -.639145   .4973268    -1.29   0.199    -1.613888    .3355976
+                 d_p_44 |  -.9985983   .5390812    -1.85   0.064    -2.055178    .0579813
+                 d_p_45 |  -1.221036   .8072994    -1.51   0.130    -2.803314    .3612415
+                 d_p_46 |  -.8115663   .6879017    -1.18   0.238    -2.159829    .5366963
+                 d_p_47 |  -.2530933   .5402737    -0.47   0.639     -1.31201    .8058238
+                 d_p_48 |   .0770352   .5670348     0.14   0.892    -1.034333    1.188403
+                 d_p_49 |  -.4825353   .5103885    -0.95   0.344    -1.482878    .5178078
+                 d_p_50 |  -.2845498   .5261167    -0.54   0.589     -1.31572    .7466199
+                 d_p_51 |  -.1347749   .5231442    -0.26   0.797    -1.160119     .890569
+                 d_p_52 |   -.633689   .6514022    -0.97   0.331    -1.910414    .6430358
+                 d_p_53 |  -1.199436   .6944893    -1.73   0.084     -2.56061    .1617376
+                 d_p_54 |  -.5608144   .5885573    -0.95   0.341    -1.714365    .5927367
+                 d_p_55 |   1.072989   .4859135     2.21   0.027     .1206156    2.025361
+                 d_p_56 |   -.385807   .5465015    -0.71   0.480     -1.45693    .6853163
+                 d_p_57 |   .1552595   .6216349     0.25   0.803    -1.063123    1.373642
+                 d_p_58 |  -.5102197    .521004    -0.98   0.327    -1.531369    .5109294
+                 d_p_59 |  -.8038743   .5625669    -1.43   0.153    -1.906485    .2987365
+                 d_p_60 |   .1978071   .5645707     0.35   0.726    -.9087312    1.304345
+                 d_p_61 |          0  (omitted)
+                 d_p_62 |  -.2494613   .7906785    -0.32   0.752    -1.799163     1.30024
+                 d_p_63 |  -.6229246   .5423513    -1.15   0.251    -1.685914    .4400645
+                 d_p_64 |          0  (omitted)
+                 d_p_65 |  -.1680213   .5827297    -0.29   0.773    -1.310151     .974108
+                 d_p_66 |  -.4528102   .6218265    -0.73   0.466    -1.671568    .7659474
+                 d_p_67 |  -.5871209   .5394954    -1.09   0.276    -1.644513    .4702708
+                 d_p_68 |  -.0868821   .5253665    -0.17   0.869    -1.116582    .9428173
+                 d_p_69 |   .0996888   .5544419     0.18   0.857    -.9869972    1.186375
+                 d_p_70 |  -.6488184   .6807745    -0.95   0.341    -1.983112    .6854752
+                 d_p_71 |  -.6740028   1.070345    -0.63   0.529     -2.77184    1.423834
+                 d_p_72 |  -.4971549   .5206468    -0.95   0.340    -1.517604     .523294
+                 d_p_73 |  -1.145718   .8520211    -1.34   0.179    -2.815649    .5242125
+                 d_p_74 |   .9103151   .5413542     1.68   0.093    -.1507196     1.97135
+                 d_p_75 |   .0140433   .6777623     0.02   0.983    -1.314346    1.342433
+                 d_p_76 |   -1.05804   .6311854    -1.68   0.094    -2.295141    .1790606
+                 d_p_77 |  -.2592618   .5472573    -0.47   0.636    -1.331866    .8133428
+                 d_p_78 |  -.0138458   .6440507    -0.02   0.983    -1.276162     1.24847
+                 d_p_79 |  -.1235038   .7890742    -0.16   0.876    -1.670061    1.423053
+                 d_p_80 |  -1.124062     .66326    -1.69   0.090    -2.424028    .1759034
+                 d_p_81 |          0  (omitted)
+                 d_p_82 |   -.583873   .6325483    -0.92   0.356    -1.823645    .6558989
+                 d_p_83 |  -.4431338    .597072    -0.74   0.458    -1.613373    .7271058
+                 d_p_84 |  -.7816697   .6727124    -1.16   0.245    -2.100162    .5368224
+                 d_p_85 |          0  (omitted)
+                 d_p_86 |   .0692468    .530096     0.13   0.896    -.9697222    1.108216
+                 d_p_87 |          0  (omitted)
+                 d_p_88 |  -.2255972   .6070375    -0.37   0.710    -1.415369    .9641744
+                 d_p_89 |  -1.285514   .6945438    -1.85   0.064    -2.646795     .075767
+                 d_p_90 |  -1.071649   .8086888    -1.33   0.185     -2.65665     .513352
+                 d_p_91 |   .0620325     .57813     0.11   0.915    -1.071081    1.195146
+                 d_p_92 |  -.9084032   .5918151    -1.53   0.125    -2.068339     .251533
+                 d_p_93 |  -.7802494   .5845366    -1.33   0.182     -1.92592    .3654212
+                 d_p_94 |  -.1476598    .549461    -0.27   0.788    -1.224584    .9292639
+                 d_p_95 |  -.8174694   .6967072    -1.17   0.241     -2.18299    .5480517
+                 d_p_96 |  -.3252049   .7860777    -0.41   0.679    -1.865889    1.215479
+                 d_p_97 |  -.3514682   .6120181    -0.57   0.566    -1.551002    .8480653
+                 d_p_98 |  -.9205822   .5927839    -1.55   0.120    -2.082417    .2412529
+                 d_p_99 |   .1980324   .5408759     0.37   0.714    -.8620649     1.25813
+                d_p_100 |    -.07267   .5365484    -0.14   0.892    -1.124286    .9789456
+                d_p_101 |  -.0374173   .4187063    -0.09   0.929    -.8580667     .783232
+                d_p_102 |   1.901378   .3462069     5.49   0.000     1.222824    2.579931
+                d_p_103 |   .9420743   .3783029     2.49   0.013     .2006142    1.683534
+                d_p_104 |    .136025   .4253366     0.32   0.749    -.6976195    .9696695
+                d_p_105 |   .2362574   .5296269     0.45   0.656    -.8017922    1.274307
+                d_p_106 |   .3693977    .414639     0.89   0.373    -.4432798    1.182075
+                d_p_107 |   2.256177   .3012107     7.49   0.000     1.665815    2.846539
+                d_p_108 |   1.040209   .3537556     2.94   0.003     .3468607    1.733557
+-----------------------------------------------------------------------------------------
+
 . /*
-> //asclogit choice p_x_* imported_x_* proof_x_* d_g_gin d_g_vod d_g_rum d_g_sch, case(case) alt(product) base
-> (0) diff
+> clogit choice lip_x_* imported_x_* proof_x_* d_s_750ML d_s_1L d_s_175L w_x_* d_p_*, group(case) iter(150)
+> asclogit choice lip_x_* imported_x_* proof_x_* d_s_750ML d_s_1L d_s_175L w_x_*, case(case) alt(product)
+> matrix tmp_b0 = e(b)
+> matrix tmp_tau = (1,1,1,1,1,1,1,1,1)
+> matrix rownames tmp_tau = y1
+> matrix colnames tmp_tau = oo_tau:_cons gin_tau:_cons vod_tau:_cons rum_tau:_cons ///
+>         sch_tau:_cons brb_tau:_cons whs_tau:_cons teq_tau:_cons otr_tau:_cons
+> matrix b0 = tmp_b0,tmp_tau
+> 
+> nlogit choice lip_x_* imported_x_* proof_x_* d_s_750ML d_s_1L d_s_175L w_x_* || ///
+>         type: || product:, case(case) iter(200) from(b0, skip)
+> */
+. /*
+> asclogit chosen cost distance rating, case(family_id) alt(restaurant) iter(100)
+> matrix tmp_b0 = e(b)
+> matrix tmp_tau = (1, 1, 1)
+> matrix rownames tmp_tau = y1
+> matrix colnames tmp_tau = fast_tau:_cons family_tau:_cons fancy_tau:_cons
+> matrix list tmp_tau
+> matrix b0 = tmp_b0,tmp_tau
+> 
+> nlogit chosen cost distance rating || type:  || restaurant:, case(family_id) iter(50) from(b0)
+> */
+. 
+. //nlogit choice p_x_* imported_x_* proof_x_* || type: cons || product: , case(case) iter(200)
+. /*
 > mixlogit choice imported_x_* proof_x_* d_g_gin d_g_vod d_g_rum d_g_sch d_p_1-d_p_101, group(case) rand(p_x_*
 > ) iter(150) nrep(1)
 > */
 . 
-. 
-. 
-. /* Adjusting constants to account for choice based sample */
-. 
-. predict xb, xb
-
-. 
-. gen adj_util = xb - ln(sample_weight/pop_weight)
-
-. 
-. gen num = exp(adj_util)
-
-. egen denom = total(exp(adj_util)), by(case)
-
-. gen prob = num/denom
-
-. 
-. local alpha1 = _b[p_x_inc_lt30]
-
-. local alpha2 =  _b[p_x_inc_30_to_70]
-
-. local alpha3 = _b[p_x_inc_70_to_100]
-
-. local alpha4 = _b[p_x_inc_100_plus]
-
-. 
-. gen ed_ij = (`alpha1'*inc_lt30 + `alpha2'*inc_30_to_70 + `alpha3'*inc_70_to_100 + `alpha4'*inc_100_plus)*pri
+. /*
+> 
+> /* Adjusting constants to account for choice based sample */
+> 
+> predict xb, xb
+> 
+> gen adj_util = xb - ln(sample_weight/pop_weight)
+> 
+> gen num = exp(adj_util)
+> egen denom = total(exp(adj_util)), by(case)
+> gen prob = num/denom
+> 
+> local alpha1 = _b[p_x_inc_lt30]
+> local alpha2 =  _b[p_x_inc_30_to_70]
+> local alpha3 = _b[p_x_inc_70_to_100]
+> local alpha4 = _b[p_x_inc_100_plus]
+> 
+> gen ed_ij = (`alpha1'*inc_lt30 + `alpha2'*inc_30_to_70 + `alpha3'*inc_70_to_100 + `alpha4'*inc_100_plus)*pri
 > ce*(1-prob)
-
-. 
-. egen ed_j = mean(ed_ij), by(product)
-
-. 
-. sum ed_j, det
-
-                            ed_j
--------------------------------------------------------------
-      Percentiles      Smallest
- 1%    -1.031031      -1.300653
- 5%    -.8891116      -1.300653
-10%    -.7955324      -1.300653       Obs              134093
-25%    -.6005368      -1.300653       Sum of Wgt.      134093
-
-50%    -.4589936                      Mean          -.4551533
-                        Largest       Std. Dev.      .2497539
-75%    -.2658311              0
-90%    -.1133102              0       Variance        .062377
-95%    -.0510235              0       Skewness      -.3327346
-99%            0              0       Kurtosis       2.982509
-
-. 
+> 
+> egen ed_j = mean(ed_ij), by(product)
+> 
+> sum ed_j, det
+> */
 . 
 . log close
       name:  <unnamed>
        log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\Nielsen_Panel\analysis\asclogit_test.
 > txt
   log type:  text
- closed on:  16 May 2017, 19:47:10
+ closed on:  24 Jul 2017, 07:11:50
 --------------------------------------------------------------------------------------------------------------

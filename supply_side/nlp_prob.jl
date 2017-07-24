@@ -77,9 +77,9 @@ function ks_dens(x::Float64,a::Float64,b::Float64)
 end
 
 
-a = 4.0
-b = 4.0
-c = 0.25
+a = 2.0
+b = 2.0
+c = 0.2
 
 
 #t_pdf(x) = pdf(Beta(a,b),x)
@@ -362,15 +362,18 @@ function hess!(hess_mat,theta)
 		end
 	end
 end
-x0 = rand(2*(N-1))
-solution = Optim.optimize(obj_func,grad!,hess!,x0,method=NelderMead(),show_trace=false, iterations=10000)
-println(solution)
-x0 = Optim.minimizer(solution)
-solution = Optim.optimize(obj_func,grad!,hess!,x0,method=Newton(),show_trace=false)
+println("Solving for unconstrained price schedule. Comparing algorithms.")
+p_guess = sort(rand(N-1),rev=true)
+t_guess = rand(N-1)
+x0 = [p_guess ; t_guess]
+solution = Optim.optimize(obj_func,grad!,hess!,x0,method=NelderMead(),show_trace=false, g_tol=1e-16)
 println(solution)
 println(Optim.minimizer(solution))
 obs_p = Optim.minimizer(solution)[1:N-1]
 obs_t = Optim.minimizer(solution)[N:end]
+solution = Optim.optimize(obj_func,grad!,hess!,x0,method=Newton(),show_trace=false, iterations=5000)
+println(solution)
+println(Optim.minimizer(solution))
 #=
 x0 = rand(2*(N-1))
 @time solution = optimize(obj_func,grad!,hess!,x0,method=Newton(),show_trace=false)
@@ -498,6 +501,7 @@ hess!(testx,htest)
 println("Numerical Hessian: ", (gtest1 - gtest2)/(2*step))
 println(htest)
 =#
+println("Solving for constrained price schedule. Comparing algorithms and timing.")
 x0 = rand(2*(N-1)-1)
 @time solution = Optim.optimize(obj_func,grad!,hess!,x0,method=NewtonTrustRegion(),show_trace=false)
 @time solution = Optim.optimize(obj_func,grad!,hess!,x0,method=NewtonTrustRegion(),show_trace=false)
@@ -526,11 +530,13 @@ t(i,n) = (i - .5)/(n-.5)
 
 p_vec = [1.0; [p(i,id_N) for i = 1:(id_N-1)]]
 t_vec = [t_lb ; [t(i,id_N) for i = 1:(id_N-1)] ; t_ub]
-println(p_vec)
-println(t_vec)
+println("P: ", p_vec)
+println("T:", t_vec)
 
+#obs_p = p_vec[2:end]
+#obs_t = t_vec[2:end-1]
 function id_focs(theta)
-	if (theta[2] < 1.0) | (theta[3] < 0.0) | (theta[1] < 0.0)
+	if (theta[2] < 0.0) | (theta[3] < 0.0) | (theta[1] < 0.0) | (theta[3] > 10.0)
 		res = Inf
 	else
 		ic = theta[1]
@@ -551,9 +557,10 @@ function id_focs(theta)
 	return res
 end
 
-x0 = [0.0,1.5,1.5]
-println(id_focs([c,b,a]))
-solution = Optim.optimize(id_focs,x0,method=NelderMead(), g_tol=1e-12)
+println("Solving FOCs for parameters")
+x0 = [0.5,1.5,1.5]
+println(id_focs([c,a,b]))
+solution = Optim.optimize(id_focs,x0,method=NelderMead(), iterations=100000, g_tol=1e-12)
 println(solution)
 println(Optim.minimizer(solution))
 
