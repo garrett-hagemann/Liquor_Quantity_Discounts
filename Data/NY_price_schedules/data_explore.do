@@ -9,6 +9,8 @@ use old_format_months
 drop _merge
 drop if posting_year == 2014 // only incomplete data for 2014. No need to keep it.
 
+
+
 replace option=option+1 // correcting options which start at 0
 egen total_options = max(option), by(record_num) // calculating total number of options
 
@@ -30,8 +32,9 @@ duplicates tag product date_n, gen(tag)
 drop if tag > 0
 reshape long // going back to long for a few things
 
-table total_options option, contents(mean actual_p sd actual_p med actual_p) format(%9.2f)
-table total_options option, contents(mean disc_q sd disc_q med disc_q) format(%9.2f)
+// for cases
+table total_options option if discount_size_type == "CASE", contents(mean actual_p sd actual_p med actual_p) format(%9.2f)
+table total_options option if discount_size_type == "CASE", contents(mean disc_q sd disc_q med disc_q) format(%9.2f)
 
 // now same tables with easy latex integration
 tabout total_options option using tab_options.txt

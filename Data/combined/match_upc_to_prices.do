@@ -15,9 +15,17 @@ keep if checked == 1 // keeping hand checked records. Ignores multiple matches
 
 drop similscore neg_similscore brand_string1
 
+// fixing bad matching. Just need to match on brand_string and month year
+format upc_id %12.0f
+gen purchase_month = regexs(1) if regexm(string(upc_id,"%12.0f"),"^([0-9]+)(2[0-1)[0-9][0-9])([0-9]+)$")
+destring purchase_month, replace
+gen purchase_year = substr(string(upc_id,"%12.0f"),2,4) if purchase_month < 10
+replace purchase_year = substr(string(upc_id,"%12.0f"),3,4) if purchase_month >= 10
+destring purchase_year, replace
+
 /* merging top upc info back in */
 
-merge 1:m upc_id brand_string using upc_file, keep(2 3) gen(_merge_matched)
+merge 1:m purchase_month purchase_year brand_string using upc_file, keep(2 3) gen(_merge_matched)
 
 local price_sched_file = "../NY_price_schedules/old_format_months.dta"
 preserve
@@ -29,6 +37,33 @@ preserve
 restore
 
 merge m:1 record_num using `ps', keep(1 3) gen(_merge_ps)
+
+gen type = ""
+replace type = "oo" if product == 0
+replace type = "gin" if d_g_gin
+replace type = "vod" if d_g_vod
+replace type = "rum" if d_g_rum
+replace type = "sch" if d_g_sch
+replace type = "brb" if d_g_brb
+replace type = "whs" if d_g_whs
+replace type = "teq" if d_g_teq
+replace type = "otr" if d_g_otr
+
+
+/* hack because match was done with only 101 products*/
+local J = 100
+replace product = (`J'+2) if product == (`J'+1) & d_g_vod == 1
+replace product = (`J'+3) if product == (`J'+1) & d_g_sch == 1
+replace product = (`J'+4) if product == (`J'+1) & d_g_brb == 1
+replace product = (`J'+5) if product == (`J'+1) & d_g_whs == 1
+replace product = (`J'+6) if product == (`J'+1) & d_g_teq == 1
+replace product = (`J'+7) if product == (`J'+1) & d_g_otr == 1
+replace product = (`J'+8) if product == (`J'+1) & d_g_rum == 1
+
+/* taking care of duplicate product records in a month */
+//duplicates drop product date_m if product <= 100, force
+
+egen mkt = group(date_m) // doesnt matter if it doesn't match mkt definition elsewhere. No mkt specific variables
 
 save merged_sample, replace
 export delimited merged_sample.csv, replace

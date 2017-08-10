@@ -4,31 +4,42 @@ using LiquorQD, DataFrames, DataArrays
 #= Set up of coefficients. Product and group utility goes in product b/c those
 don't multiply out well. The remainder go in a DemandCoefs object with an associated
 weight =#
-const group_utils = [-.9980637;.8108195;-.2365993;-.7477314] # order is gin,vod,rum,sch
-const prod_utils= [-3.121894;-3.121704;-4.801027;-5.014518;-4.846033;-3.435482;
--4.777261;-2.949315;-4.601557;-4.360644;-5.3786;-5.390806;-3.930106;-4.342176;
--4.342773;-4.797522;-5.466756;-4.916693;-3.724147;-5.618995;-4.223;-3.830568;
--4.448236;-4.904963;-6.201783;-3.911629;-4.470888;-6.215972;-5.339201;-4.433005;
--5.04312;-5.455826;-4.350398;-4.999972;-5.11608;-5.068243;-5.927884;-5.143831;
--4.432692;-5.631095;-4.801862;-5.574736;-5.192336;-4.960927;-4.160068;-3.903724;
--5.181415;-3.886327;-5.344421;-5.285977;-4.1023;-5.637782;-4.822594;-3.958131;
--6.565579;-4.548577;-5.601947;-3.987991;-4.912977;-4.840165;-6.880695;-5.605676;
--5.188475;-5.377887;-4.09764;-5.108016;-5.710825;-5.113058;-5.991073;-5.567423;
--6.625885;-5.299186;-6.272768;-5.579566;-5.928923;-4.585755;-5.869962;-5.508581;
--4.829222;-6.51405;-5.81735;-6.198225;-6.39506;-5.299936;-7.157789;-5.640015;
--5.26857;-4.868245;-4.543375;-4.700213;-4.514191;-5.530586;-4.470521;-4.471254;
--5.435326;-4.380613;-6.817262;-6.6457;-6.61709;-6.495391;-.1659607]
+const size_utils = [.151699,.6506976,-.1413254] # order is 750ml, 1L, 1.75L
+const prod_utils= [.9984359; 2.222908; -.2574402; 1.29754; .8887798; -.9459865; -.9818617;
+-.974148; 1.211948; -.6472216; 1.93983; 1.943144; -.5035014; -.7443478;
+-.8400436; -.5358744; 1.673104; 1.615472; -1.113532; -1.441404; 1.677565;
+-.0269081; -1.235775; -.0093349; 2.235452; 1.241808; -.103252; -.0133208;
+-.537227; 1.561229; 1.520777; .6162316; 1.571745; .1175427; -.776834; 2.242108;
+-.3264315; -1.750993; -.4174726; .9231605; 1.797444; -1.18543; 1.98275; -.0485804;
+-2.308151; .6849962; -2.050701; .8454664; 1.716071; -1.960274; -.4715936; .0917088;
+1.788842; -1.454759; -1.672869; 1.066978; .0430603; 1.006194; -2.148041; -1.867818;
+.7396636; .5350933; -1.569208; 1.195685; .3580877; 1.537322; -1.00704; 1.750797;
+1.117172; -1.534264; 1.363423; 1.82211; -1.225709; .9798436; 2.132275; 1.892909;
+1.866594; -.6740343; -2.048624; -2.685772; 1.213439; -1.622729; 1.026525; -1.385786;
+-1.592726; -.3203502; 1.124569; .6860642; .4910821; .0602244; .6011467; .989683;
+-2.809397; 1.772477; -2.359167; -1.26707; -.722626; -1.295764; 1.800456; 1.337842;
+.3584706; 1.100851; .3543156; -.2078676; .7758802; -.2940698; 2.612169; 1.86315]
 
-coefs_lt30 = DemandCoefs(-.1288769,-.1549591,.0300896)
-coefs_30_to_70 = DemandCoefs(-.0373797,-.3626817,.0154656)
-coefs_70_to_100 = DemandCoefs(-.0312302,-.2814536,.0191501)
-coefs_100_plus = DemandCoefs(-.028152,-.2519711, -.0019593) # price coef is estimated positive. causes problems
+const nested_coefs = DemandCoefs(-.224743, # price
+                            -.8281927, # imported
+                             -.0075732, # proof
+                             0.0, #.0202472, # price*y // setting to zero because it causes positive respones
+                             .0780103, # imported*y
+                              .0002535, # proof*y
+                              Dict("oo" => 1,
+                              "gin" => 1.255592,
+                              "vod" => 1.38928,
+                              "rum" => .555316,
+                              "sch" => 1.264724,
+                              "brb" => 1.822675,
+                              "whs" => .2343492,
+                              "teq" => 1.671329,
+                              "otr" => .3359661))
 
-const inc_weights = [.2055;.3970;.2059;.1917]
+inc_levels = Float64[2500; 6500; 9000; 11000; 13000; 17500; 22500; 27500; 32500; 37500; 42500; 47500; 55000; 65000; 85000; 150000]
+inc_weights = [0.34; 2.36; 1.21; 2.63; 3.91; 2.02; 4.99; 9.84; 2.76; 2.83; 4.45; 2.49; 11.73; 4.38; 24.14; 19.89]
 
-const coef_array = [coefs_lt30;coefs_30_to_70;coefs_70_to_100;coefs_100_plus]
-
-
+const obs_inc_dist = IncomeDist(inc_levels,inc_weights)
 #= Initial set up of product data. Need to:
   1) import data
   2) initilize a product object for each product in data
@@ -51,9 +62,9 @@ for m in mkt_ids
   for row in eachrow(mkt_df)
     # constructing product objects
     id = row[:product]
-    group_d_vec = [row[:d_g_gin],row[:d_g_vod],row[:d_g_rum],row[:d_g_sch]] # get producrt group dummy values
-    g_util = sum(group_d_vec.*group_utils) # get group utility
-    prod = Liquor(id,row[:price],row[:price],row[:imported],row[:proof],g_util,prod_utils[id],nothing)
+    size_d_vec = [row[:d_s_750ML],row[:d_s_1L],row[:d_s_175L]] # get size dummy values
+    s_util = sum(size_d_vec.*size_utils) # get group utility
+    prod = Liquor(id,row[:_type],row[:avg_price_inter],row[:avg_price_inter],row[:imported],row[:proof],s_util,prod_utils[id],nothing)
     push!(mkt_vec,prod) # push to market
     push!(prod_array,prod) # push to total product array
     # extracting data needed to construct price schedule objects
@@ -94,7 +105,7 @@ for m in mkt_ids
       try
         tmp_rhos = mkt_ps_lookup[j][1]
         tmp_ff = mkt_ps_lookup[j][2]
-        tmp_t = obs_lambdas(tmp_rhos,tmp_ff,j,coef_array,inc_weights,tmp_mkt,10000000.0) # M probably not right. Need to pin down a better number
+        tmp_t = obs_lambdas(tmp_rhos,tmp_ff,j,nested_coefs,obs_inc_dist,tmp_mkt,10000000.0) # M probably not right. Need to pin down a better number
         tmp_ps = PriceSched(tmp_rhos,tmp_t,(length(tmp_rhos)+1))
         j.ps = tmp_ps # Setting price schedule for product
       end
@@ -104,6 +115,7 @@ end
 
 for m in markets_array[1:1]
   for j in m.products
+    println("test: ", j)
     if !isnull(j.ps)
       println("working with product", j)
       tmp_ps = get(j.ps) # becase the ps field is nullable, need to use get
@@ -112,12 +124,12 @@ for m in markets_array[1:1]
       print("Pre-calculating retail prices. ")
       pre_calc = Dict{Int64,Float64}[]
       for s in dev_ps
-        tmp_dict = Dict(i => p_star(s.rhos[i],j,coef_array,inc_weights,m) for i in 1:(s.N-1))
+        tmp_dict = Dict(i => p_star(s.rhos[i],j,nested_coefs,obs_inc_dist,m) for i in 1:(s.N-1))
         push!(pre_calc,tmp_dict)
       end
       println("Done.")
       min_rho = minimum(tmp_ps.rhos)
-      sol,xtrace,ftrace = optimize_moment(tmp_ps,dev_ps,j,coef_array,inc_weights,m,25000,pre_calc,x0=[min_rho,1.0,1.0])
+      sol,xtrace,ftrace = optimize_moment(tmp_ps,dev_ps,j,nested_coefs,obs_inc_dist,m,25000,pre_calc,x0=[min_rho,1.0,1.0])
       println(sol)
       trace = [vcat(xtrace'...) ftrace]
       out_str = "traces/trace_"*string(m.year)*"_"*string(m.month)*"_"*string(j.id)*".csv"

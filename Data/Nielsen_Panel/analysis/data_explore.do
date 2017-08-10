@@ -37,6 +37,26 @@ tab purchase_year purchase_month
 gen date_q = qofd(date_n) // quarterly date. Useful for time graphs
 format date_q %tq
 
+gen inc = .
+replace inc = 2500 if household_income == 3
+replace inc = 6500 if household_income == 4
+replace inc = 9000 if household_income == 6
+replace inc = 11000 if household_income == 8
+replace inc = 13000 if household_income == 10
+replace inc = 17500 if household_income == 11
+replace inc = 22500 if household_income == 13
+replace inc = 27500 if household_income == 15
+replace inc = 32500 if household_income == 16
+replace inc = 37500 if household_income == 17
+replace inc = 42500 if household_income == 18
+replace inc = 47500 if household_income == 19
+replace inc = 55000 if household_income == 21
+replace inc = 65000 if household_income == 23
+replace inc = 85000 if household_income == 26
+replace inc = 150000 if household_income == 27
+
+tab inc
+
 /* Distribution of household purchases. I.e. distribution of number of times
 a household appears in the data */
 

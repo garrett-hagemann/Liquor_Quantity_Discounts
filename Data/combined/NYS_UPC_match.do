@@ -65,13 +65,13 @@ foreach year in `years'{
 
 clear
 
-use "../Nielsen_Panel/analysis/prod_chars_individual"
+use "../Nielsen_Panel/analysis/individual_logit_sample"
 drop if product == 0 // don't need to match for non liquor purchases
-gen purchase_month = month(date_d)
-gen purchase_year = year(date_d)
+gen purchase_month = month(dofm(date_m))
+gen purchase_year = year(dofm(date_m))
 egen upc_id = concat(purchase_month purchase_year product), punct("")
 destring upc_id, replace
-save upc_file
+save upc_file, replace
 /* Now we need to separate purchases by month, year, and size to allign
 with the price schedule data. Then we can apply the matching algorithm */
 

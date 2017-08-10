@@ -8,11 +8,13 @@ log using asclogit_test.txt, text replace
 
 use individual_logit_sample.dta
 
+/*
 // generating dummies for income levels
 gen byte inc_lt30 = (household_income <= 15)
 gen byte inc_30_to_70 = (household_income > 15 & household_income <= 23)
 gen byte inc_70plus = (household_income >= 26)
 //gen byte inc_100_plus = (household_income > 26)
+*/
 
 gen inc = .
 replace inc = 2500 if household_income == 3
@@ -30,16 +32,12 @@ replace inc = 47500 if household_income == 19
 replace inc = 55000 if household_income == 21
 replace inc = 65000 if household_income == 23
 replace inc = 85000 if household_income == 26
-replace inc = 150000 if household_income == 27
-
-
-gen p_x_inc_lt30 = price*inc_lt30
-gen p_x_inc_30_to_70 = price*inc_30_to_70
-gen p_x_inc_70plus = price*inc_70plus
+replace inc = 150000 if household_income >= 27
 
 gen byte month = month(dofm(date_m))
 gen int year = year(dofm(date_m))
 
+/*
 gen byte d_m_1 = (month == 1)
 gen byte d_m_2 = (month == 2)
 gen byte d_m_3 = (month == 3)
@@ -67,8 +65,9 @@ foreach inc of varlist inc_* {
 		gen byte `inc'_x_`group' = `inc'*`group'
 	}
 }
+*/
 
-
+/*
 // generating proof x income group
 gen proof_x_inc_lt30 = proof*inc_lt30
 gen proof_x_inc_30_to_70 = proof*inc_30_to_70
@@ -86,6 +85,7 @@ gen byte imported_x_white = imported*white
 gen byte w_x_750ML = white*d_s_750ML
 gen byte w_x_1L = white*d_s_1L
 gen byte w_x_175L = white*d_s_175L
+*/
 
 //// sampling cases
 /*
@@ -107,37 +107,83 @@ sample 10 if choice == 0 & product != 0, by(case) count
 */
 
 //generating product dummies
-foreach i of numlist 1/108{
+levelsof product if product > 0, local(prods)
+foreach i in `prods'{
 	gen byte d_p_`i' = (product == `i')
 }
 
-
+/*
 gen byte holiday = d_m_11 + d_m_12 + d_m_1 // Nov or Dec or Jan
 
 gen byte d_q_1 = d_m_1 + d_m_2 + d_m_3
 gen byte d_q_2 = d_m_4 + d_m_5 + d_m_6
 gen byte d_q_3 = d_m_7 + d_m_8 + d_m_9
 gen byte d_q_4 = d_m_10 + d_m_11 + d_m_12
-
+*/
 //export delimited asclogit_test.csv, replace
 
+gen byte liquor = (product != 0)
+//nlogitgen liq_group = liquor(outside: 0, liq: 1)
 
-gen lip = ln(inc - price)
-gen lip_x_inc_lt30 = lip*inc_lt30
-gen lip_x_inc_30_to_70 = lip*inc_30_to_70
-gen lip_x_inc_70plus = lip*inc_70plus
+gen type = 0
+replace type = 1 if d_g_gin
+replace type = 2 if d_g_vod
+replace type = 3 if d_g_rum
+replace type = 4 if d_g_sch
+replace type = 5 if d_g_brb
+replace type = 6 if d_g_whs
+replace type = 7 if d_g_teq
+replace type = 8 if d_g_otr
 
-nlogitgen type = product(oo: 0, gin: 27 | 41 | 101, vod: 1 | 3 | 6 | 8 | 11 | 13 | 14 | 15 | 17 | 19 | 20 | ///
-	22 | 25 | 31 | 38 | 45 | 46 | 47 | 49 | 51 | 52 | 54 | 57 | 59 | 60 | 66 | 79 | ///
-	82 | 83 | 85 | 87 | 93 | 96 | 97 | 102, rum: 2 | 16 | 18 | 21 | 24 | 28 | 29 | 34 | ///
-	37 | 48 | 50 | 53 | 55 | 58 | 67 | 68 | 70 | 71 | 76 | 80 | 84 | 89 | 100 | 108, ///
-	sch: 30 | 33 | 61 | 90 | 92 | 94 | 103, brb: 7 | 23 | 39 | 42| 73 | 104, ///
-	whs: 5 | 56 | 91 | 105, teq: 32 | 35 | 65 | 106, otr: 4 | 9 | 10 | 12 | 26 | 36 | ///
-	40 | 43 | 44 | 62 | 63 | 64 | 69 | 72 | 74 | 75 | 77 | 78 | 81 | 86 | 88 | 95 | 98 | 99 | 107)
+//nlogitgen spirit_type = type(oo: 0, clear: 1 | 2, tr: 3 | 7, whs: 4 | 5 | 6, otr: 8)
 
+gen log_inc = ln(inc/10000)
+gen import_y = imported*log_inc
+gen proof_y = proof*log_inc
+replace avg_price = 0 if product == 0 // not sure why this is non-zero. Likely bug in code earlier
+gen ap_y = avg_price_inter*log_inc
 
-keep if year == 2011
-clogit choice lip_x_inc_* imported_x_* proof_x_* d_s_* d_p_*, group(case) iter(150)
+clogit choice avg_price_inter ap_y d_p_1-d_p_250, group(case)
+estimates save liq_demand, replace
+
+predictnl eps_y = (_b[avg_price_inter] + _b[ap_y]*log_inc)*(1-predict(pc1))*avg_price_inter
+
+preserve
+	collapse (mean) eps_y , by(product d_g_*)
+	drop if product == 0 // dropping outside option
+	sum eps_y, det
+	count if eps_y > -1.0
+
+	kdensity eps_y if d_g_gin
+	graph export eps_gin.pdf, replace
+
+	kdensity eps_y if d_g_vod
+	graph export eps_vod.pdf, replace
+
+	kdensity eps_y if d_g_rum
+	graph export eps_rum.pdf, replace
+
+	kdensity eps_y if d_g_sch
+	graph export eps_sch.pdf, replace
+
+	kdensity eps_y if d_g_brb
+	graph export eps_brb.pdf, replace
+
+	kdensity eps_y if d_g_teq
+	graph export eps_teq.pdf, replace
+
+	kdensity eps_y if d_g_otr
+	graph export eps_otr.pdf, replace
+restore
+
+/*
+nlogit choice lip imported proof proof_y import_y d_p_* || type: || product:, case(case) nocons
+nlogit choice lip imported proof proof_y import_y d_p_* || liq_group: || type: || product:, case(case) nocons
+nlogit choice lip imported proof proof_y import_y d_p_* || liq_group: || product:, case(case) nocons
+*/
+//clogit choice price py imported import_y proof proof_y d_s_750 d_s_1L d_s_175 d_p_*, group(case) iter(150)
+*nlogit choice price py imported import_y proof proof_y d_s_750 d_s_1L d_s_175 d_p_* || type: || product:, case(case) iter(150) nocons
+//nlogit choice price py imported import_y proof proof_y d_p_* || liq_group: || type: || product:, case(case) nocons
 /*
 clogit choice lip_x_* imported_x_* proof_x_* d_s_750ML d_s_1L d_s_175L w_x_* d_p_*, group(case) iter(150)
 asclogit choice lip_x_* imported_x_* proof_x_* d_s_750ML d_s_1L d_s_175L w_x_*, case(case) alt(product)
@@ -191,5 +237,7 @@ egen ed_j = mean(ed_ij), by(product)
 
 sum ed_j, det
 */
+
+save asc_logit_test_data, replace
 
 log close

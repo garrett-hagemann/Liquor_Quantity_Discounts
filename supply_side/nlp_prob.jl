@@ -80,17 +80,20 @@ end
 a = 2.0
 b = 2.0
 c = 0.2
+gamma = 5
 
 
 #t_pdf(x) = pdf(Beta(a,b),x)
 #t_cdf(x) = cdf(Beta(a,b),x)
 t_pdf(x) = ks_dens(x,a,b)
 t_cdf(x) = ks_dist(x,a,b)
+#t_pdf(x) = pdf(Exponential(gamma),x)
+#t_cdf(x) = cdf(Exponential(gamma),x)
 
 t_lb = 0.0
 t_ub = 1.0
 
-N = 3
+N = 4
 
 function focs!(theta,focs_vec)
 
