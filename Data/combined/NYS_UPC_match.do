@@ -22,7 +22,7 @@ something that should be fixed */
 
 local years = "2011"
 local months = "1 2 3 4 5 6 7 8 9 10 11 12"
-local sizes = "750ML 1L 1.75L"
+local sizes = "375ML 750ML 1L 1.75L"
 
 /* first use the old format NYS data */
 use "../NY_price_schedules/old_format_months"
@@ -69,6 +69,10 @@ use "../Nielsen_Panel/analysis/individual_logit_sample"
 drop if product == 0 // don't need to match for non liquor purchases
 gen purchase_month = month(dofm(date_m))
 gen purchase_year = year(dofm(date_m))
+/* limiting to one product record per month. All relevant matching data 
+is the same across records */
+bys date_m product: keep if _n == 1 // only need one record of product per mkt. Not per case. Keeps matched records
+
 egen upc_id = concat(purchase_month purchase_year product), punct("")
 destring upc_id, replace
 save upc_file, replace
@@ -144,13 +148,34 @@ foreach year in `years'{
 					save `res_y`year'_m`month'_s750ML'
 				restore
 			}
+			if "`size'" == "375ML"{
+				tempfile res_y`year'_m`month'_s375ML
+				tempfile raw_y`year'_m`month'_s375ML
+				preserve
+					keep if (purchase_month == `month') ///
+					& (purchase_year == `year') ///
+					& (d_s_375ML)	
+
+					matchit upc_id brand_string using `ps_y`year'_m`month'_s375ML', idusing(record_num) txtusing(brand_string) override sim(ngram_circ, 2) threshold(0)
+
+					gen neg_similscore = -similscore
+
+					sort upc_id neg_similscore // sorting by each UPC and then by match rank within
+
+					save  `raw_y`year'_m`month'_s375ML' // useful to fix hand matches
+
+					by upc_id: keep if _n <= 3 // keeping top 3 matches 
+
+					save `res_y`year'_m`month'_s375ML'
+				restore
+			}
 		}
 	}
 }
 
 clear
 
-local sizes = "175L 1L 750ML"
+local sizes = "175L 1L 750ML 375ML"
 
 foreach year in `years'{
 	foreach month in `months'{

@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\combined\match_upc_to_prices.txt
   log type:  text
- opened on:   9 Aug 2017, 22:30:01
+ opened on:  11 Aug 2017, 14:21:30
 
 . 
 . /* This file matches the nielsen UPCs to the NYS price schedule data.
@@ -42,18 +42,20 @@ purchase_year has all characters numeric; replaced as int
 . /* merging top upc info back in */
 . 
 . merge 1:m purchase_month purchase_year brand_string using upc_file, keep(2 3) gen(_merge_matched)
-(note: variable brand_string was str60, now str66 to accommodate using data's values)
 (note: variable purchase_month was byte, now float to accommodate using data's values)
 (note: variable purchase_year was int, now float to accommodate using data's values)
 
     Result                           # of obs.
     -----------------------------------------
-    not matched                     1,333,406
+    not matched                        18,698
         from master                         0  (_merge_matched==1)
-        from using                  1,333,406  (_merge_matched==2)
+        from using                     18,698  (_merge_matched==2)
 
-    matched                               394  (_merge_matched==3)
+    matched                               136  (_merge_matched==3)
     -----------------------------------------
+
+. drop if product == 0
+(0 observations deleted)
 
 . 
 . local price_sched_file = "../NY_price_schedules/old_format_months.dta"
@@ -85,7 +87,7 @@ xij variables:
 .         tempfile ps
 
 .         save `ps'
-file C:\Users\garre\AppData\Local\Temp\ST_0b000002.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0d000002.tmp saved
 
 . restore
 
@@ -95,78 +97,71 @@ file C:\Users\garre\AppData\Local\Temp\ST_0b000002.tmp saved
 
     Result                           # of obs.
     -----------------------------------------
-    not matched                     1,333,406
-        from master                 1,333,406  (_merge_ps==1)
+    not matched                        18,698
+        from master                    18,698  (_merge_ps==1)
         from using                          0  (_merge_ps==2)
 
-    matched                               394  (_merge_ps==3)
+    matched                               136  (_merge_ps==3)
     -----------------------------------------
 
 . 
 . gen type = ""
-(1333800 missing values generated)
+(18834 missing values generated)
 
 . replace type = "oo" if product == 0
 (0 real changes made)
 
 . replace type = "gin" if d_g_gin
 type was str1 now str3
-(74100 real changes made)
+(1314 real changes made)
 
 . replace type = "vod" if d_g_vod
-(456950 real changes made)
+(4672 real changes made)
 
 . replace type = "rum" if d_g_rum
-(259350 real changes made)
+(2409 real changes made)
 
 . replace type = "sch" if d_g_sch
-(74100 real changes made)
+(1460 real changes made)
 
 . replace type = "brb" if d_g_brb
-(98800 real changes made)
+(2336 real changes made)
 
 . replace type = "whs" if d_g_whs
-(37050 real changes made)
+(1022 real changes made)
 
 . replace type = "teq" if d_g_teq
-(74100 real changes made)
+(584 real changes made)
 
 . replace type = "otr" if d_g_otr
-(259350 real changes made)
+(5037 real changes made)
 
 . 
 . 
-. /* hack because match was done with only 101 products*/
-. local J = 100
-
-. replace product = (`J'+2) if product == (`J'+1) & d_g_vod == 1
-(0 real changes made)
-
-. replace product = (`J'+3) if product == (`J'+1) & d_g_sch == 1
-(0 real changes made)
-
-. replace product = (`J'+4) if product == (`J'+1) & d_g_brb == 1
-(0 real changes made)
-
-. replace product = (`J'+5) if product == (`J'+1) & d_g_whs == 1
-(0 real changes made)
-
-. replace product = (`J'+6) if product == (`J'+1) & d_g_teq == 1
-(0 real changes made)
-
-. replace product = (`J'+7) if product == (`J'+1) & d_g_otr == 1
-(0 real changes made)
-
-. replace product = (`J'+8) if product == (`J'+1) & d_g_rum == 1
-(0 real changes made)
-
+. /*
+> /* hack because match was done with only 101 products*/
+> local J = 250
+> replace product = (`J'+2) if product == (`J'+1) & d_g_vod == 1
+> replace product = (`J'+3) if product == (`J'+1) & d_g_sch == 1
+> replace product = (`J'+4) if product == (`J'+1) & d_g_brb == 1
+> replace product = (`J'+5) if product == (`J'+1) & d_g_whs == 1
+> replace product = (`J'+6) if product == (`J'+1) & d_g_teq == 1
+> replace product = (`J'+7) if product == (`J'+1) & d_g_otr == 1
+> replace product = (`J'+8) if product == (`J'+1) & d_g_rum == 1
+> */
 . 
 . /* taking care of duplicate product records in a month */
 . //duplicates drop product date_m if product <= 100, force
 . 
+. sort date_m product
+
+. 
 . egen mkt = group(date_m) // doesnt matter if it doesn't match mkt definition elsewhere. No mkt specific vari
 > ables
 
+. 
+. //bys date_m product (_merge_ps): keep if _n == _N // only need one record of product per mkt. Not per case.
+>  Keeps matched records
 . 
 . save merged_sample, replace
 file merged_sample.dta saved
@@ -179,5 +174,5 @@ file merged_sample.csv saved
       name:  <unnamed>
        log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\combined\match_upc_to_prices.txt
   log type:  text
- closed on:   9 Aug 2017, 22:33:09
+ closed on:  11 Aug 2017, 14:21:45
 --------------------------------------------------------------------------------------------------------------

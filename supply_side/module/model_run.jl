@@ -1,45 +1,62 @@
-include("LiquorQD.jl")
-using LiquorQD, DataFrames, DataArrays
+@everywhere include("LiquorQD.jl")
+@everywhere using LiquorQD, DataFrames, DataArrays
 
 #= Set up of coefficients. Product and group utility goes in product b/c those
 don't multiply out well. The remainder go in a DemandCoefs object with an associated
 weight =#
-const size_utils = [.151699,.6506976,-.1413254] # order is 750ml, 1L, 1.75L
-const prod_utils= [.9984359; 2.222908; -.2574402; 1.29754; .8887798; -.9459865; -.9818617;
--.974148; 1.211948; -.6472216; 1.93983; 1.943144; -.5035014; -.7443478;
--.8400436; -.5358744; 1.673104; 1.615472; -1.113532; -1.441404; 1.677565;
--.0269081; -1.235775; -.0093349; 2.235452; 1.241808; -.103252; -.0133208;
--.537227; 1.561229; 1.520777; .6162316; 1.571745; .1175427; -.776834; 2.242108;
--.3264315; -1.750993; -.4174726; .9231605; 1.797444; -1.18543; 1.98275; -.0485804;
--2.308151; .6849962; -2.050701; .8454664; 1.716071; -1.960274; -.4715936; .0917088;
-1.788842; -1.454759; -1.672869; 1.066978; .0430603; 1.006194; -2.148041; -1.867818;
-.7396636; .5350933; -1.569208; 1.195685; .3580877; 1.537322; -1.00704; 1.750797;
-1.117172; -1.534264; 1.363423; 1.82211; -1.225709; .9798436; 2.132275; 1.892909;
-1.866594; -.6740343; -2.048624; -2.685772; 1.213439; -1.622729; 1.026525; -1.385786;
--1.592726; -.3203502; 1.124569; .6860642; .4910821; .0602244; .6011467; .989683;
--2.809397; 1.772477; -2.359167; -1.26707; -.722626; -1.295764; 1.800456; 1.337842;
-.3584706; 1.100851; .3543156; -.2078676; .7758802; -.2940698; 2.612169; 1.86315]
+@everywhere const size_utils = [0.0,0.0,0.0] # order is 750ml, 1L, 1.75L
+@everywhere const prod_utils= [-1.031654;  -0.5986714;  2.719251;  -2.136661;  -0.7166995;  -2.262;  -2.120311;  -1.541387;
+-2.646299;  -2.654972;  -1.434078;  -0.0966979;  -2.604326;  -2.413193;  -2.50415;  -2.278296;
+-2.025461;  -2.939136;  -2.366031;  -2.627487;  -2.73191;  -0.7602613;  -1.76746;  -0.9681924;
+-2.647136;  -3.143549;  -3.056831;  -1.480597;  -2.202042;  -0.7426222;  -2.521247;  -0.3321612;
+-1.883391;  -2.37551;  -0.0969018;  -2.71941;  -0.0398781;  -2.479553;  -3.223033;  -4.171165;
+-1.537278;  -3.579824;  -2.600178;  -3.214601;  -2.201891;  -2.242283;  -2.909715;  -3.208443;
+-3.047639;  -4.36851;  -4.14869;  -4.302991;  -3.446561;  -0.4603544;  -1.889882;  -2.320702;
+-3.668417;  -1.162365;  -3.543497;  -3.725587;  -4.398088;  -2.799301;  -2.832664;  -3.511715;
+-2.207737;  -2.264005;  -2.970694;  -2.267005;  -5.102547;  -4.635895;  -3.291156;  -4.526457;
+-2.711992;  -1.847489;  -3.467429;  -3.002993;  -2.899891;  2.297307;  -3.361088;  -2.685769;
+-2.579266;  -1.914592;  -4.353611;  -3.701298;  -3.726989;  -3.745329;  -3.262226;  -0.8323384;
+-1.837014;  -3.906951;  -0.7877522;  -1.406462;  -1.866976;  -1.028922;  -1.593316;  -3.226181;
+-0.8440271;  -4.112507;  -3.948755;  -4.13223;  -3.119976;  -2.607345;  -3.573856;  -3.489196;
+-4.073018;  -0.4705465;  -2.96645;  -2.777133;  -4.992293;  -3.35968;  -2.760934;  -4.169735;
+-5.476136;  -3.135815;  -3.467021;  -2.619442;  -0.7818482;  -4.255969;  -4.730402;  -3.705244;
+-4.757192;  -2.710783;  -4.723884;  -3.884752;  -0.5518308;  -2.169723;  -3.857576;  -4.087936;
+-5.246792;  -1.449692;  -4.304432;  -4.742753;  -3.562025;  -5.305832;  -5.286488;  -5.105905;
+-3.918621;  -3.978658;  -3.249214;  -4.694763;  -3.242497;  -4.142702;  -3.063908;  -4.552217;
+-0.8854282;  -3.007056;  -4.586837;  -4.343445;  -1.675508;  -5.384725;  -4.351588;  -4.493908;
+-1.829689;  -3.449844;  -3.834611;  -3.630683;  -4.76543;  -4.508183;  -4.113295;  2.337819;
+-5.7323;  -4.490103;  -4.951924;  -0.9476656;  -4.890666;  -3.23345;  -3.968342;  -5.624683;
+-2.367878;  -4.28221;  -4.702244;  -1.621754;  -2.360367;  -3.128938;  -5.312097;  -5.652628;
+-5.148921;  -4.865083;  -4.679488;  -4.805693;  -5.244291;  -3.566109;  -3.501546;  -5.579437;
+-2.110095;  -3.881827;  -3.088027;  -5.167253;  -3.314906;  -3.843971;  -1.675156;  -2.342578;
+-3.314817;  -0.9385336;  -4.097188;  -1.996012;  -5.252544;  -4.562477;  -3.46129;  -4.061216;
+-5.464092;-4.311072;-3.505353;-4.919189;-3.002201;-4.591751;-3.96926;-5.012443;-3.355068;-5.073336;
+-2.593191;-4.422889;-4.37292;-0.7637211;-3.551962;-3.01347;-4.800927;-3.354938;-5.143094;-4.038786;
+-3.781936;-5.678621;-6.073475;-4.826704;-4.586513;-4.349475;-6.103028;-4.223599;-4.233743;-1.581903;
+-4.372692;-3.39948;-2.542516;-3.287263;-6.033693;-4.714857;-5.936033;-5.880964;-4.488038;-4.623158;
+-5.179918;-4.234136;-4.884122; -1.525883; -5.316571; -3.39473; -4.659103; -5.109047; -3.767755; -2.927771;
+0.0;0.0;0.0;0.0;0.0;0.0;0.0;0.0]
 
-const nested_coefs = DemandCoefs(-.224743, # price
-                            -.8281927, # imported
-                             -.0075732, # proof
-                             0.0, #.0202472, # price*y // setting to zero because it causes positive respones
-                             .0780103, # imported*y
-                              .0002535, # proof*y
-                              Dict("oo" => 1,
-                              "gin" => 1.255592,
-                              "vod" => 1.38928,
-                              "rum" => .555316,
-                              "sch" => 1.264724,
-                              "brb" => 1.822675,
-                              "whs" => .2343492,
-                              "teq" => 1.671329,
-                              "otr" => .3359661))
+@everywhere const nested_coefs = DemandCoefs(-.1596846, # price
+                            0.0, # imported // unused currently
+                             0.0, # proof // unused currently
+                             .0079275, # price*y
+                             0.0, # imported*y // unused currently
+                              0.0, # proof*y // unused currently
+                              Dict("oo" => 1.0, # nesting params // unused currently
+                              "gin" => 1.0,
+                              "vod" => 1.0,
+                              "rum" => 1.0,
+                              "sch" => 1.0,
+                              "brb" => 1.0,
+                              "whs" => 1.0,
+                              "teq" => 1.0,
+                              "otr" => 1.0))
 
-inc_levels = Float64[2500; 6500; 9000; 11000; 13000; 17500; 22500; 27500; 32500; 37500; 42500; 47500; 55000; 65000; 85000; 150000]
-inc_weights = [0.34; 2.36; 1.21; 2.63; 3.91; 2.02; 4.99; 9.84; 2.76; 2.83; 4.45; 2.49; 11.73; 4.38; 24.14; 19.89]
+@everywhere inc_levels = Float64[2500; 6500; 9000; 11000; 13000; 17500; 22500; 27500; 32500; 37500; 42500; 47500; 55000; 65000; 85000; 150000]
+@everywhere inc_weights = [0.34; 2.36; 1.21; 2.63; 3.91; 2.02; 4.99; 9.84; 2.76; 2.83; 4.45; 2.49; 11.73; 4.38; 24.14; 19.89]
 
-const obs_inc_dist = IncomeDist(inc_levels,inc_weights)
+@everywhere const obs_inc_dist = IncomeDist(inc_levels,inc_weights)
 #= Initial set up of product data. Need to:
   1) import data
   2) initilize a product object for each product in data
@@ -56,14 +73,16 @@ mkt_ids = Array(levels(prod_char_df[:,:mkt])) # get market ids
 prod_array = Liquor[]
 markets_array = Market[]
 for m in mkt_ids
+    println("Working with market ", m)
   mkt_df = prod_char_df[(prod_char_df[:,:mkt] .== m),:] # get products in market
   mkt_vec = Liquor[]
   mkt_ps_lookup = Dict{Liquor,Tuple{Array{Float64,1},Array{Float64,1}}}() # dictionary with keys as products and tuple of prices and ffs as values.
   for row in eachrow(mkt_df)
+      print(".")
     # constructing product objects
     id = row[:product]
     size_d_vec = [row[:d_s_750ML],row[:d_s_1L],row[:d_s_175L]] # get size dummy values
-    s_util = sum(size_d_vec.*size_utils) # get group utility
+    s_util = 0.0 # sum(size_d_vec.*size_utils) # get group utility
     prod = Liquor(id,row[:_type],row[:avg_price_inter],row[:avg_price_inter],row[:imported],row[:proof],s_util,prod_utils[id],nothing)
     push!(mkt_vec,prod) # push to market
     push!(prod_array,prod) # push to total product array
@@ -85,7 +104,7 @@ for m in mkt_ids
       end
       if case
         obs_rhos = obs_rhos ./ 12.0
-        obs_cutoff_q = obs_cutoff_q .* 10.0
+        obs_cutoff_q = obs_cutoff_q .* 12.0
       end
       obs_ff = [0.0] # first fixed fee is by definition, and corresponds to A1
       for k = 2:length(obs_cutoff_q)
@@ -111,32 +130,59 @@ for m in mkt_ids
       end
     end
   push!(markets_array,tmp_mkt)
+  println("")
 end
 
-for m in markets_array[1:1]
-  for j in m.products
-    println("test: ", j)
-    if !isnull(j.ps)
-      println("working with product", j)
-      tmp_ps = get(j.ps) # becase the ps field is nullable, need to use get
-      dev_ps = dev_gen(tmp_ps,0.05)
-      dev_ps = dev_ps[rand(1:end,200)] # 200 random ineqaulities. Speeds up computation
-      print("Pre-calculating retail prices. ")
-      pre_calc = Dict{Int64,Float64}[]
-      for s in dev_ps
-        tmp_dict = Dict(i => p_star(s.rhos[i],j,nested_coefs,obs_inc_dist,m) for i in 1:(s.N-1))
-        push!(pre_calc,tmp_dict)
-      end
-      println("Done.")
-      min_rho = minimum(tmp_ps.rhos)
-      sol,xtrace,ftrace = optimize_moment(tmp_ps,dev_ps,j,nested_coefs,obs_inc_dist,m,25000,pre_calc,x0=[min_rho,1.0,1.0])
-      println(sol)
-      trace = [vcat(xtrace'...) ftrace]
-      out_str = "traces/trace_"*string(m.year)*"_"*string(m.month)*"_"*string(j.id)*".csv"
-      writedlm(out_str,trace)
+@everywhere function mkt_est(m::Market)
+    out = Dict{Tuple{Market,Liquor},Array{Float64,2}}()
+    println("Working with ", m.year,"-",m.month,".")
+    for j in m.products
+        println("working with product ", j.id)
+        if !isnull(j.ps)
+            println("Matched price schedule.")
+          tmp_ps = get(j.ps) # becase the ps field is nullable, need to use get
+          print("Generating perturbed price schedules. ")
+          dev_ps = dev_gen(tmp_ps,0.05)
+          println("Done.")
+          print("Pre-calculating retail prices. ")
+          pre_calc = Dict{Int64,Float64}[]
+          for s in dev_ps
+            tmp_dict = Dict(i => p_star(s.rhos[i],j,nested_coefs,obs_inc_dist,m) for i in 1:(s.N-1))
+            push!(pre_calc,tmp_dict)
+          end
+          println("Done.")
+          print("Pre-calculating shares at retail prices. ")
+          s_pre_calc = Dict{Int64,Float64}[]
+          for d in pre_calc
+              tmp_s_dict = Dict(key=>share(p,j,nested_coefs,obs_inc_dist,m) for (key,p) in d)
+              push!(s_pre_calc,tmp_s_dict)
+          end
+          println("Done.")
+          min_rho = minimum(tmp_ps.rhos)
+          sol,xtrace,ftrace = optimize_moment(tmp_ps,dev_ps,j,nested_coefs,obs_inc_dist,m,25000,pre_calc,s_pre_calc,x0=[min_rho,1.0])
+          println(sol)
+          trace = [vcat(xtrace'...) ftrace]
+          out[(m,j)] = trace
+        else
+            println("No matching price schedule data.")
+        end
     end
-  end
+    return out
 end
+
+mkts_for_est = markets_array[26:27]
+res = pmap(mkt_est,mkts_for_est)
+
+out_dict = merge(res...)
+
+for (key,v) in out_dict
+    m = key[1]
+    j = key[2]
+    out_str = "traces/trace_$(m.year)_$(m.month)_$(j.id).csv"
+    writedlm(out_str,v)
+end
+
+
 
 #=
 m = markets_array[1]

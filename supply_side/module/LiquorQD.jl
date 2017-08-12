@@ -14,7 +14,7 @@ mutable struct Liquor # should be thought of as a product. Products have charact
   group::String # string indicating group. Looks up relevant nesting parameter
   price::Float64 # price of liquor. Can be changed
   obs_price::Float64 # field so we can reset price to observed
-  imported::Bool # imported flag. Should not change
+  imported::Float64 # imported flag. Should not change
   proof::Float64 # Proof. Should not change
   size_util::Float64 # Utility of product size. e.g. value of d_s_750ML
   prod_util::Float64 # Product specific utility. i.e. value of d_j
@@ -189,11 +189,12 @@ function share(price::Float64,product::Liquor,coefs::DemandCoefs,inc_dist::Incom
   for (inc,w) in zip(inc_dist.incomes,inc_dist.prob)
     res = res + logit_prob(product,coefs,inc,mkt)*w
   end
-  return res
   product.price = product.obs_price # undoing change to price for subsequent calls
+  return res
 end
 
 function d_share(price::Float64,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
+  product.price = price # changing price of product of interest
   res = 0.0
   for (inc,w) in zip(inc_dist.incomes,inc_dist.prob)
     s = logit_prob(product,coefs,inc,mkt)
@@ -201,6 +202,7 @@ function d_share(price::Float64,product::Liquor,coefs::DemandCoefs,inc_dist::Inc
     res = res + (coefs.price + coefs.price_y*linc)*s*(1-s)*w
   end
   return res
+  product.price = product.obs_price # undoing change to price for subsequent calls
 end
 
 function p_star(mc::Float64,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
@@ -225,7 +227,6 @@ function p_star(mc::Float64,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeD
       old_p = new_p
     end
     return old_p
-
 end
 
 function obs_lambdas(rhos::Array{Float64,1},ff::Array{Float64,1},product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market,M::Float64)
@@ -240,7 +241,7 @@ function obs_lambdas(rhos::Array{Float64,1},ff::Array{Float64,1},product::Liquor
   return obs_t
 end
 
-function wholesaler_profit(ps::PriceSched, params::WholesaleParams, product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market,ps_pre::Dict{Int64,Float64}=Dict{Int64,Float64}())
+function wholesaler_profit(ps::PriceSched, params::WholesaleParams, product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market,ps_pre::Dict{Int64,Float64}=Dict{Int64,Float64}(),s_pre::Dict{Int64,Float64}=Dict{Int64,Float64}())
   #= ps_pre holds pre-calculated values of p_star. This optional argument prevents recalculation as the p_star values
   don't depend on any wholesaler parameters =#
 
@@ -263,7 +264,12 @@ function wholesaler_profit(ps::PriceSched, params::WholesaleParams, product::Liq
       else
         ps1 = ps_pre[k]
       end
-      inc = ((rho_vec[k] - params.c)*s(ps1))*int + (1-est_cdf(lambda_vec[k]))*lambda_vec[k]*((ps1 - rho_vec[k])*s(ps1) - 0.0)
+      if isempty(s_pre)
+          s1 = s(ps1)
+      else
+          s1 = s_pre[k]
+      end
+      inc = ((rho_vec[k] - params.c)*s1)*int + (1-est_cdf(lambda_vec[k]))*lambda_vec[k]*((ps1 - rho_vec[k])*s1 - 0.0)
       profit = profit + inc
     else
       # Pre-calculating some stuff to avoid repeated calls to p_star
@@ -274,7 +280,14 @@ function wholesaler_profit(ps::PriceSched, params::WholesaleParams, product::Liq
         ps1 = ps_pre[k]
         ps2 = ps_pre[k-1]
       end
-      inc = ((rho_vec[k] - params.c)*s(ps1))*int + (1-est_cdf(lambda_vec[k]))*lambda_vec[k]*((ps1 - rho_vec[k])*s(ps1) - (ps2 - rho_vec[k-1])*s(ps2))
+      if isempty(s_pre)
+          s1 = s(ps1)
+          s2 = s(ps2)
+      else
+          s1 = s_pre[k]
+          s2 = s_pre[k-1]
+      end
+      inc = ((rho_vec[k] - params.c)*s1)*int + (1-est_cdf(lambda_vec[k]))*lambda_vec[k]*((ps1 - rho_vec[k])*s1 - (ps2 - rho_vec[k-1])*s2)
       profit = profit + inc
     end
   end
@@ -375,48 +388,57 @@ function dev_gen(ps::PriceSched,δ::Float64)
   dev_steps = [1+δ,1.0,1-δ] # deviation amounts
   dev_poss = fill(dev_steps,2*(N-1)) # deviation possibilities for each ps element
   ps_vec = [ps.rhos ; ps.t_cuts] # price schedule in vector form so we can manipulate it
-  dev_cart_prod = Iterators.product(dev_poss...) # cartesian product of elems in dev_poss. Each is a possible deviation vector. Iterators is in base
-  dev_cart_prod_filter = Iterators.filter(x->(x!=tuple(ones(2*(N-1))...)),dev_cart_prod) # removing deviation vector of all ones (i.e. unperturbed price schedule)
-  dev_ps = map(x->ps_vec.*x,dev_cart_prod_filter) # generating perturbed price schedules
+  if N <= 3 # with small N, can just produce ALL possible deviations
+      dev_cart_prod = Iterators.product(dev_poss...) # cartesian product of elems in dev_poss. Each is a possible deviation vector. Iterators is in base
+      dev_vec_res = Iterators.filter(x->(x!=tuple(ones(2*(N-1))...)),dev_cart_prod) # removing deviation vector of all ones (i.e. unperturbed price schedule)
+  else # For larger N, just keep generating until you get 200 unique ones.
+      dev_vec_res = Array{Float64,1}[]
+      while length(dev_vec_res) < 200
+          tmp_dev = rand(dev_steps,2*(N-1))
+          if !(tmp_dev in dev_vec_res)
+            push!(dev_vec_res,tmp_dev)
+          end
+      end
+  end
+  dev_ps = map(x->ps_vec.*x,dev_vec_res) # generating perturbed price schedules
   output = PriceSched[] # initializing empty arry of price schedules.
-  Threads.@threads for s in dev_ps  # potentially very many deviations. Scales at the rate of (2*(N-1))^3 - 1. Threads may be faster
+  for s in dev_ps  # potentially very many deviations. Scales at the rate of (2*(N-1))^3 - 1. Threads may be faster
     push!(output,PriceSched(s[1:N-1],s[N:end],N))
   end
   return output::Array{PriceSched,1}
 end
 
-function moment_obj_func(ps::PriceSched, devs::Array{PriceSched,1},params::WholesaleParams,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market,ps_pre_array::Array{Dict{Int64,Float64}}=Dict{Int64,Float64}[])
+function moment_obj_func(ps::PriceSched, devs::Array{PriceSched,1},params::WholesaleParams,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market,ps_pre_array::Array{Dict{Int64,Float64}}=Dict{Int64,Float64}[],s_pre_array::Array{Dict{Int64,Float64}}=Dict{Int64,Float64}[])
   # calculates the value of the objective function for a given set of deviations.
-  wp(x::PriceSched,ps_pre::Dict{Int64,Float64}=Dict{Int64,Float64}()) = wholesaler_profit(x,params,product,coefs,inc_dist,mkt,ps_pre)
+  wp(x::PriceSched,ps_pre::Dict{Int64,Float64}=Dict{Int64,Float64}(),s_pre::Dict{Int64,Float64}=Dict{Int64,Float64}()) = wholesaler_profit(x,params,product,coefs,inc_dist,mkt,ps_pre,s_pre)
   obs_profit = wp(ps)
   if obs_profit < 0.0
     res = Inf
   else
-    #dev_profit = max.(map(wp,devs),0.0) # likewise with all deviations. Use max.() because array
-    dev_profit = map(wp,devs,ps_pre_array) # likewise with all deviations. Use max.() because array
+    dev_profit = map(wp,devs,ps_pre_array,s_pre_array) # likewise with all deviations.
     nu = min.(obs_profit - dev_profit,0.0).^2 # if dev profit is greater, then you get a positive value for that deviation.
     res = sum(nu)
   end
   return res
 end
 
-function optimize_moment(ps::PriceSched, devs::Array{PriceSched,1},product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market,iters::Int64,ps_pre_array::Array{Dict{Int64,Float64}}=Dict{Int64,Float64}[];x0=[0.0,1.0,1.0])
+function optimize_moment(ps::PriceSched, devs::Array{PriceSched,1},product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market,iters::Int64,ps_pre_array::Array{Dict{Int64,Float64}}=Dict{Int64,Float64}[],s_pre_array::Array{Dict{Int64,Float64}}=Dict{Int64,Float64}[];x0=[0.0,1.0])
 
   function Q(x::Array{Float64,1})
-    theta = WholesaleParams(x...) # search all 3 params
+    theta = WholesaleParams(x[1],1.0,x[2]) # search all 3 params
     #if (theta.b <= 0.0 ) | (theta.b >= 10.0) | (theta.c < 0.0) | (theta.a <= 1.0) # constraining SA search
-    if (theta.b <= 0.0 ) | (theta.c < 0.0) | (theta.a <= 1.0) # constraining SA search
+    if (theta.b <= 0.0 ) | (theta.c < 0.0) | (theta.a < 1.0) # constraining SA search
       return Inf
     else
-      return moment_obj_func(ps,devs,theta,product,coefs,inc_dist,mkt,ps_pre_array)
+      return moment_obj_func(ps,devs,theta,product,coefs,inc_dist,mkt,ps_pre_array,s_pre_array)
     end
   end
 
-  moment_res = Optim.optimize(Q,x0,method=SimulatedAnnealing(), store_trace=true, show_trace = false, extended_trace=true, iterations=iters)
+  @time moment_res = Optim.optimize(Q,x0,method=SimulatedAnnealing(), store_trace=true, show_trace = false, extended_trace=true, iterations=iters)
   moment_res_min = Optim.minimizer(moment_res)
   x_trace = Optim.x_trace(moment_res)
   f_trace = Optim.f_trace(moment_res)
-  return (WholesaleParams(moment_res_min...),x_trace,f_trace)
+  return (WholesaleParams(moment_res_min[1],1.0,moment_res_min[2]),x_trace,f_trace)
   #=
   function Q(x::Float64)
     theta = WholesaleParams(x,1.0,1.0) # search just c

@@ -4,7 +4,7 @@ set more off
 
 log using "individual_logit_sample.txt", text replace
 
-local rebuild_data = 1 // set to 1 to rebuild data from scratch. Very slow
+local rebuild_data = 0 // set to 1 to rebuild data from scratch. Very slow
 local J = 250 // number of products to get
 
 set seed 317596364  // seed taken from random.org
@@ -207,6 +207,9 @@ foreach var of varlist d_g_* d_s_* proof imported {
 	bys product (`var'): replace `var' = `var'[1]
 }
 
+// filling in brand string to use in price sched matching
+bys product (brand_string): replace brand_string = brand_string[_N] // empty strings sorted first
+
 // fixing average price when not missing
 bys product date_m (avg_price): replace avg_price = avg_price[1]
 
@@ -216,8 +219,12 @@ preserve
 	sort product date_m
 	xtset product date_m
 	gen avg_price_inter = avg_price
-	replace avg_price_inter = L.avg_price_inter if avg_price_inter == .
-	replace avg_price_inter = F.avg_price_inter if avg_price_inter == .
+	// filling forward
+	bys product (date_m): replace avg_price_inter = avg_price_inter[_n-1] if avg_price_inter == .
+	// filling backward to handle missings at begining of data
+	gen rev = -date_m
+	bys product (rev): replace avg_price_inter = avg_price_inter[_n-1] if avg_price_inter == .
+	sort product date_m
 	keep product date_m avg_price_inter
 	tempfile ipol
 	save `ipol'
