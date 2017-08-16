@@ -229,6 +229,13 @@ function p_star(mc::Float64,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeD
     return old_p
 end
 
+function retailer_vprofit(mc::Float64,price::Float64,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
+    #= Returns variable retailer profit. Is not scaled by type so function can be reused simply. Actual retail profit
+    must then be scaled by type and have the fixed fee subtracted =#
+    return (price - mc)*share(price,product,coefs,inc_dist,mkt)
+end
+
+
 function obs_lambdas(rhos::Array{Float64,1},ff::Array{Float64,1},product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market,M::Float64)
   # function calculates type cutoffs from observed FF and prices
   obs_t = [0.0] # corresponds to lambda1. Must be zero as A0 = 0 & A1 = 0
@@ -245,7 +252,7 @@ function wholesaler_profit(ps::PriceSched, params::WholesaleParams, product::Liq
   #= ps_pre holds pre-calculated values of p_star. This optional argument prevents recalculation as the p_star values
   don't depend on any wholesaler parameters =#
 
-  M = 10000.0 # normalizing constant. Shouldn't affect price schedule, just scale of profits
+  M = 1.0 # normalizing constant. Shouldn't affect price schedule, just scale of profits
   lambda_vec = [ps.t_cuts; 1.0] # need to put in upper boundary values
   rho_vec = ps.rhos # no boundary here, will deal with in iterator
   N = ps.N
@@ -380,6 +387,40 @@ function optimal_price_sched(params::WholesaleParams, N::Int64, product::Liquor,
   return res_ps
 end
 
+function recover_ff(ps::PriceSched,product::Liquor,coefs::DemandCoefs,inc::IncomeDist,mkt::Market)
+    out_ff = Float64[0.0] # A_1 = 0 due to constraint
+    for i=2:(ps.N-1)
+        tmp_p1 = p_star(ps.rhos[i],product,coefs,inc,mkt)
+        tmp_p2 = p_star(ps.rhos[i-1],product,coefs,inc,mkt)
+        tmp_a = ps.t_cuts[i]*(retailer_vprofit(ps.rhos[i],tmp_p1,product,coefs,inc,mkt) - retailer_vprofit(ps.rhos[i-1],tmp_p2,product,coefs,inc,mkt))+out_ff[i-1]
+        push!(out_ff,tmp_a)
+    end
+    return out_ff
+end
+
+function ps_ret_profits(ps::PriceSched,w_params::WholesaleParams,product::Liquor,coefs::DemandCoefs,inc::IncomeDist,mkt::Market)
+    tmp_ff = recover_ff(ps,product,coefs,inc,mkt)
+    out_r_profit = 0.0
+    h(t) = t*ks_dens(t,w_params.a,w_params.b)
+    for i=1:(ps.N-1)
+        tmp_rho = ps.rhos[i]
+        tmp_pstar = p_star(tmp_rho,product,coefs,inc,mkt)
+        if (ps.N == 2) # special case for 2 part price schedules in constrained model
+            int = sparse_int(h,0.0,1.0)
+            dist_diff = 1.0
+        elseif (i==1)
+            int = sparse_int(h,0.0,ps.t_cuts[i])
+            dist_diff = ks_dist(ps.t_cuts[i],w_params.a,w_params.b) - 0.0
+        else
+            int = sparse_int(h,ps.t_cuts[i-1],ps.t_cuts[i])
+            dist_diff = ks_dist(ps.t_cuts[i],w_params.a,w_params.b) - ks_dist(ps.t_cuts[i-1],w_params.a,w_params.b)
+        end
+        ret_seg_profit = retailer_vprofit(tmp_rho,tmp_pstar,product,coefs,inc,mkt)*int - tmp_ff[i]*dist_diff
+        out_r_profit = out_r_profit + ret_seg_profit
+    end
+    return out_r_profit
+end
+
 function dev_gen(ps::PriceSched,δ::Float64)
   #= returns deviations of a price schedule. The deviations constitute all price
   schedules where one or more elements is multiplied by 1+δ or 1-δ. Function
@@ -424,10 +465,11 @@ end
 
 function optimize_moment(ps::PriceSched, devs::Array{PriceSched,1},product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market,iters::Int64,ps_pre_array::Array{Dict{Int64,Float64}}=Dict{Int64,Float64}[],s_pre_array::Array{Dict{Int64,Float64}}=Dict{Int64,Float64}[];x0=[0.0,1.0])
 
+    min_rho = ps.rhos[end]
   function Q(x::Array{Float64,1})
     theta = WholesaleParams(x[1],1.0,x[2]) # search all 3 params
     #if (theta.b <= 0.0 ) | (theta.b >= 10.0) | (theta.c < 0.0) | (theta.a <= 1.0) # constraining SA search
-    if (theta.b <= 0.0 ) | (theta.c < 0.0) | (theta.a < 1.0) # constraining SA search
+    if (theta.b <= 0.0 ) | (theta.a < 1.0) | (theta.c < 0.0) | (theta.c > min_rho) # constraining SA search
       return Inf
     else
       return moment_obj_func(ps,devs,theta,product,coefs,inc_dist,mkt,ps_pre_array,s_pre_array)
@@ -463,6 +505,6 @@ end
 export Liquor, Market, DemandCoefs, WholesaleParams, PriceSched, IncomeDist
 export ks_dist, ks_dens, sparse_int, share, d_share,
   p_star, wholesaler_profit, optimal_price_sched, dev_gen, moment_obj_func,
-  optimize_moment, obs_lambdas
+  optimize_moment, obs_lambdas, retailer_vprofit, recover_ff, ps_ret_profits
 
 end

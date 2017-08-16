@@ -159,7 +159,7 @@ end
           end
           println("Done.")
           min_rho = minimum(tmp_ps.rhos)
-          sol,xtrace,ftrace = optimize_moment(tmp_ps,dev_ps,j,nested_coefs,obs_inc_dist,m,25000,pre_calc,s_pre_calc,x0=[min_rho,1.0])
+          sol,xtrace,ftrace = optimize_moment(tmp_ps,dev_ps,j,nested_coefs,obs_inc_dist,m,25000,pre_calc,s_pre_calc,x0=[min_rho/2.0,1.0])
           println(sol)
           trace = [vcat(xtrace'...) ftrace]
           out[(m,j)] = trace

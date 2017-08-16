@@ -98,7 +98,7 @@ foreach year in `years'{
 
 					save  `raw_y`year'_m`month'_s175L' // useful to fix hand matches
 
-					by upc_id: keep if _n == 3 // keeping top 3 matches 
+					by upc_id: keep if _n <= 3 // keeping top 3 matches 
 
 					save `res_y`year'_m`month'_s175L'
 					
@@ -121,7 +121,7 @@ foreach year in `years'{
 
 					save  `raw_y`year'_m`month'_s1L' // useful to fix hand matches
 
-					by upc_id: keep if _n == 3 // keeping top 3 matches 
+					by upc_id: keep if _n <= 3 // keeping top 3 matches 
 
 					save `res_y`year'_m`month'_s1L'
 				restore

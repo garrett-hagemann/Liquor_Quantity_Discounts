@@ -3,10 +3,10 @@
        log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\Nielsen_Panel\analysis\individual_log
 > it_sample.txt
   log type:  text
- opened on:  11 Aug 2017, 13:10:02
+ opened on:  15 Aug 2017, 21:52:24
 
 . 
-. local rebuild_data = 0 // set to 1 to rebuild data from scratch. Very slow
+. local rebuild_data = 1 // set to 1 to rebuild data from scratch. Very slow
 
 . local J = 250 // number of products to get
 
@@ -18,13 +18,33 @@
 . local years = "2009 2010 2011 2012 2013 2014" // "2008 2009 2010 2011 2012 2013 2014"
 
 . if `rebuild_data' { 
-.         /* trimming down UPC file so be smaller so merging is easier */
-.         use liquor_upcs
+. /* Importing UPCs to keep just the liquor ones */
+.         import delimited using "../nielsen_extracts/HMS/Master_Files/Latest/products.tsv", stringcols(1)
+(17 vars, 3946174 obs)
+. 
+.         /* Keeping only Liquor records. CAn narrow it down to Alcoholic beverage first,
+>         but no need. Only other Alocohol is coded as Beer or Wine. There may be some
+>         marginal cases that differ between the NYS data and the Nielsen Data. Right now, 
+>         just working with the Liquor records for simplicity */
+.         keep if product_group_desc == "LIQUOR"  // corresponding product_group_code is 5002
+(3913729 observations deleted)
+. 
+.         /* Uncomment the following line to remove multi-packs. This might make matching
+>         brand strings easier between the NYS and Nielsen datasets. The price schedules do
+>         contain multipacks, but it seems more complicated to model. The multipacks represent
+>         a form of retail quantity discounts. The focus here is on wholesale quantity discoutns
+> 
+>         drop if multi > 1 */
+. 
+.         save liquor_upcs, replace
+file liquor_upcs.dta saved
 . 
 .         /* generating varibles that we want */
 .         //dropping unwanted types of products
 .         drop if product_module_descr == "COOLERS - REMAINING"
+(2369 observations deleted)
 .         drop if product_module_descr == "ALOCOHOLIC COCKTAILS"
+(0 observations deleted)
 . 
 .         // Liquor type dummies
 .         gen d_g_gin = (product_module_descr == "GIN")
@@ -45,21 +65,50 @@
 . 
 .         /* Generating proof */
 .         gen proof = regexs(1) if regexm(upc_descr , "([0-9]?[0-9][0-9][.]?[0-9]?[0-9]?)P")
+(858 missing values generated)
 .         destring proof, replace
+proof has all characters numeric; replaced as double
+(858 missing values generated)
 . 
 .         /* imported flag */
 .         gen imported = regexm(upc_descr , " IM ")
 .         replace imported = 1 if regexm(upc_descr, " PRD ") & d_g_rum == 1 // PRD is Puerto Rico Distilled
+(10 real changes made)
 .         replace imported = 1 if d_g_sch == 1 // All scotch is imported
+(212 real changes made)
 .         replace imported = 1 if d_g_teq == 1 // all tequila is imported
+(2180 real changes made)
 . 
 .         // imputing proof for products which the regex didn't work
 .         reg proof d_g_* imported, nocons
+
+      Source |       SS       df       MS              Number of obs =   29218
+-------------+------------------------------           F(  9, 29209) =48599.81
+       Model |   141617440     9  15735271.1           Prob > F      =  0.0000
+    Residual |  9457065.01 29209  323.772297           R-squared     =  0.9374
+-------------+------------------------------           Adj R-squared =  0.9374
+       Total |   151074505 29218  5170.59706           Root MSE      =  17.994
+
+------------------------------------------------------------------------------
+       proof |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     d_g_gin |   79.34282   .5230145   151.70   0.000     78.31769    80.36795
+     d_g_vod |   70.34937   .2671577   263.33   0.000     69.82573    70.87301
+     d_g_rum |   71.64215   .3120517   229.58   0.000     71.03052    72.25379
+     d_g_sch |   73.83041     .52018   141.93   0.000     72.81083    74.84998
+     d_g_brb |    84.6113    .375194   225.51   0.000     83.87591     85.3467
+     d_g_whs |   73.63109   .4988544   147.60   0.000     72.65331    74.60886
+     d_g_teq |   68.23441   .5051852   135.07   0.000     67.24422    69.22459
+     d_g_otr |   50.24454   .1774196   283.20   0.000     49.89679    50.59229
+    imported |   10.89421   .3233422    33.69   0.000     10.26044    11.52797
+------------------------------------------------------------------------------
 .         predict proof_hat, xb
 .         replace proof = proof_hat if proof == .
+(858 real changes made)
 . 
 .         tempfile small_upc_file
 .         save `small_upc_file'
+file C:\Users\garre\AppData\Local\Temp\ST_0d000005.tmp saved
 . 
 .         foreach year in `years'{
   2.                 
@@ -72,9 +121,9 @@
   6.                 save `tmp_trips', replace
   7.                                 
 .                 import delimited using "../nielsen_extracts/HMS/`year'/Annual_Files/purchases_`year'.tsv", c
-> lear colrange(1:5)
+> lear colrange(1:5) stringcol(2)
   8.                 
-.                 /* first merging in just trip codes to eliminate data set size */
+.                 /* first merging in just trip codes to reduce data set size */
 .                 
 .                 merge m:1 trip_code_uc using `tmp_trips', gen(_merge_trips) keep(3)
   9.                 drop _merge_trips
@@ -105,12 +154,245 @@
 .                 tempfile obs`year'
  22.                 save `obs`year''
  23.         }
+(note: file C:\Users\garre\AppData\Local\Temp\ST_0d000006.tmp not found)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000006.tmp saved
+(5 vars, 63686904 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                         3,725,633  (_merge_trips==3)
+    -----------------------------------------
+(label _merge already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                         3,725,633  (_merge_trips==3)
+    -----------------------------------------
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                     3,718,576
+        from master                 3,718,576  (_merge_upcs==1)
+        from using                          0  (_merge_upcs==2)
+
+    matched                             7,057  (_merge_upcs==3)
+    -----------------------------------------
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                     3,714,636
+        from master                 3,714,636  (_merge_wine==1)
+        from using                          0  (_merge_wine==2)
+
+    matched                            10,997  (_merge_wine==3)
+    -----------------------------------------
+(4941 observations deleted)
+(3688152 observations deleted)
+(19945 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000007.tmp saved
+(note: file C:\Users\garre\AppData\Local\Temp\ST_0d000008.tmp not found)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000008.tmp saved
+(5 vars, 62817813 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                         3,559,223  (_merge_trips==3)
+    -----------------------------------------
+(label _merge already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                         3,559,223  (_merge_trips==3)
+    -----------------------------------------
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                     3,552,805
+        from master                 3,552,805  (_merge_upcs==1)
+        from using                          0  (_merge_upcs==2)
+
+    matched                             6,418  (_merge_upcs==3)
+    -----------------------------------------
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                     3,548,713
+        from master                 3,548,713  (_merge_wine==1)
+        from using                          0  (_merge_wine==2)
+
+    matched                            10,510  (_merge_wine==3)
+    -----------------------------------------
+(4270 observations deleted)
+(3525231 observations deleted)
+(18131 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000009.tmp saved
+(note: file C:\Users\garre\AppData\Local\Temp\ST_0d00000a.tmp not found)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000a.tmp saved
+(5 vars, 66321848 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                         3,770,628  (_merge_trips==3)
+    -----------------------------------------
+(label _merge already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                         3,770,628  (_merge_trips==3)
+    -----------------------------------------
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                     3,764,272
+        from master                 3,764,272  (_merge_upcs==1)
+        from using                          0  (_merge_upcs==2)
+
+    matched                             6,356  (_merge_upcs==3)
+    -----------------------------------------
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                     3,759,597
+        from master                 3,759,597  (_merge_wine==1)
+        from using                          0  (_merge_wine==2)
+
+    matched                            11,031  (_merge_wine==3)
+    -----------------------------------------
+(5103 observations deleted)
+(3731423 observations deleted)
+(22371 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000b.tmp saved
+(note: file C:\Users\garre\AppData\Local\Temp\ST_0d00000c.tmp not found)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000c.tmp saved
+(5 vars, 62952271 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                         3,462,387  (_merge_trips==3)
+    -----------------------------------------
+(label _merge already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                         3,462,387  (_merge_trips==3)
+    -----------------------------------------
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                     3,456,650
+        from master                 3,456,650  (_merge_upcs==1)
+        from using                          0  (_merge_upcs==2)
+
+    matched                             5,737  (_merge_upcs==3)
+    -----------------------------------------
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                     3,451,722
+        from master                 3,451,722  (_merge_wine==1)
+        from using                          0  (_merge_wine==2)
+
+    matched                            10,665  (_merge_wine==3)
+    -----------------------------------------
+(5907 observations deleted)
+(3423505 observations deleted)
+(22115 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000d.tmp saved
+(note: file C:\Users\garre\AppData\Local\Temp\ST_0d00000e.tmp not found)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000e.tmp saved
+(5 vars, 63142825 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                         3,383,357  (_merge_trips==3)
+    -----------------------------------------
+(label _merge already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                         3,383,357  (_merge_trips==3)
+    -----------------------------------------
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                     3,377,836
+        from master                 3,377,836  (_merge_upcs==1)
+        from using                          0  (_merge_upcs==2)
+
+    matched                             5,521  (_merge_upcs==3)
+    -----------------------------------------
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                     3,372,803
+        from master                 3,372,803  (_merge_wine==1)
+        from using                          0  (_merge_wine==2)
+
+    matched                            10,554  (_merge_wine==3)
+    -----------------------------------------
+(5279 observations deleted)
+(3345048 observations deleted)
+(22412 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000f.tmp saved
+(note: file C:\Users\garre\AppData\Local\Temp\ST_0d00000g.tmp not found)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000g.tmp saved
+(5 vars, 64717120 obs)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                         3,283,324  (_merge_trips==3)
+    -----------------------------------------
+(label _merge already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                         3,283,324  (_merge_trips==3)
+    -----------------------------------------
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                     3,277,599
+        from master                 3,277,599  (_merge_upcs==1)
+        from using                          0  (_merge_upcs==2)
+
+    matched                             5,725  (_merge_upcs==3)
+    -----------------------------------------
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                     3,273,641
+        from master                 3,273,641  (_merge_wine==1)
+        from using                          0  (_merge_wine==2)
+
+    matched                             9,683  (_merge_wine==3)
+    -----------------------------------------
+(5194 observations deleted)
+(3244694 observations deleted)
+(22922 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000h.tmp saved
 . 
 .         clear
 . 
 .         foreach year in `years'{
   2.                 append using `obs`year''
   3.         }
+(label _merge already defined)
+(label _merge already defined)
+(label _merge already defined)
+(label _merge already defined)
+(label _merge already defined)
 . 
 .         
 .         gen date_d = date(purchase_date, "YMD") // daily date
@@ -129,35 +411,58 @@
 . 
 .         gen choice = 1 // all these records are actual choices
 .         keep if d_s_375ML | d_s_750ML | d_s_1L | d_s_175L // keeping only popular size bottles
+(3298 observations deleted)
 . 
 .         // getting top J UPCs
 .         preserve
 .                 drop if liquor_trip == 0 // keeping only liquor purchases
+(31095 observations deleted)
 .                 contract upc, freq(upc_purchases)
 .                 gen rev = -upc_purchases
 .                 sort rev
 .                 keep in 1/`J' // keeping top J products
+(2939 observations deleted)
 .                 gen product = _n
 .                 save top_upc_individual, replace
+file top_upc_individual.dta saved
 .         restore
 . 
 .         merge m:1 upc using top_upc_individual, gen(_merge_top) assert(1 3)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                        42,132
+        from master                    42,132  (_merge_top==1)
+        from using                          0  (_merge_top==2)
+
+    matched                            22,479  (_merge_top==3)
+    -----------------------------------------
 . 
 .         replace product = 0 if _merge_top == 1 & liquor_trip == 0 // outside option
+(31095 real changes made)
 .         replace product = (`J'+1) if _merge_top == 1 & liquor_trip == 1 // all other products
+(11037 real changes made)
 .         replace product = (`J'+2) if product == (`J'+1) & d_g_vod == 1
+(2416 real changes made)
 .         replace product = (`J'+3) if product == (`J'+1) & d_g_sch == 1
+(824 real changes made)
 .         replace product = (`J'+4) if product == (`J'+1) & d_g_brb == 1
+(862 real changes made)
 .         replace product = (`J'+5) if product == (`J'+1) & d_g_whs == 1
+(561 real changes made)
 .         replace product = (`J'+6) if product == (`J'+1) & d_g_teq == 1
+(417 real changes made)
 .         replace product = (`J'+7) if product == (`J'+1) & d_g_otr == 1
+(4005 real changes made)
 .         replace product = (`J'+8) if product == (`J'+1) & d_g_rum == 1
+(1448 real changes made)
 . 
 .         gen case = _n // Each "purchase" is a case. Now need to construct alternatives
 .         egen brand_string = concat(brand_descr upc_descr size1_amount size1_units), punct(";") // used to ma
 > tch to price schedules
 .         egen mkt = group(date_m)
 .         save prod_chars_individual, replace
+file prod_chars_individual.dta saved
 . }
 
 . 
@@ -237,7 +542,7 @@ Original case count: 64611
 . tempfile all_choices
 
 . save `all_choices'
-file C:\Users\garre\AppData\Local\Temp\ST_0e000002.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000k.tmp saved
 
 . 
 . fillin product case // generate 1 product record per choice situation
@@ -264,7 +569,7 @@ file C:\Users\garre\AppData\Local\Temp\ST_0e000002.tmp saved
 (64611 real changes made)
 (64611 real changes made)
 (64611 real changes made)
-(64600 real changes made)
+(64592 real changes made)
 (64611 real changes made)
 
 . 
@@ -307,7 +612,7 @@ file C:\Users\garre\AppData\Local\Temp\ST_0e000002.tmp saved
 . 
 . // fixing average price when not missing
 . bys product date_m (avg_price): replace avg_price = avg_price[1]
-(8793672 real changes made)
+(8800266 real changes made)
 
 . 
 . // interpolating missing avg_price
@@ -324,17 +629,17 @@ file C:\Users\garre\AppData\Local\Temp\ST_0e000002.tmp saved
                 delta:  1 month
 
 .         gen avg_price_inter = avg_price
-(9110 missing values generated)
+(9104 missing values generated)
 
 .         // filling forward
 .         bys product (date_m): replace avg_price_inter = avg_price_inter[_n-1] if avg_price_inter == .
-(7928 real changes made)
+(7966 real changes made)
 
 .         // filling backward to handle missings at begining of data
 .         gen rev = -date_m
 
 .         bys product (rev): replace avg_price_inter = avg_price_inter[_n-1] if avg_price_inter == .
-(1182 real changes made)
+(1138 real changes made)
 
 .         sort product date_m
 
@@ -343,7 +648,7 @@ file C:\Users\garre\AppData\Local\Temp\ST_0e000002.tmp saved
 .         tempfile ipol
 
 .         save `ipol'
-file C:\Users\garre\AppData\Local\Temp\ST_0e000004.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000m.tmp saved
 
 . restore
 
@@ -438,5 +743,5 @@ file individual_logit_sample.dta saved
        log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\Nielsen_Panel\analysis\individual_log
 > it_sample.txt
   log type:  text
- closed on:  11 Aug 2017, 13:17:58
+ closed on:  15 Aug 2017, 22:47:33
 --------------------------------------------------------------------------------------------------------------

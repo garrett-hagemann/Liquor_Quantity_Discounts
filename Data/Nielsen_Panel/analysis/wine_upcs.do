@@ -1,7 +1,7 @@
 capture log close
 clear
 
-import delimited using "../nielsen_extracts/HMS/Master_Files/Latest/products.tsv"
+import delimited using "../nielsen_extracts/HMS/Master_Files/Latest/products.tsv", stringcol(1)
 
 keep if product_group_desc == "WINE"
 

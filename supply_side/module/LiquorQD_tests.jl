@@ -50,13 +50,12 @@ println("Optimal price at $test_mc: ", ps_res)
 # Testing price schedule optimization
 test_w_params = WholesaleParams(2.0,1.0,3.0)
 test_N = 6
-test_ps = optimal_price_sched(test_w_params,test_N,test_prod1,test_coefs,test_inc,test_mkt)
+@time test_ps = optimal_price_sched(test_w_params,test_N,test_prod1,test_coefs,test_inc,test_mkt)
 println("Optimal price schedule: ", test_ps)
 println("Profit at optimal schedule: ", wholesaler_profit(test_ps,test_w_params,test_prod1,test_coefs,test_inc,test_mkt))
 # testing deviation generation
 test_δ = 0.025
 test_devs = dev_gen(test_ps,test_δ)
-println(length(test_devs))
 
 # pre-calculating optimal retail prices since they don't change with wholesaler params
 test_pre_calc = Dict{Int64,Float64}[]
@@ -79,17 +78,39 @@ println("Q(other params) = ", test_Q2) # should be > 0
 
 # testing moment optimization to recover params
 optimize_moment(test_ps,test_devs,test_prod1,test_coefs,test_inc,test_mkt,1,test_pre_calc,test_s_pre_calc,x0=[0.0,1.0])
-test_recovered_params,test_xtrace,test_ftrace = optimize_moment(test_ps,test_devs,test_prod1,test_coefs,test_inc,test_mkt,25000,test_pre_calc,test_s_pre_calc,x0=[0.0,1.0])
+test_recovered_params,test_xtrace,test_ftrace = optimize_moment(test_ps,test_devs,test_prod1,test_coefs,test_inc,test_mkt,250,test_pre_calc,test_s_pre_calc,x0=[0.0,1.0])
 println("Recovered Parameters: ", test_recovered_params)
 test_trace = [vcat(test_xtrace'...) test_ftrace]
 writedlm("test_dens.csv",test_trace)
 
-# mapping shape of objective function
-#=
-println("b, Q")
-for b = 0.5:.5:20
-  tmp_params = WholesaleParams(b,6.0,6.0)
-  res = moment_obj_func(test_ps,test_devs,tmp_params,test_prod1,[test_coefs],test_weights,test_mkt,test_pre_calc)
-  print(b,",",res,"\n")
-end
-=#
+# recovering bounds on zeta
+test_profit =  wholesaler_profit(test_ps,test_w_params,test_prod1,test_coefs,test_inc,test_mkt)
+test_ps_up = optimal_price_sched(test_w_params,test_N+1,test_prod1,test_coefs,test_inc,test_mkt)
+profit_up = wholesaler_profit(test_ps_up,test_w_params,test_prod1,test_coefs,test_inc,test_mkt)
+test_ps_dn = optimal_price_sched(test_w_params,test_N-1,test_prod1,test_coefs,test_inc,test_mkt)
+profit_dn = wholesaler_profit(test_ps_dn,test_w_params,test_prod1,test_coefs,test_inc,test_mkt)
+
+zeta_lb = profit_up - test_profit
+zeta_ub = test_profit - profit_dn
+zeta_mid = (zeta_lb + zeta_ub)/2.0
+println("Bounds on zeta: [",zeta_lb,",",zeta_ub,"]")
+
+# calculating linear PS and change in profits
+lin_ps = optimal_price_sched(test_w_params,2,test_prod1,test_coefs,test_inc,test_mkt)
+lin_profit = wholesaler_profit(lin_ps,test_w_params,test_prod1,test_coefs,test_inc,test_mkt)
+delta_profit = (lin_profit - 2*zeta_mid) - (test_profit - zeta_mid*test_N)
+println("Change in wholesaler profits under linear price: ", delta_profit)
+
+# finding fixed fees associated with price schedule
+test_ff = recover_ff(test_ps,test_prod1,test_coefs,test_inc,test_mkt)
+println("Recovered fixed fees: ", test_ff)
+
+# change in avg retailer profits
+test_r_profit = ps_ret_profits(test_ps,test_w_params,test_prod1,test_coefs,test_inc,test_mkt)
+println("Retailer profit under observed schedule: ", test_r_profit)
+
+lin_r_profit = ps_ret_profits(lin_ps,test_w_params,test_prod1,test_coefs,test_inc,test_mkt)
+println("Retailer profit under linear price: ", lin_r_profit)
+
+delta_r_profit = lin_r_profit - test_r_profit
+println("Change in retailer profit: ", delta_r_profit)

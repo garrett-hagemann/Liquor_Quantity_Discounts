@@ -1,0 +1,481 @@
+--------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\supply_side\module\traces\trace_parse.txt
+  log type:  text
+ opened on:  14 Aug 2017, 16:02:53
+
+. 
+. /* generating list of files */
+. local traces : dir "." files "*.csv"
+
+. 
+. local i = 0
+
+. foreach t of local traces {
+  2.         import delim "`t'", clear
+  3.         rename v1 c
+  4.         rename v2 b 
+  5.         rename v3 Q
+  6.         
+.         foreach var of varlist c b Q {
+  7.                 egen `var'_mode = mode(`var')
+  8.                 egen `var'_med = median(`var')
+  9.                 egen `var'_mean = mean(`var')
+ 10.                 egen `var'_sd = sd(`var')
+ 11.         }
+ 12.         
+.         keep *_* // keeping summary stats
+ 13.         keep in 1 // keeping just one obs
+ 14. 
+.         gen year = regexs(1) if regexm("`t'", "trace_([0-9]+)_([0-9]+)_([0-9]+).csv")
+ 15.         gen month = regexs(2) if regexm("`t'", "trace_([0-9]+)_([0-9]+)_([0-9]+).csv")
+ 16.         gen prod = regexs(3) if regexm("`t'", "trace_([0-9]+)_([0-9]+)_([0-9]+).csv")
+ 17.         
+.         local save_str : subinstr local t ".csv" "", all
+ 18.         
+.         tempfile tmp`save_str'
+ 19.         save `tmp`save_str''
+ 20. }
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000001.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000002.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000003.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000004.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000005.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000006.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000007.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000008.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000009.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000a.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000b.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000c.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000d.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000e.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000f.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000g.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000h.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000i.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000j.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000k.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000l.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000m.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000n.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000o.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000p.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000q.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000r.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000s.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000t.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000u.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000v.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000w.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00000x.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000010.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000011.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000012.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000013.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000014.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000015.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000016.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000017.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000018.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000019.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00001a.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00001b.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00001c.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00001d.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00001e.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00001f.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00001g.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00001h.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00001i.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00001j.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00001k.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00001l.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00001m.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00001n.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00001o.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00001p.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00001q.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00001r.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00001s.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00001t.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00001u.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00001v.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00001w.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00001x.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000020.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000021.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000022.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000023.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000024.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000025.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000026.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000027.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000028.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000029.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00002a.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00002b.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00002c.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00002d.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00002e.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00002f.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00002g.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00002h.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00002i.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00002j.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00002k.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00002l.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00002m.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00002n.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00002o.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00002p.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00002q.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00002r.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00002s.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00002t.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00002u.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00002v.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00002w.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00002x.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000030.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000031.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000032.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000033.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000034.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000035.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000036.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000037.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000038.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000039.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00003a.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00003b.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00003c.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00003d.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00003e.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00003f.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00003g.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00003h.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00003i.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00003j.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00003k.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00003l.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00003m.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00003n.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00003o.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00003p.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00003q.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00003r.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00003s.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00003t.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00003u.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00003v.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00003w.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d00003x.tmp saved
+(3 vars, 25001 obs)
+(25000 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0d000040.tmp saved
+
+. 
+. clear
+
+. 
+. foreach t of local traces {
+  2.         local save_str : subinstr local t ".csv" "", all
+  3.         append using `tmp`save_str''
+  4. }
+(note: variable prod was str2, now str3 to accommodate using data's values)
+
+. 
+. kdensity c_mode
+
+. graph export c_density.pdf, replace
+(file c_density.pdf written in PDF format)
+
+. 
+. kdensity b_mode
+
+. graph export b_density.pdf, replace
+(file b_density.pdf written in PDF format)
+
+. 
+. save trace_sum, replace
+(note: file trace_sum.dta not found)
+file trace_sum.dta saved
+
+. 
+. log close
+      name:  <unnamed>
+       log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\supply_side\module\traces\trace_parse.txt
+  log type:  text
+ closed on:  14 Aug 2017, 16:05:56
+--------------------------------------------------------------------------------------------------------------

@@ -4,7 +4,7 @@ set more off
 
 log using "individual_logit_sample.txt", text replace
 
-local rebuild_data = 0 // set to 1 to rebuild data from scratch. Very slow
+local rebuild_data = 1 // set to 1 to rebuild data from scratch. Very slow
 local J = 250 // number of products to get
 
 set seed 317596364  // seed taken from random.org
@@ -12,8 +12,23 @@ set seed 317596364  // seed taken from random.org
 
 local years = "2009 2010 2011 2012 2013 2014" // "2008 2009 2010 2011 2012 2013 2014"
 if `rebuild_data' { 
-	/* trimming down UPC file so be smaller so merging is easier */
-	use liquor_upcs
+/* Importing UPCs to keep just the liquor ones */
+	import delimited using "../nielsen_extracts/HMS/Master_Files/Latest/products.tsv", stringcols(1)
+
+	/* Keeping only Liquor records. CAn narrow it down to Alcoholic beverage first,
+	but no need. Only other Alocohol is coded as Beer or Wine. There may be some
+	marginal cases that differ between the NYS data and the Nielsen Data. Right now, 
+	just working with the Liquor records for simplicity */
+	keep if product_group_desc == "LIQUOR"  // corresponding product_group_code is 5002
+
+	/* Uncomment the following line to remove multi-packs. This might make matching
+	brand strings easier between the NYS and Nielsen datasets. The price schedules do
+	contain multipacks, but it seems more complicated to model. The multipacks represent
+	a form of retail quantity discounts. The focus here is on wholesale quantity discoutns
+
+	drop if multi > 1 */
+
+	save liquor_upcs, replace
 
 	/* generating varibles that we want */
 	//dropping unwanted types of products
@@ -63,9 +78,9 @@ if `rebuild_data' {
 		tempfile tmp_trips
 		save `tmp_trips', replace
 				
-		import delimited using "../nielsen_extracts/HMS/`year'/Annual_Files/purchases_`year'.tsv", clear colrange(1:5)
+		import delimited using "../nielsen_extracts/HMS/`year'/Annual_Files/purchases_`year'.tsv", clear colrange(1:5) stringcol(2)
 		
-		/* first merging in just trip codes to eliminate data set size */
+		/* first merging in just trip codes to reduce data set size */
 		
 		merge m:1 trip_code_uc using `tmp_trips', gen(_merge_trips) keep(3)
 		drop _merge_trips
