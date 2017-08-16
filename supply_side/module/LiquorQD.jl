@@ -1,6 +1,6 @@
 module LiquorQD
 
-using Optim
+using Optim, QuadGK
 
 mutable struct PriceSched # type to hold a price schedule
   rhos::Array{Float64,1} # price options
@@ -418,6 +418,40 @@ function ps_ret_profits(ps::PriceSched,w_params::WholesaleParams,product::Liquor
     return out_r_profit
 end
 
+function ps_cons_surplus(ps::PriceSched,w_params::WholesaleParams,product::Liquor,coefs::DemandCoefs,inc::IncomeDist,mkt::Market)
+    out_c_surp = 0.0
+    h(t) = t*ks_dens(t,w_params.a,w_params.b)
+    for i=1:(ps.N-1)
+        tmp_pstar = p_star(ps.rhos[i],product,coefs,inc,mkt)
+        if (i==(ps.N-1))
+            int = sparse_int(h,ps.t_cuts[i],1.0)
+        else
+            int = sparse_int(h,ps.t_cuts[i],ps.t_cuts[i+1])
+        end
+        s(p) = share(p,product,coefs,inc,mkt)
+        #unscaled_surp = sparse_int(s,tmp_pstar,1000.0)
+        unscaled_surp = quadgk(s,tmp_pstar,Inf) # want to use this, sparse_int can't handle Inf correctly
+        scaled_cons_surp = unscaled_surp[1]*int
+        out_c_surp = out_c_surp + scaled_cons_surp
+    end
+    return out_c_surp
+end
+
+function ps_avg_ret_price(ps::PriceSched,w_params::WholesaleParams,product::Liquor,coefs::DemandCoefs,inc::IncomeDist,mkt::Market)
+    out_avg_p = 0.0
+    for i=1:(ps.N-1)
+        tmp_pstar = p_star(ps.rhos[i],product,coefs,inc,mkt)
+        if (i==(ps.N-1))
+            dist_diff = 1 - ks_dist(ps.t_cuts[i],w_params.a,w_params.b)
+        else
+            dist_diff = ks_dist(ps.t_cuts[i+1],w_params.a,w_params.b) - ks_dist(ps.t_cuts[i],w_params.a,w_params.b)
+        end
+        weighted_p = tmp_pstar*dist_diff
+        out_avg_p = out_avg_p + weighted_p
+    end
+    return out_avg_p
+end
+
 function dev_gen(ps::PriceSched,δ::Float64)
   #= returns deviations of a price schedule. The deviations constitute all price
   schedules where one or more elements is multiplied by 1+δ or 1-δ. Function
@@ -502,6 +536,7 @@ end
 export Liquor, Market, DemandCoefs, WholesaleParams, PriceSched, IncomeDist
 export ks_dist, ks_dens, sparse_int, share, d_share,
   p_star, wholesaler_profit, optimal_price_sched, dev_gen, moment_obj_func,
-  optimize_moment, obs_lambdas, retailer_vprofit, recover_ff, ps_ret_profits
+  optimize_moment, obs_lambdas, retailer_vprofit, recover_ff, ps_ret_profits,
+  ps_cons_surplus, ps_avg_ret_price
 
 end

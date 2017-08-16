@@ -1,3 +1,6 @@
+# addprocs(68) # for Stampede 2 on 1 node
+
+@everywhere srand(69510606) #seeding random number gen
 @everywhere include("LiquorQD.jl")
 @everywhere using LiquorQD, DataFrames, DataArrays
 
@@ -170,7 +173,7 @@ end
     return out
 end
 
-mkts_for_est = markets_array[26:27]
+mkts_for_est = markets_array
 res = pmap(mkt_est,mkts_for_est)
 
 out_dict = merge(res...)

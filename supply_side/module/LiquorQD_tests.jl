@@ -115,3 +115,21 @@ println("Retailer profit under linear price: ", lin_r_profit)
 
 delta_r_profit = lin_r_profit - test_r_profit
 println("Change in retailer profit: ", delta_r_profit)
+
+# Change in consumer surplus
+test_cs = ps_cons_surplus(test_ps,test_w_params,test_prod1,test_coefs,test_inc,test_mkt)
+println("Consumer surplus under observed schedule: ", test_cs)
+
+lin_cs = ps_cons_surplus(lin_ps,test_w_params,test_prod1,test_coefs,test_inc,test_mkt)
+println("Consumer surplus under linear price: ", lin_cs)
+
+delta_cs = lin_cs - test_cs
+println("Change in consumer surplus: ", delta_cs)
+
+test_avg_p = ps_avg_ret_price(test_ps,test_w_params,test_prod1,test_coefs,test_inc,test_mkt)
+lin_avg_p =ps_avg_ret_price(lin_ps,test_w_params,test_prod1,test_coefs,test_inc,test_mkt)
+println("Avg retail price under observed schedule: ", test_avg_p)
+println("Avg retail price under linear price: ", lin_avg_p)
+
+# change in total welfare
+println("Change in total welfare: ", delta_cs + delta_profit + delta_r_profit)
