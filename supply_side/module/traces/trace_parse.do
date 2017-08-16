@@ -53,5 +53,6 @@ graph export b_density.pdf, replace
 destring _all, replace
 
 save trace_sum, replace
+export delim trace_sum.csv, replace delim(",")
 
 log close
