@@ -97,6 +97,7 @@ println("Bounds on zeta: [",zeta_lb,",",zeta_ub,"]")
 
 # calculating linear PS and change in profits
 lin_ps = optimal_price_sched(test_w_params,2,test_prod1,test_coefs,test_inc,test_mkt)
+println("Counterfactual Linear Price Schedule: ", lin_ps)
 lin_profit = wholesaler_profit(lin_ps,test_w_params,test_prod1,test_coefs,test_inc,test_mkt)
 delta_profit = (lin_profit - 2*zeta_mid) - (test_profit - zeta_mid*test_N)
 println("Change in wholesaler profits under linear price: ", delta_profit)

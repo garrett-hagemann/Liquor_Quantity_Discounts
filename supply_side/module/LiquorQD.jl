@@ -405,15 +405,12 @@ function ps_ret_profits(ps::PriceSched,w_params::WholesaleParams,product::Liquor
     for i=1:(ps.N-1)
         tmp_rho = ps.rhos[i]
         tmp_pstar = p_star(tmp_rho,product,coefs,inc,mkt)
-        if (ps.N == 2) # special case for 2 part price schedules in constrained model
-            int = sparse_int(h,0.0,1.0)
-            dist_diff = 1.0
-        elseif (i==1)
-            int = sparse_int(h,0.0,ps.t_cuts[i])
-            dist_diff = ks_dist(ps.t_cuts[i],w_params.a,w_params.b) - 0.0
+        if (i==(ps.N-1))
+            int = sparse_int(h,ps.t_cuts[i],1.0)
+            dist_diff = 1 - ks_dist(ps.t_cuts[i],w_params.a,w_params.b)
         else
-            int = sparse_int(h,ps.t_cuts[i-1],ps.t_cuts[i])
-            dist_diff = ks_dist(ps.t_cuts[i],w_params.a,w_params.b) - ks_dist(ps.t_cuts[i-1],w_params.a,w_params.b)
+            int = sparse_int(h,ps.t_cuts[i],ps.t_cuts[i+1])
+            dist_diff = ks_dist(ps.t_cuts[i+1],w_params.a,w_params.b) - ks_dist(ps.t_cuts[i],w_params.a,w_params.b)
         end
         ret_seg_profit = retailer_vprofit(tmp_rho,tmp_pstar,product,coefs,inc,mkt)*int - tmp_ff[i]*dist_diff
         out_r_profit = out_r_profit + ret_seg_profit
