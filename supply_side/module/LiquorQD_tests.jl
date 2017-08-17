@@ -24,7 +24,7 @@ test_coefs = DemandCoefs(-.1596846, # price
                               "teq" => 1.0,
                               "otr" => 1.0))
 inc_levels = Float64[2500; 6500; 9000; 11000; 13000; 17500; 22500; 27500; 32500; 37500; 42500; 47500; 55000; 65000; 85000; 150000]
-inc_weights = [0.34; 2.36; 1.21; 2.63; 3.91; 2.02; 4.99; 9.84; 2.76; 2.83; 4.45; 2.49; 11.73; 4.38; 24.14; 19.89]
+inc_weights = [0.34; 2.36; 1.21; 2.63; 3.91; 2.02; 4.99; 9.84; 2.76; 2.83; 4.45; 2.49; 11.73; 4.38; 24.14; 19.89]./100
 test_inc = IncomeDist(inc_levels,inc_weights)
 
 # testing density functions and integral
@@ -48,8 +48,8 @@ ps_res = p_star(test_mc,test_prod1,test_coefs,test_inc,test_mkt)
 println("Optimal price at $test_mc: ", ps_res)
 
 # Testing price schedule optimization
-test_w_params = WholesaleParams(2.0,1.0,5.0)
-test_N = 5
+test_w_params = WholesaleParams(2.0,1.0,1.0)
+test_N = 6
 @time test_ps = optimal_price_sched(test_w_params,test_N,test_prod1,test_coefs,test_inc,test_mkt)
 println("Optimal price schedule: ", test_ps)
 println("Profit at optimal schedule: ", wholesaler_profit(test_ps,test_w_params,test_prod1,test_coefs,test_inc,test_mkt))
@@ -89,6 +89,9 @@ test_ps_up = optimal_price_sched(test_w_params,test_N+1,test_prod1,test_coefs,te
 profit_up = wholesaler_profit(test_ps_up,test_w_params,test_prod1,test_coefs,test_inc,test_mkt)
 test_ps_dn = optimal_price_sched(test_w_params,test_N-1,test_prod1,test_coefs,test_inc,test_mkt)
 profit_dn = wholesaler_profit(test_ps_dn,test_w_params,test_prod1,test_coefs,test_inc,test_mkt)
+
+println(test_ps_up)
+println(test_ps_dn)
 
 zeta_lb = profit_up - test_profit
 zeta_ub = test_profit - profit_dn

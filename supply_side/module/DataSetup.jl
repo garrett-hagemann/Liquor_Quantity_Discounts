@@ -53,7 +53,7 @@ const nested_coefs = DemandCoefs(-.1596846, # price
                               "otr" => 1.0))
 
 inc_levels = Float64[2500; 6500; 9000; 11000; 13000; 17500; 22500; 27500; 32500; 37500; 42500; 47500; 55000; 65000; 85000; 150000]
-inc_weights = [0.34; 2.36; 1.21; 2.63; 3.91; 2.02; 4.99; 9.84; 2.76; 2.83; 4.45; 2.49; 11.73; 4.38; 24.14; 19.89]
+inc_weights = [0.34; 2.36; 1.21; 2.63; 3.91; 2.02; 4.99; 9.84; 2.76; 2.83; 4.45; 2.49; 11.73; 4.38; 24.14; 19.89]./100 # divide to convert to percent
 
 const obs_inc_dist = IncomeDist(inc_levels,inc_weights)
 #= Initial set up of product data. Need to:

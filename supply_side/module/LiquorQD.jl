@@ -1,6 +1,6 @@
 module LiquorQD
 
-using Optim, QuadGK
+using Optim, QuadGK #, NLopt
 
 mutable struct PriceSched # type to hold a price schedule
   rhos::Array{Float64,1} # price options
@@ -351,7 +351,22 @@ end
 function optimal_price_sched(params::WholesaleParams, N::Int64, product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
   #= params contains the parameters for the wholesaler. This means the marginal
   cost as well as the parameters of the Kumaraswamy distribution. =#
-  g(x,n) = ps_opt_g(x,params,n,product,coefs,inc_dist,mkt)
+  function g1(x,n::Int64)
+      return ps_opt_g(x,params,n,product,coefs,inc_dist,mkt)
+  end
+  ps_count = 0.0
+  function g2(x,n::Int64)
+      ps_count += 1
+      #println(ps_count)
+      rhos = x[1:n-1]
+      t = x[n:end]
+      if (rhos == sort(rhos,rev=true)) & (t == sort(t)) # constraining search to look only at PS with right shape
+          return ps_opt_g(x,params,n,product,coefs,inc_dist,mkt)
+      else
+          return Inf
+      end
+
+  end
   # need to solve sequence of price schedules
   res_ps = PriceSched([0.0],[0.0],N) # initalizing so for loop can change it
   hs_x0 = Float64[] # initalizing so for loop can change it
@@ -365,20 +380,41 @@ function optimal_price_sched(params::WholesaleParams, N::Int64, product::Liquor,
       else
         ub = 10*params.c
       end
-      ps_optim_res = Optim.optimize((x)->g(x,hs_n),params.c,ub,show_trace=false)
+      ps_optim_res = Optim.optimize((x)->g1(x,hs_n),params.c,ub,show_trace=false)  # Optim still good for univariate minimization
       optim_rho = Optim.minimizer(ps_optim_res)
       res_ps = PriceSched([optim_rho],[0.0],hs_n) # constrained
       hs_rhos = [optim_rho,optim_rho]
       hs_types = [0.0] # guess for n=3
       hs_x0 = [hs_rhos ; hs_types] #
     else
-      ps_optim_res = Optim.optimize((x)->g(x,hs_n),hs_x0,method=NelderMead(), g_tol=1e-12, iterations=20000)
+        #=
+        #NLopt implementation. Make sure g2 has a gradient argument as second arg
+        hs_x0 = [sort(rand(hs_n-1),rev=true);sort(rand(hs_n-2))]
+        println(hs_x0)
+        tmp_num_params = 2*(hs_n-1)-1
+        #ps_opt=Opt(:LN_NELDERMEAD,tmp_num_params)
+        ps_opt=Opt(:G_MLSL_LDS,tmp_num_params)
+        lcl_opt=Opt(:LN_NELDERMEAD,tmp_num_params)
+        local_optimizer!(ps_opt,lcl_opt)
+        lower_bounds!(ps_opt,zeros(tmp_num_params))
+        upper_bounds!(ps_opt,[repeat([1000.0],outer=(hs_n-1)); ones(hs_n-2)])
+        #xtol_rel!(ps_opt,1e-10)
+        #ftol_rel!(ps_opt,1e-10)
+        #ftol_abs!(ps_opt,1e-16)
+        maxeval!(ps_opt,500000)
+        min_objective!(ps_opt, (x,v)->g2(x,v,hs_n))
+        (ps_minf,ps_minx,ps_ret) = NLopt.optimize(ps_opt, hs_x0)
+        optim_rho=ps_minx[1:hs_n-1]
+        optim_t=ps_minx[hs_n:end]
+        =#
+      ps_optim_res = Optim.optimize((x)->g2(x,hs_n),hs_x0,method=NelderMead(), g_tol=1e-13, iterations=50000)
       optim_rho = Optim.minimizer(ps_optim_res)[1:hs_n-1]
       optim_t = Optim.minimizer(ps_optim_res)[hs_n:end]
+
       res_ps = PriceSched(optim_rho,[0.0; optim_t],hs_n) # constrained
       # best guess for N+1 is current sched with last value repated
-      hs_rhos = [optim_rho ; optim_rho[end]]
-      hs_types = [optim_t ; optim_t[end]]
+      hs_rhos = [optim_rho ; .75*optim_rho[end]]
+      hs_types = [optim_t ; 1.2*optim_t[end]]
       hs_x0 = [hs_rhos ; hs_types]
     end
   end

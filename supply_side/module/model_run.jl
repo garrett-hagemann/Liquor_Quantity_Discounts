@@ -54,7 +54,7 @@ for (key,v) in out_dict
     m = key[1]
     j = key[2]
     out_str = "traces/trace_$(m.year)_$(m.month)_$(j.id).csv"
-    writedlm(out_str,v)
+    writecsv(out_str,v)
 end
 
 
