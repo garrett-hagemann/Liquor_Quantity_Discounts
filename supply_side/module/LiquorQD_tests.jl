@@ -48,8 +48,8 @@ ps_res = p_star(test_mc,test_prod1,test_coefs,test_inc,test_mkt)
 println("Optimal price at $test_mc: ", ps_res)
 
 # Testing price schedule optimization
-test_w_params = WholesaleParams(2.0,1.0,3.0)
-test_N = 6
+test_w_params = WholesaleParams(2.0,1.0,5.0)
+test_N = 5
 @time test_ps = optimal_price_sched(test_w_params,test_N,test_prod1,test_coefs,test_inc,test_mkt)
 println("Optimal price schedule: ", test_ps)
 println("Profit at optimal schedule: ", wholesaler_profit(test_ps,test_w_params,test_prod1,test_coefs,test_inc,test_mkt))
@@ -130,6 +130,11 @@ test_avg_p = ps_avg_ret_price(test_ps,test_w_params,test_prod1,test_coefs,test_i
 lin_avg_p =ps_avg_ret_price(lin_ps,test_w_params,test_prod1,test_coefs,test_inc,test_mkt)
 println("Avg retail price under observed schedule: ", test_avg_p)
 println("Avg retail price under linear price: ", lin_avg_p)
+
+test_avg_p = ps_swavg_ret_price(test_ps,test_w_params,test_prod1,test_coefs,test_inc,test_mkt)
+lin_avg_p =ps_swavg_ret_price(lin_ps,test_w_params,test_prod1,test_coefs,test_inc,test_mkt)
+println("Weighted Avg retail price under observed schedule: ", test_avg_p)
+println("Weighted Avg retail price under linear price: ", lin_avg_p)
 
 # change in total welfare
 println("Change in total welfare: ", delta_cs + delta_profit + delta_r_profit)

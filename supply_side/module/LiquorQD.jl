@@ -361,26 +361,24 @@ function optimal_price_sched(params::WholesaleParams, N::Int64, product::Liquor,
       t_guess = nothing # don't need t_guess because constraint forces only type cutoff to be 0
       hs_x0 = rho_guess
       if params.c == 0.0
-        ub = 20.0
+        ub = 200.0
       else
         ub = 10*params.c
       end
       ps_optim_res = Optim.optimize((x)->g(x,hs_n),params.c,ub,show_trace=false)
       optim_rho = Optim.minimizer(ps_optim_res)
       res_ps = PriceSched([optim_rho],[0.0],hs_n) # constrained
-      hs_rhos = [optim_rho, (optim_rho - (optim_rho-params.c)/2.0)] # guess for next iteration. Start with optimal price schedule, but include additional price halfway between 0 and minimum price
-      hs_types = [0.5] # best guess for cutoff is 0.5 for n = 3
+      hs_rhos = [optim_rho,optim_rho]
+      hs_types = [0.0] # guess for n=3
       hs_x0 = [hs_rhos ; hs_types] #
     else
-      #rho_guess = sort(rand(N-1),rev=true) # prices in 0,1 declining. Scaling up seems to have no effect on solutions (which is good)
-      #t_guess = sort(rand(N-2)) # generates types between 0 and 1 that increase. One less b/c of constrained
-      #hs_x0 = [rho_guess; t_guess]
-      ps_optim_res = Optim.optimize((x)->g(x,hs_n),hs_x0,method=NelderMead(), g_tol=1e-12)
+      ps_optim_res = Optim.optimize((x)->g(x,hs_n),hs_x0,method=NelderMead(), g_tol=1e-12, iterations=20000)
       optim_rho = Optim.minimizer(ps_optim_res)[1:hs_n-1]
       optim_t = Optim.minimizer(ps_optim_res)[hs_n:end]
       res_ps = PriceSched(optim_rho,[0.0; optim_t],hs_n) # constrained
-      hs_rhos = [optim_rho ; (optim_rho[end]-(optim_rho[end]-params.c)/2.0)]
-      hs_types = [optim_t ; (optim_t[end] + (1.0-optim_t[end])/2.0)] # add in another guess at type halfway between last type and 1
+      # best guess for N+1 is current sched with last value repated
+      hs_rhos = [optim_rho ; optim_rho[end]]
+      hs_types = [optim_t ; optim_t[end]]
       hs_x0 = [hs_rhos ; hs_types]
     end
   end
@@ -435,6 +433,25 @@ function ps_cons_surplus(ps::PriceSched,w_params::WholesaleParams,product::Liquo
         out_c_surp = out_c_surp + scaled_cons_surp
     end
     return out_c_surp
+end
+
+function ps_swavg_ret_price(ps::PriceSched,w_params::WholesaleParams,product::Liquor,coefs::DemandCoefs,inc::IncomeDist,mkt::Market)
+    out_avg_p = 0.0
+    total_w = 0.0
+    h(t) = t*ks_dens(t,w_params.a,w_params.b)
+    for i=1:(ps.N-1)
+        tmp_pstar = p_star(ps.rhos[i],product,coefs,inc,mkt)
+        if (i==(ps.N-1))
+            int = sparse_int(h,ps.t_cuts[i],1.0)
+        else
+            int = sparse_int(h,ps.t_cuts[i],ps.t_cuts[i+1])
+        end
+        w = share(tmp_pstar,product,coefs,inc,mkt)
+        weighted_p = tmp_pstar*int*w
+        out_avg_p = out_avg_p + weighted_p
+        total_w = total_w + w*int
+    end
+    return out_avg_p/total_w
 end
 
 function ps_avg_ret_price(ps::PriceSched,w_params::WholesaleParams,product::Liquor,coefs::DemandCoefs,inc::IncomeDist,mkt::Market)
@@ -537,6 +554,6 @@ export Liquor, Market, DemandCoefs, WholesaleParams, PriceSched, IncomeDist
 export ks_dist, ks_dens, sparse_int, share, d_share,
   p_star, wholesaler_profit, optimal_price_sched, dev_gen, moment_obj_func,
   optimize_moment, obs_lambdas, retailer_vprofit, recover_ff, ps_ret_profits,
-  ps_cons_surplus, ps_avg_ret_price
+  ps_cons_surplus, ps_avg_ret_price, ps_swavg_ret_price
 
 end
