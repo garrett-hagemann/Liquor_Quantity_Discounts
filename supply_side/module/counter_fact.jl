@@ -1,5 +1,5 @@
 # addprocs(68)
-#addprocs(2)
+addprocs(2)
 
 @everywhere srand(69510606) #seeding random number gen
 
@@ -12,28 +12,29 @@ markets_array = data_setup()
 
 # importing estimated coefficients
 ss_coefs_df = readtable("traces/trace_sum.csv")
-@everywhere coefs_dict = Dict{Tuple{Int64,Int64,Int64},Tuple{Float64,Float64}}() # epty dict. Keys are (y,m,p) and value is (c,b)
+@everywhere est_coefs = Dict{Tuple{Int64,Int64,Int64},Tuple{Float64,Float64}}() # epty dict. Keys are (y,m,p) and value is (c,b)
 for row in eachrow(ss_coefs_df)
     key = (row[:year],row[:month],row[:prod])
     val = (row[:c_mode],row[:b_mode])
-    coefs_dict[key]=val
+    est_coefs[key]=val
 end
 
-@everywhere function cf_calcs(tup::Tuple{Market,Liquor})
+@everywhere function cf_calcs(tup::Tuple{Market,Liquor},coefs_dict::Dict{Tuple{Int64,Int64,Int64},Tuple{Float64,Float64}})
     m = tup[1]
     j = tup[2]
     out = Dict{Tuple{Market,Liquor},Array{Float64,1}}()
     key = (m.year,m.month,j.id)
+    println("working with product $(j.id) in $(m.year)-$(m.month)")
     if key in keys(coefs_dict)
-        print("Recovering zeta for product $(j.id) in $(m.year)-$(m.month). ")
+        print("Recovering zeta. ")
         wp = WholesaleParams(coefs_dict[key][1],1.0,coefs_dict[key][2])
         tmp_ps = get(j.ps) # because it's nullable
         #finding zeta
-        @time base_ps = optimal_price_sched(wp,(tmp_ps.N),j,nested_coefs,obs_inc_dist,m) # this ensures inequality defining zeta is true. Can't use observed
+        base_ps = optimal_price_sched(wp,(tmp_ps.N),j,nested_coefs,obs_inc_dist,m) # this ensures inequality defining zeta is true. Can't use observed
         base_w_profit =  wholesaler_profit(tmp_ps,wp,j,nested_coefs,obs_inc_dist,m)
-        @time ps_up = optimal_price_sched(wp,(tmp_ps.N+1),j,nested_coefs,obs_inc_dist,m)
+        ps_up = optimal_price_sched(wp,(tmp_ps.N+1),j,nested_coefs,obs_inc_dist,m)
         profit_up = wholesaler_profit(ps_up,wp,j,nested_coefs,obs_inc_dist,m)
-        @time ps_dn = optimal_price_sched(wp,(tmp_ps.N-1),j,nested_coefs,obs_inc_dist,m)
+        ps_dn = optimal_price_sched(wp,(tmp_ps.N-1),j,nested_coefs,obs_inc_dist,m)
         profit_dn = wholesaler_profit(ps_dn,wp,j,nested_coefs,obs_inc_dist,m)
 
         zeta_lb = profit_up - base_w_profit
@@ -71,20 +72,24 @@ end
 
         res_array = [zeta_lb; zeta_ub; zeta_mid; delta_w_profit ; delta_r_profit ; delta_cs ; base_avg_p ; lin_avg_p ; base_wavg_p]
         out[(m,j)] = res_array
+    else
+        println("Product has no parameter estimates.")
     end
     return out
 end
 
 mkts_for_est = [(m,j) for m in markets_array for j in m.products] # array of tuples
-res = pmap(cf_calcs,mkts_for_est)
+res = pmap((x)->cf_calcs(x,est_coefs),mkts_for_est)
 
-out_dct = merge(res...)
-outfile = open("counter_fact_calcs.csv",w)
-write(outfile,"year,month,prod,zeta_lb,zeta_ub,zeta_mid,delta_w_profit,delta_r_profit,delta_cs,base_avg_p,lin_avg_p,base_wavg_p")
-for (key,v) in out_dict
-    m = key[1]
-    j = key[2]
-    row = [m.year;m.month;j.id;v]
-    writecsv(outfile,row)
+outfile = open("counter_fact_calcs.csv","w")
+write(outfile,"year,month,prod,zeta_lb,zeta_ub,zeta_mid,delta_w_profit,delta_r_profit,delta_cs,base_avg_p,lin_avg_p,base_wavg_p","\n")
+for d in res
+    for (key,v) in d # should only be single element, but just in case
+        m = key[1]
+        j = key[2]
+        row = [m.year;m.month;j.id;v]'
+        writecsv(outfile,row)
+        write
+    end
 end
 close(outfile)
