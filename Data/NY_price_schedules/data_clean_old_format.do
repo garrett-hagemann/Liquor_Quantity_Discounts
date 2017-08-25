@@ -116,6 +116,7 @@ replace size = "1.75L" if size == "1.75"
 replace size = "375ML" if size == "375"
 replace size = "1L" if size == "LT"
 replace size = "750ML" if size == "750BTL"
+replace size = "750ML" if size == "750 BTL"
 replace size = "750ML" if size == "750ML."
 replace size = "1L" if size == "LITER"
 replace size = "50ML" if size == "50"
@@ -136,10 +137,22 @@ replace size = "1.75L" if size == "1.75LIT"
 replace size = "375ML" if size == ".375LITERSBOTTLE"
 replace size = "200ML" if size == ".200LITERSBOTTLE"
 replace size = "1.75L" if size == "1.75ML"
-replace size = "1L" if size == "1.000LITERSBOTTLE" 
+replace size = "1L" if size == "1.000LITERSBOTTLE"
 
-/* keeping only larger bottles. Most likely to be purcahsed sizes I think*/
-keep if size == "750ML" | size == "1L" | size == "1.75L"
+// catching a few more
+replace size = subinstr(size, "LITER", "L",.)
+replace size = subinstr(size, "LTR", "L",.)
+replace size = subinstr(size, "LT", "L",.)
+replace size = subinstr(size, "LIT", "L",.)
+
+// removing spaces to standardize
+replace size = subinstr(size, " ", "",.)
+
+// one last one
+replace size = "750ML" if size == "750BTL"
+
+/* keeping only larger bottles. Most likely to be purcahsed sizes*/
+keep if size == "750ML" | size == "1L" | size == "1.75L" | size == "375ML"
 
 /* identifying the type of discount, case or bottle */
 gen discount_size_type = ""

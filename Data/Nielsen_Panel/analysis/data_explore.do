@@ -29,7 +29,17 @@ clear
 
 /* Working with purchases now */
 
-use ny_liquor_purchases_all_years
+use prod_chars_individual
+keep if product > 0 // dropping outside options
+
+sum price proof imported d_s_* [weight = projection_factor]
+sum price proof imported d_s_* [weight = projection_factor] if product <= 250
+
+preserve
+	bys product: keep if _n == 1
+	drop if product > 250
+	tab1 d_g_*
+restore
 
 /* Purchases by month and Year */
 tab purchase_year purchase_month
@@ -55,7 +65,9 @@ replace inc = 65000 if household_income == 23
 replace inc = 85000 if household_income == 26
 replace inc = 150000 if household_income == 27
 
-tab inc
+tab inc [weight = projection_factor]
+tab inc [weight = projection_factor] if NYC
+
 
 /* Distribution of household purchases. I.e. distribution of number of times
 a household appears in the data */
@@ -79,44 +91,7 @@ preserve
 	graph export "retailer_freq.pdf", replace
 restore
 
-/* Listing top products */
-
-preserve
-	contract upc upc_ver_uc upc_descr brand_string brand_descr size1_amount size1_units
-	/* note that upc and upc_ver_uc are unique identifiers. So any other
-	variables included will not generate additional tuples. That is, it should
-	just carry those varibles through */
-	disp "Total number of Products Observed " _N
-	sort _freq
-	gen reverse = -_n // needed for descending sort
-	sort reverse
-	list in 1/500 // top 500 products
-	
-	/*
-	// Exporting top 500 products
-	egen brand_string = concat(brand_descr upc_descr size1_amount size1_units), punct(";")
-	keep upc upc_ver_uc upc_descr brand_descr size1_amount size1_units brand_string
-	keep in 1/500
-	gen upc_id = _n
-	save top_500_upcs, replace*/
-
-
-	// Exporting top 1000 products
-	keep upc upc_ver_uc upc_descr brand_descr size1_amount size1_units brand_string
-	keep in 1/1000
-	gen upc_id = _n
-	save top_1000_upcs, replace
-restore
-
-/* Panelists stats */
-preserve
-	clear
-	local years = "2009 2010 2011 2012 2013 2014"
-	foreach y in `years'{
-		append using ny_panelists_`y'.dta
-	}
-restore
-
+/*
 preserve
 	// contracting down to frequencies
 	contract upc_descr fips_county_descr fips_county_code purchase_month purchase_year date_q
@@ -199,6 +174,7 @@ preserve
 	}	  
 	  
 restore
+*/
 
 
 log close

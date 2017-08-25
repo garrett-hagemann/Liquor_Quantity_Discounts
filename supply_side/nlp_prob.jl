@@ -77,9 +77,9 @@ function ks_dens(x::Float64,a::Float64,b::Float64)
 end
 
 
-a = 2.0
-b = 2.0
-c = 0.2
+a = 1.0
+b = 1.0
+c = 0.0
 gamma = 5
 
 
@@ -271,6 +271,7 @@ end
 =#
 
 ##### optimizer solution
+#=
 # Unconstrained problem
 function obj_func(theta)
 	if !all((0 .<= theta .<= 1)) # if not all elements in [0,1]
@@ -377,6 +378,7 @@ obs_t = Optim.minimizer(solution)[N:end]
 solution = Optim.optimize(obj_func,grad!,hess!,x0,method=Newton(),show_trace=false, iterations=5000)
 println(solution)
 println(Optim.minimizer(solution))
+=#
 #=
 x0 = rand(2*(N-1))
 @time solution = optimize(obj_func,grad!,hess!,x0,method=Newton(),show_trace=false)
@@ -505,11 +507,26 @@ println("Numerical Hessian: ", (gtest1 - gtest2)/(2*step))
 println(htest)
 =#
 println("Solving for constrained price schedule. Comparing algorithms and timing.")
-x0 = rand(2*(N-1)-1)
-@time solution = Optim.optimize(obj_func,grad!,hess!,x0,method=NewtonTrustRegion(),show_trace=false)
-@time solution = Optim.optimize(obj_func,grad!,hess!,x0,method=NewtonTrustRegion(),show_trace=false)
-@time solution = Optim.optimize(obj_func,grad!,hess!,x0,method=NewtonTrustRegion(),show_trace=false)
-@time solution = Optim.optimize(obj_func,grad!,hess!,x0,method=NewtonTrustRegion(),show_trace=false)
+
+rho_0 = sort(rand(N-1),rev=true)
+t_0 = sort(rand(N-2))
+x0 = [rho_0;t_0]
+#@time solution = Optim.optimize(obj_func,grad!,hess!,x0,method=NewtonTrustRegion(),show_trace=false)
+#@time solution = Optim.optimize(obj_func,grad!,hess!,x0,method=NewtonTrustRegion(),show_trace=false)
+#@time solution = Optim.optimize(obj_func,grad!,hess!,x0,method=NewtonTrustRegion(),show_trace=false)
+n = N
+x0 = [.5,.4,.5]
+for iter_n = 3:n
+	println(iter_n)
+	N=iter_n
+	println(x0)
+	solution = Optim.optimize(obj_func,grad!,hess!,x0,method=NewtonTrustRegion(),show_trace=false)
+	min_x = Optim.minimizer(solution)
+	hs_rhos = min_x[1:iter_n-1]
+	hs_t = min_x[iter_n:end]
+	x0 = [hs_rhos;hs_rhos[end];hs_t;hs_t[end]]
+end
+solution = Optim.optimize(obj_func,grad!,hess!,x0,method=NewtonTrustRegion(),show_trace=false)
 println(solution)
 println(Optim.minimizer(solution))
 println("Profits: ",-obj_func(Optim.minimizer(solution)))
@@ -525,6 +542,7 @@ println(Optim.minimizer(solution))
 println("Profits: ",-obj_func(Optim.minimizer(solution)))
 
 ## Identification test
+#=
 #= the goal of this test is to take the observed price schedule and see if the parameters
 can be recovered by solving the FOCs for 0 as a function of the params. =#
 id_N = N
@@ -567,7 +585,7 @@ solution = Optim.optimize(id_focs,x0,method=NelderMead(), iterations=100000, g_t
 println(solution)
 println(Optim.minimizer(solution))
 
-
+=#
 #=
 #### JuMP solution
 

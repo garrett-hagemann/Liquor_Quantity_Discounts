@@ -37,7 +37,7 @@ table total_options option if discount_size_type == "CASE", contents(mean actual
 table total_options option if discount_size_type == "CASE", contents(mean disc_q sd disc_q med disc_q) format(%9.2f)
 
 // now same tables with easy latex integration
-tabout total_options option using tab_options.txt
+tabout total_options option using tab_options.txt, replace
 
 reshape wide
 
@@ -78,5 +78,27 @@ preserve
 	contract product2  posting_month posting_year
 	tab _freq
 restore
+
+
+/* based on my own analysis. Has codes that don't appera in file formats */
+gen spirit_type = ""
+replace spirit_type = "vod" if beverage_type == "A"
+replace spirit_type = "sch/whs/brb" if beverage_type == "B"
+replace spirit_type = "gin" if beverage_type == "C"
+replace spirit_type = "brandy" if beverage_type == "D"
+replace spirit_type = "rum" if beverage_type == "E"
+replace spirit_type = "liqueur" if beverage_type == "F"
+replace spirit_type = "cocktail" if beverage_type == "G"
+replace spirit_type = "otr" if beverage_type == "K"
+replace spirit_type = "teq" if beverage_type == "M"
+replace spirit_type = "mislabeled" if beverage_type == "O"
+
+encode spirit_type, gen(spirit_type_n)
+encode size, gen(size_n)
+
+drop if spirit_type == "mislabeled" | spirit_type == "cocktail" | spirit_type == "otr"
+
+poisson total_options actual_p1 disc_q2  proof_alcohol_cont i.spirit_type_n i.size_n
+
 
 log close

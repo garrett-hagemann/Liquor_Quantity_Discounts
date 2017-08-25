@@ -1,6 +1,6 @@
 module LiquorQD
 
-using Optim, QuadGK #, NLopt
+using Optim, QuadGK, ForwardDiff, LineSearches #NLopt
 
 mutable struct PriceSched # type to hold a price schedule
   rhos::Array{Float64,1} # price options
@@ -12,7 +12,7 @@ mutable struct Liquor # should be thought of as a product. Products have charact
   # maybe should add name as well
   id::Int64 # product number
   group::String # string indicating group. Looks up relevant nesting parameter
-  price::Float64 # price of liquor. Can be changed
+  price::Any # price of liquor. Can be changed. Is type Any to support ForwardDiff
   obs_price::Float64 # field so we can reset price to observed
   imported::Float64 # imported flag. Should not change
   proof::Float64 # Proof. Should not change
@@ -64,7 +64,7 @@ function ks_dist(x::Float64,a::Float64,b::Float64)
   return 1.0 - (1.0-x^a)^b
 end
 
-function ks_dens(x::Float64,a::Float64,b::Float64)
+function ks_dens(x,a::Float64,b::Float64)
   if a <= 0.0
     error("Must have a > 0")
   end
@@ -178,7 +178,7 @@ function logit_prob(product::Liquor, coefs::DemandCoefs, inc::Float64, mkt::Mark
   return num/denom
 end
 
-function share(price::Float64,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
+function share(price,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
   #= coefs argument should be a Lx1 vector where each row contains a pointer to
   a set of coefficients (a DemandCoefs object). The wight vector must be in the
   corresponding order. The length can be as long as needed (i.e. however many
@@ -193,7 +193,8 @@ function share(price::Float64,product::Liquor,coefs::DemandCoefs,inc_dist::Incom
   return res
 end
 
-function d_share(price::Float64,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
+function d_share(price,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
+    #=
   product.price = price # changing price of product of interest
   res = 0.0
   for (inc,w) in zip(inc_dist.incomes,inc_dist.prob)
@@ -203,6 +204,21 @@ function d_share(price::Float64,product::Liquor,coefs::DemandCoefs,inc_dist::Inc
   end
   return res
   product.price = product.obs_price # undoing change to price for subsequent calls
+  =#
+  s(p) = share(p,product,coefs,inc_dist,mkt)
+  ds(p) = ForwardDiff.derivative(s,p)
+  return ds(price)
+end
+
+function dd_share(price,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
+    ds(p) = d_share(p,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
+    dds(p) = ForwardDiff.derivative(ds,p)
+    return dds(price)
+end
+function ddd_share(price,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
+    dds(p) = dd_share(p,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
+    ddds(p) = ForwardDiff.derivative(dds,p)
+    return ddds(price)
 end
 
 function p_star(mc::Float64,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
@@ -227,6 +243,27 @@ function p_star(mc::Float64,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeD
       old_p = new_p
     end
     return old_p
+end
+
+function d_pstar_d_rho(mc::Float64,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
+    u = p_star(mc,product,coefs,inc_dist,mkt)
+    dsu = d_share(u,product,coefs,inc_dist,mkt)
+    res = dsu / (dd_share(u,product,coefs,inc_dist,mkt)*(u - mc) + 2*dsu)
+    return res
+end
+
+function d2_pstar_d2_rho(mc::Float64,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
+    u = p_star(mc,product,coefs,inc_dist,mkt)
+    dsu = d_share(u,product,coefs,inc_dist,mkt)
+    ddsu = dd_share(u,product,coefs,inc_dist,mkt)
+    dddsu = ddd_share(u,product,coefs,inc_dist,mkt)
+    d_p_d_r = d_pstar_d_rho(mc,product,coefs,inc_dist,mkt)
+
+    num1 = (ddsu*(u - mc) + 2*dsu)*ddsu*d_p_d_r
+    num2 = dsu*(ddsu*(d_p_d_r - 1) + ((u - mc)*dddsu + 2*ddsu)*d_p_d_r)
+    den = ddsu*(u - mc) + 2*dsu
+    res = (num1 - num2)/(den^2)
+    return res
 end
 
 function retailer_vprofit(mc::Float64,price::Float64,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
@@ -298,7 +335,7 @@ function wholesaler_profit(ps::PriceSched, params::WholesaleParams, product::Liq
       profit = profit + inc
     end
   end
-  return profit*M
+  return profit
   #=
   #### Linear version. Only for checking with Wilson Problem
   M = 1.0 # normalizing constant. Shouldn't affect price schedule, just scale of profits
@@ -330,6 +367,137 @@ function wholesaler_profit(ps::PriceSched, params::WholesaleParams, product::Liq
   =#
 end
 
+function wholesaler_focs!(wfocs_vec,x,params::WholesaleParams,N::Int64,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
+    t = x[N:end]
+    lambda_vec = [0.0;t; 1.0] # need to put in upper boundary values
+    rho_vec = x[1:N-1] # no boundary here, will deal with in iterator
+    m=2000000.0 # scaling factor
+    # defining some functions for convience
+    s(p) = share(p,product,coefs,inc_dist,mkt)
+    d_s(p) = d_share(p,product,coefs,inc_dist,mkt)
+    d_p_d_r(r) = d_pstar_d_rho(r,product,coefs,inc_dist,mkt)
+    est_pdf(x) = ks_dens(x,params.a,params.b)
+    est_cdf(x) = ks_dist(x,params.a,params.b)
+    c=params.c
+  # Calculating FOCs
+  for i in 1:N-1
+    k = i
+    #calculating integral for rho FOC
+    f(l) = l*est_pdf(l)
+    int = sparse_int(f,lambda_vec[k],lambda_vec[k+1])
+    # Pre-calculating some stuff to avoid repeated calls to p_star
+    ps1 = p_star(rho_vec[k],product,coefs,inc_dist,mkt)
+    #rho FOC
+      term1 = ((rho_vec[k] - c)*d_s(ps1)*d_p_d_r(rho_vec[k]) + s(ps1))*int*m
+      term2 = ((ps1 - rho_vec[k])*d_s(ps1)*d_p_d_r(rho_vec[k]) + s(ps1)*(d_p_d_r(rho_vec[k]) - 1))*m
+      term3 = (1 - est_cdf(lambda_vec[k]))*lambda_vec[k] - (1-est_cdf(lambda_vec[k+1]))*lambda_vec[k+1]
+      res = term1 + term2*term3
+      wfocs_vec[i] = -res
+    # lambda FOC
+    if i == 1
+      # do nothing
+    else
+        ps2 = p_star(rho_vec[k-1],product,coefs,inc_dist,mkt) # only needed when k >= 2
+      term1 = ((rho_vec[k] - c)*m*s(ps1))*(-lambda_vec[k]*est_pdf(lambda_vec[k]))
+      term2 = ((rho_vec[k-1] - c)*m*s(ps2))*(lambda_vec[k]*est_pdf(lambda_vec[k]))
+      term3 = ((ps1 - rho_vec[k])*m*s(ps1) - (ps2 - rho_vec[k-1])*m*s(ps2))
+      term4 = (1 - est_cdf(lambda_vec[k]) - lambda_vec[k]*est_pdf(lambda_vec[k]))
+      res = term1 + term2 + term3*term4
+      wfocs_vec[i+N-1-1] = -res
+    end
+  end
+end
+
+function wholesaler_hess!(whess_mat,x,params::WholesaleParams,N::Int64,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
+    t = x[N:end]
+    lambda_vec = [0.0; t; 1.0] # need to put in upper boundary values
+    rho_vec = x[1:N-1] # no boundary here, will deal with in iterator
+    m=2000000.0 # scaling factor
+    # defining some functions for convience
+    s(p) = share(p,product,coefs,inc_dist,mkt)
+    d_s(p) = d_share(p,product,coefs,inc_dist,mkt)
+    dd_s(p) = dd_share(p,product,coefs,inc_dist,mkt)
+    d_p_d_r(r) = d_pstar_d_rho(r,product,coefs,inc_dist,mkt)
+    d2_p_d2_r(r) = d2_pstar_d2_rho(r,product,coefs,inc_dist,mkt)
+    est_pdf(x) = ks_dens(x,params.a,params.b)
+    est_cdf(x) = ks_dist(x,params.a,params.b)
+    d_est_pdf(x) = ForwardDiff.derivative(est_pdf,x)
+    c=params.c
+    #rho rho part of hess
+    for i = 1:N-1
+        k = i
+        f(l) = l*est_pdf(l)
+        int = sparse_int(f,lambda_vec[k],lambda_vec[k+1])
+        # Pre-calculating some stuff to avoid repeated calls to p_star
+        ps1 = p_star(rho_vec[k],product,coefs,inc_dist,mkt)
+        for j = 1:N-1
+            if j == i
+                term1 = m*((rho_vec[k] - c)*(d_s(ps1)*d2_p_d2_r(rho_vec[k]) + d_p_d_r(rho_vec[k])^2*dd_s(ps1)) + 2*d_s(ps1)*d_p_d_r(rho_vec[k]))
+                term2 = m*((ps1 - rho_vec[k])*(d_s(ps1)*d2_p_d2_r(rho_vec[k]) + d_p_d_r(rho_vec[k])^2*dd_s(ps1)) + d_s(ps1)*d_p_d_r(rho_vec[k])*(d_p_d_r(rho_vec[k]) - 1) + s(ps1)*d2_p_d2_r(rho_vec[k]) + (d_p_d_r(rho_vec[k]) - 1)*d_s(ps1)*d_p_d_r(rho_vec[k]))
+                term3 = (1-est_cdf(lambda_vec[k]))*lambda_vec[k] - (1-est_cdf(lambda_vec[k+1]))*lambda_vec[k+1]
+                res = term1*int + term2*term3
+                whess_mat[i,j] = -res
+            else
+                whess_mat[i,j] = 0.0
+            end
+        end
+    end
+    # rho lambda part of hess (upper right)
+    for i = 1:N-1
+        k = i
+        # Pre-calculating some stuff to avoid repeated calls to p_star
+        ps1 = p_star(rho_vec[k],product,coefs,inc_dist,mkt)
+        for j = 2:N-1 # because of constraint
+            if j == i
+                term1 = m*((rho_vec[k] - c)*d_s(ps1)*d_p_d_r(rho_vec[k]) + s(ps1))*(-lambda_vec[k]*est_pdf(lambda_vec[k]))
+                term2 = m*((ps1 - rho_vec[k])*d_s(ps1)*d_p_d_r(rho_vec[k]) + s(ps1)*(d_p_d_r(rho_vec[k]) - 1))
+                term3 = (1-est_cdf(lambda_vec[k])) + lambda_vec[k]*(-est_pdf(lambda_vec[k]))
+                res = term1 + term2*term3
+                whess_mat[i,j+N-1-1] = -res
+            elseif j == i+1
+                term1 = m*((rho_vec[k] - c)*d_s(ps1)*d_p_d_r(rho_vec[k]) + s(ps1))*(lambda_vec[k+1]*est_pdf(lambda_vec[k+1]))
+                term2 = m*((ps1 - rho_vec[k])*d_s(ps1)*d_p_d_r(rho_vec[k]) + s(ps1)*(d_p_d_r(rho_vec[k]) - 1))
+                term3 = (1-est_cdf(lambda_vec[k+1])) + lambda_vec[k+1]*(-est_pdf(lambda_vec[k+1]))
+                res = term1 + term2*(-1)*term3
+                whess_mat[i,j+N-1-1] = -res
+            else
+                whess_mat[i,j+N-1-1] = 0.0
+            end
+        end
+    end
+    #lambda lambda part of hess
+    for i = 1:N-1
+        k = i
+        # Pre-calculating some stuff to avoid repeated calls to p_star
+        ps1 = p_star(rho_vec[k],product,coefs,inc_dist,mkt)
+        if (k==1)
+            #do nothing
+        else
+            ps2 = p_star(rho_vec[k-1],product,coefs,inc_dist,mkt)
+            for j = 1:N-1
+                if j == i
+                    term1 = m*((rho_vec[k] - c)*s(ps1))
+                    term2 = (-(lambda_vec[k]*d_est_pdf(lambda_vec[k]) + est_pdf(lambda_vec[k])))
+                    term3 = m*((rho_vec[k-1] - c)*s(ps2))
+                    term4 = (lambda_vec[k]*d_est_pdf(lambda_vec[k]) + est_pdf(lambda_vec[k]))
+                    term5 = m*((ps1 - rho_vec[k])*s(ps1) - (ps2 - rho_vec[k-1])*s(ps2))
+                    term6 = -est_pdf(lambda_vec[k]) + lambda_vec[k]*(-d_est_pdf(lambda_vec[k])) + (-est_pdf(lambda_vec[k]))
+                    res = term1*term2 + term3*term4 + term5*term6
+                    whess_mat[i+N-1-1,j+N-1-1] = -res
+                else
+                    whess_mat[i+N-1-1,j+N-1-1] = 0.0
+                end
+            end
+    end
+    # lambda rho part (lower left). should be same as rho_lambda part.
+    for i = 1:N-1
+        for j = 1:N-1
+            whess_mat[i+N-1-1,j] = whess_mat[j,i+N-1-1]
+        end
+    end
+end
+end
+
 function ps_opt_g(x::Float64,params::WholesaleParams,N::Int64,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
   ps = PriceSched([x],[0.0],N) # intializing new price schedule object. Need to impose constrained
   if !all((0.0 .<= ps.t_cuts .<= 1.0)) | !all((0.0 .<= ps.rhos)) # error checking to limit derivative-free search
@@ -340,7 +508,9 @@ function ps_opt_g(x::Float64,params::WholesaleParams,N::Int64,product::Liquor,co
 end
 
 function ps_opt_g(x::Array{Float64,1},params::WholesaleParams,N::Int64,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
-  ps = PriceSched(x[1:N-1],[0.0; x[N:end]],N) # intializing new price schedule object. Need to impose constrained
+    rhos = x[1:N-1]
+    t = x[N:end]
+  ps = PriceSched(rhos,[0.0; t],N) # intializing new price schedule object. Need to impose constrained
   if !all((0.0 .<= ps.t_cuts .<= 1.0)) | !all((0.0 .<= ps.rhos)) # error checking to limit derivative-free search
     return Inf
   else
@@ -348,25 +518,33 @@ function ps_opt_g(x::Array{Float64,1},params::WholesaleParams,N::Int64,product::
   end
 end
 
+
 function optimal_price_sched(params::WholesaleParams, N::Int64, product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
   #= params contains the parameters for the wholesaler. This means the marginal
   cost as well as the parameters of the Kumaraswamy distribution. =#
   function g1(x,n::Int64)
-      return ps_opt_g(x,params,n,product,coefs,inc_dist,mkt)
+      return ps_opt_g(x,params,n,product,coefs,inc_dist,mkt)*10000
   end
   ps_count = 0.0
   function g2(x,n::Int64)
+      #= un comment for NLopt
+        if length(grad) > 0
+            wholesaler_focs!(grad,x,params,n,product,coefs,inc_dist,mkt)
+        end
+        =#
       ps_count += 1
       #println(ps_count)
       rhos = x[1:n-1]
       t = x[n:end]
       if (rhos == sort(rhos,rev=true)) & (t == sort(t)) # constraining search to look only at PS with right shape
-          return ps_opt_g(x,params,n,product,coefs,inc_dist,mkt)
+          return ps_opt_g(x,params,n,product,coefs,inc_dist,mkt)*2000000
       else
-          return Inf
+          return ps_opt_g(x,params,n,product,coefs,inc_dist,mkt)*2000000 # Inf
       end
-
   end
+ focs!(g,x,n::Int64) = wholesaler_focs!(g,x,params,n,product,coefs,inc_dist,mkt)
+ hess!(m,x,n::Int64) = wholesaler_hess!(m,x,params,n,product,coefs,inc_dist,mkt)
+
   # need to solve sequence of price schedules
   res_ps = PriceSched([0.0],[0.0],N) # initalizing so for loop can change it
   hs_x0 = Float64[] # initalizing so for loop can change it
@@ -383,22 +561,20 @@ function optimal_price_sched(params::WholesaleParams, N::Int64, product::Liquor,
       ps_optim_res = Optim.optimize((x)->g1(x,hs_n),params.c,ub,show_trace=false)  # Optim still good for univariate minimization
       optim_rho = Optim.minimizer(ps_optim_res)
       res_ps = PriceSched([optim_rho],[0.0],hs_n) # constrained
-      hs_rhos = [optim_rho,optim_rho]
-      hs_types = [0.0] # guess for n=3
+      hs_rhos = [optim_rho,params.c]
+      hs_res = Optim.optimize((x)->g2([hs_rhos;x],(hs_n+1)),0.0,1,show_trace=false) # gettting good guess for lambda for n=3
+      hs_types = Optim.minimizer(hs_res) # guess for n=3
       hs_x0 = [hs_rhos ; hs_types] #
     else
         #=
         #NLopt implementation. Make sure g2 has a gradient argument as second arg
-        hs_x0 = [sort(rand(hs_n-1),rev=true);sort(rand(hs_n-2))]
-        println(hs_x0)
         tmp_num_params = 2*(hs_n-1)-1
         #ps_opt=Opt(:LN_NELDERMEAD,tmp_num_params)
-        ps_opt=Opt(:G_MLSL_LDS,tmp_num_params)
-        lcl_opt=Opt(:LN_NELDERMEAD,tmp_num_params)
-        local_optimizer!(ps_opt,lcl_opt)
+        ps_opt=Opt(:LD_TNEWTON_PRECOND_RESTART,tmp_num_params)
+        #local_optimizer!(ps_opt,lcl_opt)
         lower_bounds!(ps_opt,zeros(tmp_num_params))
         upper_bounds!(ps_opt,[repeat([1000.0],outer=(hs_n-1)); ones(hs_n-2)])
-        #xtol_rel!(ps_opt,1e-10)
+        xtol_rel!(ps_opt,1e-10)
         #ftol_rel!(ps_opt,1e-10)
         #ftol_abs!(ps_opt,1e-16)
         maxeval!(ps_opt,500000)
@@ -407,14 +583,15 @@ function optimal_price_sched(params::WholesaleParams, N::Int64, product::Liquor,
         optim_rho=ps_minx[1:hs_n-1]
         optim_t=ps_minx[hs_n:end]
         =#
-      ps_optim_res = Optim.optimize((x)->g2(x,hs_n),hs_x0,method=NelderMead(), g_tol=1e-13, iterations=50000)
+      ps_optim_res = Optim.optimize((x)->g2(x,hs_n),(g,x)->focs!(g,x,hs_n),(m,x)->hess!(m,x,hs_n),hs_x0,method=Newton(), g_tol=1e-4, iterations=50000, show_trace=false, extended_trace=false,allow_f_increases=false)
       optim_rho = Optim.minimizer(ps_optim_res)[1:hs_n-1]
       optim_t = Optim.minimizer(ps_optim_res)[hs_n:end]
-
       res_ps = PriceSched(optim_rho,[0.0; optim_t],hs_n) # constrained
       # best guess for N+1 is current sched with last value repated
-      hs_rhos = [optim_rho ; .75*optim_rho[end]]
-      hs_types = [optim_t ; 1.2*optim_t[end]]
+      hs_rhos = [optim_rho ; params.c]
+      hs_res = Optim.optimize((x)->g2([hs_rhos;optim_t;x],(hs_n+1)),0.0,1,show_trace=false) # gettting good guess for lambda for n=3
+      hs_type_plus_one = Optim.minimizer(hs_res) # guess for n=3
+      hs_types = [optim_t ; hs_type_plus_one]
       hs_x0 = [hs_rhos ; hs_types]
     end
   end
@@ -536,13 +713,14 @@ end
 function moment_obj_func(ps::PriceSched, devs::Array{PriceSched,1},params::WholesaleParams,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market,ps_pre_array::Array{Dict{Int64,Float64}}=Dict{Int64,Float64}[],s_pre_array::Array{Dict{Int64,Float64}}=Dict{Int64,Float64}[])
   # calculates the value of the objective function for a given set of deviations.
   wp(x::PriceSched,ps_pre::Dict{Int64,Float64}=Dict{Int64,Float64}(),s_pre::Dict{Int64,Float64}=Dict{Int64,Float64}()) = wholesaler_profit(x,params,product,coefs,inc_dist,mkt,ps_pre,s_pre)
-  obs_profit = wp(ps)
+  M = 2000000.0
+  obs_profit = wp(ps)*M
   if obs_profit < 0.0
     res = Inf
   else
-    dev_profit = map(wp,devs,ps_pre_array,s_pre_array) # likewise with all deviations.
+    dev_profit = map(wp,devs,ps_pre_array,s_pre_array).*M # likewise with all deviations.
     nu = min.(obs_profit - dev_profit,0.0).^2 # if dev profit is greater, then you get a positive value for that deviation.
-    res = sum(nu)
+    res = sum(nu)*200
   end
   return res
 end
@@ -552,16 +730,16 @@ function optimize_moment(ps::PriceSched, devs::Array{PriceSched,1},product::Liqu
     min_rho = ps.rhos[end]
   function Q(x::Array{Float64,1})
     theta = WholesaleParams(x[1],1.0,x[2]) # search all 3 params
-    #if (theta.b <= 0.0 ) | (theta.b >= 10.0) | (theta.c < 0.0) | (theta.a <= 1.0) # constraining SA search
-    if (theta.b <= 0.0 ) | (theta.a < 1.0) | (theta.c < 0.0) | (theta.c > min_rho) # constraining SA search
+    if (theta.b <= 0.0 ) | (theta.b > 40) | (theta.a < 1.0) | (theta.c < 0.0) | (theta.c > min_rho) # constraining SA search
       return Inf
     else
       return moment_obj_func(ps,devs,theta,product,coefs,inc_dist,mkt,ps_pre_array,s_pre_array)
     end
   end
 
-  @time moment_res = Optim.optimize(Q,x0,method=SimulatedAnnealing(), store_trace=true, show_trace = false, extended_trace=true, iterations=iters)
+  @time moment_res = Optim.optimize(Q,x0,method=SimulatedAnnealing(), store_trace=true, show_trace = true, extended_trace=true, iterations=iters, g_tol=1e-6)
   moment_res_min = Optim.minimizer(moment_res)
+  #println(moment_res)
   x_trace = Optim.x_trace(moment_res)
   f_trace = Optim.f_trace(moment_res)
   return (WholesaleParams(moment_res_min[1],1.0,moment_res_min[2]),x_trace,f_trace)
@@ -587,8 +765,8 @@ end
 # Export statements
 
 export Liquor, Market, DemandCoefs, WholesaleParams, PriceSched, IncomeDist
-export ks_dist, ks_dens, sparse_int, share, d_share,
-  p_star, wholesaler_profit, optimal_price_sched, dev_gen, moment_obj_func,
+export ks_dist, ks_dens, sparse_int, share, d_share, dd_share, ddd_share,p_star, d_pstar_d_rho, d2_pstar_d2_rho,
+    wholesaler_profit, wholesaler_focs!, wholesaler_hess!, optimal_price_sched, dev_gen, moment_obj_func,
   optimize_moment, obs_lambdas, retailer_vprofit, recover_ff, ps_ret_profits,
   ps_cons_surplus, ps_avg_ret_price, ps_swavg_ret_price
 

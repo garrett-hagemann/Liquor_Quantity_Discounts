@@ -62,6 +62,8 @@ const obs_inc_dist = IncomeDist(inc_levels,inc_weights)
   3) Construct markets out of products
 =#
 
+const M = 2000000.0
+
 function data_setup()
     prod_char_df = readtable("E:/Box/Box Sync/Snuffles Backup/gh8728/Projects/Liquor/Data/combined/merged_sample.csv")
     # estimated price schedule
@@ -124,7 +126,7 @@ function data_setup()
           try
             tmp_rhos = mkt_ps_lookup[j][1]
             tmp_ff = mkt_ps_lookup[j][2]
-            tmp_t = obs_lambdas(tmp_rhos,tmp_ff,j,nested_coefs,obs_inc_dist,tmp_mkt,10000000.0) # M probably not right. Need to pin down a better number
+            tmp_t = obs_lambdas(tmp_rhos,tmp_ff,j,nested_coefs,obs_inc_dist,tmp_mkt,M) # M probably not right. Need to pin down a better number
             tmp_ps = PriceSched(tmp_rhos,tmp_t,(length(tmp_rhos)+1))
             j.ps = tmp_ps # Setting price schedule for product
           end

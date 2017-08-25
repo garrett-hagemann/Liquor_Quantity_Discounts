@@ -5,11 +5,12 @@ set more off
 log using trace_parse.txt, text replace
 
 /* generating list of files */
-local traces : dir "." files "*.csv"
+local traces : dir "traces/" files "*.csv"
 
 local i = 0
 foreach t of local traces {
-	import delim "`t'", clear
+	disp "`t'"
+	import delim "traces/`t'", clear
 	rename v1 c
 	rename v2 b 
 	rename v3 Q
@@ -35,6 +36,8 @@ foreach t of local traces {
 	tempfile tmp`save_str'
 	save `tmp`save_str''
 }
+
+disp "All files parsed. Combining."
 
 clear
 

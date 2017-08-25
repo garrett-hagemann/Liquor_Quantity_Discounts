@@ -1,5 +1,5 @@
 # addprocs(68) # for Stampede 2 on 1 node
-addprocs(2) # for home computer testing
+#addprocs(2) # for home computer testing
 
 @everywhere srand(69510606) #seeding random number gen
 
@@ -17,8 +17,14 @@ markets_array = data_setup()
     if !isnull(j.ps)
         println("Matched price schedule.")
       tmp_ps = get(j.ps) # becase the ps field is nullable, need to use get
+      # hack-y code
+      println(tmp_ps.t_cuts)
+      scale = (1-1/tmp_ps.N)/tmp_ps.t_cuts[end]
+      tmp_ps.t_cuts = tmp_ps.t_cuts.*scale
+      println(tmp_ps.t_cuts)
+      #end hack
       print("Generating perturbed price schedules. ")
-      dev_ps = dev_gen(tmp_ps,0.05)
+      dev_ps = dev_gen(tmp_ps,0.025)
       println("Done.")
       print("Pre-calculating retail prices. ")
       pre_calc = Dict{Int64,Float64}[]
@@ -35,9 +41,11 @@ markets_array = data_setup()
       end
       println("Done.")
       min_rho = minimum(tmp_ps.rhos)
-      sol,xtrace,ftrace = optimize_moment(tmp_ps,dev_ps,j,nested_coefs,obs_inc_dist,m,25,pre_calc,s_pre_calc,x0=[min_rho/2.0,1.0])
+      sol,xtrace,ftrace = optimize_moment(tmp_ps,dev_ps,j,nested_coefs,obs_inc_dist,m,500,pre_calc,s_pre_calc,x0=[min_rho/2.0,1.0])
       println(sol)
-      trace = [vcat(xtrace'...) ftrace]
+      println(ftrace)
+      #trace = [vcat(xtrace'...) ftrace]
+      trace = [sol.c sol.b ftrace]
       out[(m,j)] = trace
     else
         println("No matching price schedule data.")
@@ -48,13 +56,15 @@ end
 mkts_for_est = [(m,j) for m in markets_array for j in m.products] # array of tuples
 res = pmap(mkt_est,mkts_for_est)
 
-out_dict = merge(res...)
-
-for (key,v) in out_dict
-    m = key[1]
-    j = key[2]
-    out_str = "traces/trace_$(m.year)_$(m.month)_$(j.id).csv"
-    writecsv(out_str,v)
+for d in res
+    if !isempty(d)
+        for (key,v) in d
+            m = key[1]
+            j = key[2]
+            out_str = "traces/trace_$(m.year)_$(m.month)_$(j.id).csv"
+            writecsv(out_str,v)
+        end
+    end
 end
 
 
