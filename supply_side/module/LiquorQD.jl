@@ -737,7 +737,7 @@ function optimize_moment(ps::PriceSched, devs::Array{PriceSched,1},product::Liqu
     end
   end
 
-  @time moment_res = Optim.optimize(Q,x0,method=SimulatedAnnealing(), store_trace=true, show_trace = true, extended_trace=true, iterations=iters, g_tol=1e-6)
+  @time moment_res = Optim.optimize(Q,x0,method=SimulatedAnnealing(), store_trace=true, show_trace = false, extended_trace=true, iterations=iters, g_tol=1e-6)
   moment_res_min = Optim.minimizer(moment_res)
   #println(moment_res)
   x_trace = Optim.x_trace(moment_res)
