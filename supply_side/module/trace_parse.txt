@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\supply_side\module\trace_parse.txt
   log type:  text
- opened on:  21 Aug 2017, 08:35:11
+ opened on:  28 Aug 2017, 08:38:20
 
 . 
 . /* generating list of files */
@@ -57,7 +57,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d000001.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000001.tmp saved
 trace_2011_10_120.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -76,7 +76,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d000002.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000002.tmp saved
 trace_2011_10_154.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -95,7 +95,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d000003.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000003.tmp saved
 trace_2011_10_159.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -114,7 +114,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d000004.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000004.tmp saved
 trace_2011_10_163.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -133,7 +133,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d000005.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000005.tmp saved
 trace_2011_10_2.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -152,7 +152,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d000006.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000006.tmp saved
 trace_2011_10_32.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -171,7 +171,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d000007.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000007.tmp saved
 trace_2011_10_4.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -190,7 +190,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d000008.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000008.tmp saved
 trace_2011_10_57.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -209,7 +209,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d000009.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000009.tmp saved
 trace_2011_10_90.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -228,7 +228,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000a.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000a.tmp saved
 trace_2011_11_154.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -247,7 +247,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000b.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000b.tmp saved
 trace_2011_11_163.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -266,7 +266,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000c.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000c.tmp saved
 trace_2011_11_192.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -285,7 +285,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000d.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000d.tmp saved
 trace_2011_11_2.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -304,7 +304,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000e.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000e.tmp saved
 trace_2011_11_4.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -323,7 +323,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000f.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000f.tmp saved
 trace_2011_11_45.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -342,7 +342,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000g.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000g.tmp saved
 trace_2011_11_6.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -361,7 +361,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000h.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000h.tmp saved
 trace_2011_11_63.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -380,7 +380,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000i.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000i.tmp saved
 trace_2011_11_8.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -399,7 +399,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000j.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000j.tmp saved
 trace_2011_11_90.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -418,7 +418,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000k.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000k.tmp saved
 trace_2011_12_110.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -437,7 +437,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000l.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000l.tmp saved
 trace_2011_12_120.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -456,7 +456,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000m.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000m.tmp saved
 trace_2011_12_154.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -475,7 +475,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000n.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000n.tmp saved
 trace_2011_12_192.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -494,7 +494,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000o.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000o.tmp saved
 trace_2011_12_2.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -513,7 +513,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000p.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000p.tmp saved
 trace_2011_12_3.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -532,7 +532,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000q.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000q.tmp saved
 trace_2011_12_32.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -551,7 +551,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000r.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000r.tmp saved
 trace_2011_12_33.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -570,7 +570,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000s.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000s.tmp saved
 trace_2011_12_45.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -589,7 +589,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000t.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000t.tmp saved
 trace_2011_12_6.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -608,7 +608,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000u.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000u.tmp saved
 trace_2011_12_68.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -627,7 +627,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000v.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000v.tmp saved
 trace_2011_12_90.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -646,7 +646,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000w.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000w.tmp saved
 trace_2011_1_10.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -665,7 +665,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000x.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000x.tmp saved
 trace_2011_1_108.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -684,7 +684,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d000010.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000010.tmp saved
 trace_2011_1_136.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -703,7 +703,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d000011.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000011.tmp saved
 trace_2011_1_154.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -722,7 +722,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d000012.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000012.tmp saved
 trace_2011_1_163.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -741,7 +741,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d000013.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000013.tmp saved
 trace_2011_1_199.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -760,7 +760,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d000014.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000014.tmp saved
 trace_2011_1_2.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -779,7 +779,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d000015.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000015.tmp saved
 trace_2011_1_222.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -798,7 +798,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d000016.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000016.tmp saved
 trace_2011_1_42.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -817,7 +817,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d000017.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000017.tmp saved
 trace_2011_1_45.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -836,7 +836,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d000018.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000018.tmp saved
 trace_2011_1_6.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -855,7 +855,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d000019.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000019.tmp saved
 trace_2011_1_63.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -874,7 +874,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00001a.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001a.tmp saved
 trace_2011_1_68.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -893,7 +893,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00001b.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001b.tmp saved
 trace_2011_2_10.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -912,7 +912,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00001c.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001c.tmp saved
 trace_2011_2_108.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -931,7 +931,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00001d.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001d.tmp saved
 trace_2011_2_154.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -950,7 +950,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00001e.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001e.tmp saved
 trace_2011_2_199.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -969,7 +969,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00001f.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001f.tmp saved
 trace_2011_2_2.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -988,7 +988,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00001g.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001g.tmp saved
 trace_2011_2_22.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1007,7 +1007,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00001h.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001h.tmp saved
 trace_2011_2_42.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1026,7 +1026,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00001i.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001i.tmp saved
 trace_2011_2_45.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1045,7 +1045,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00001j.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001j.tmp saved
 trace_2011_2_8.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1064,7 +1064,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00001k.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001k.tmp saved
 trace_2011_3_10.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1083,7 +1083,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00001l.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001l.tmp saved
 trace_2011_3_11.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1102,7 +1102,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00001m.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001m.tmp saved
 trace_2011_3_136.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1121,7 +1121,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00001n.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001n.tmp saved
 trace_2011_3_154.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1140,7 +1140,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00001o.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001o.tmp saved
 trace_2011_3_163.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1159,7 +1159,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00001p.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001p.tmp saved
 trace_2011_3_199.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1178,7 +1178,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00001q.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001q.tmp saved
 trace_2011_3_2.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1197,7 +1197,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00001r.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001r.tmp saved
 trace_2011_3_221.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1216,7 +1216,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00001s.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001s.tmp saved
 trace_2011_3_3.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1235,7 +1235,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00001t.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001t.tmp saved
 trace_2011_3_42.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1254,7 +1254,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00001u.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001u.tmp saved
 trace_2011_3_45.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1273,7 +1273,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00001v.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001v.tmp saved
 trace_2011_3_54.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1292,7 +1292,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00001w.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001w.tmp saved
 trace_2011_3_6.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1311,7 +1311,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00001x.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001x.tmp saved
 trace_2011_3_8.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1330,7 +1330,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d000020.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000020.tmp saved
 trace_2011_3_90.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1349,7 +1349,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d000021.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000021.tmp saved
 trace_2011_4_136.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1368,7 +1368,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d000022.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000022.tmp saved
 trace_2011_4_159.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1387,7 +1387,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d000023.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000023.tmp saved
 trace_2011_4_192.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1406,7 +1406,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d000024.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000024.tmp saved
 trace_2011_4_2.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1425,7 +1425,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d000025.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000025.tmp saved
 trace_2011_4_233.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1444,7 +1444,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d000026.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000026.tmp saved
 trace_2011_4_3.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1463,7 +1463,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d000027.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000027.tmp saved
 trace_2011_4_4.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1482,7 +1482,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d000028.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000028.tmp saved
 trace_2011_4_45.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1501,7 +1501,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d000029.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000029.tmp saved
 trace_2011_4_6.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1520,7 +1520,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00002a.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002a.tmp saved
 trace_2011_4_67.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1539,7 +1539,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00002b.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002b.tmp saved
 trace_2011_4_68.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1558,7 +1558,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00002c.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002c.tmp saved
 trace_2011_4_8.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1577,7 +1577,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00002d.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002d.tmp saved
 trace_2011_5_11.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1596,7 +1596,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00002e.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002e.tmp saved
 trace_2011_5_110.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1615,7 +1615,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00002f.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002f.tmp saved
 trace_2011_5_159.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1634,7 +1634,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00002g.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002g.tmp saved
 trace_2011_5_186.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1653,7 +1653,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00002h.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002h.tmp saved
 trace_2011_5_199.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1672,7 +1672,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00002i.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002i.tmp saved
 trace_2011_5_2.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1691,7 +1691,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00002j.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002j.tmp saved
 trace_2011_5_37.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1710,7 +1710,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00002k.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002k.tmp saved
 trace_2011_5_4.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1729,7 +1729,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00002l.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002l.tmp saved
 trace_2011_5_45.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1748,7 +1748,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00002m.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002m.tmp saved
 trace_2011_5_54.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1767,7 +1767,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00002n.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002n.tmp saved
 trace_2011_5_63.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1786,7 +1786,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00002o.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002o.tmp saved
 trace_2011_5_8.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1805,7 +1805,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00002p.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002p.tmp saved
 trace_2011_5_90.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1824,7 +1824,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00002q.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002q.tmp saved
 trace_2011_6_10.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1843,7 +1843,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00002r.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002r.tmp saved
 trace_2011_6_158.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1862,7 +1862,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00002s.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002s.tmp saved
 trace_2011_6_159.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1881,7 +1881,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00002t.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002t.tmp saved
 trace_2011_6_199.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1900,7 +1900,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00002u.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002u.tmp saved
 trace_2011_6_2.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1919,7 +1919,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00002v.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002v.tmp saved
 trace_2011_6_32.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1938,7 +1938,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00002w.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002w.tmp saved
 trace_2011_6_45.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1957,7 +1957,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00002x.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002x.tmp saved
 trace_2011_6_54.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1976,7 +1976,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d000030.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000030.tmp saved
 trace_2011_6_6.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -1995,7 +1995,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d000031.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000031.tmp saved
 trace_2011_6_90.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2014,7 +2014,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d000032.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000032.tmp saved
 trace_2011_7_11.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2033,7 +2033,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d000033.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000033.tmp saved
 trace_2011_7_159.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2052,7 +2052,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d000034.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000034.tmp saved
 trace_2011_7_202.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2071,7 +2071,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d000035.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000035.tmp saved
 trace_2011_7_45.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2090,7 +2090,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d000036.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000036.tmp saved
 trace_2011_7_6.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2109,7 +2109,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d000037.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000037.tmp saved
 trace_2011_7_63.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2128,7 +2128,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d000038.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000038.tmp saved
 trace_2011_7_90.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2147,7 +2147,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d000039.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000039.tmp saved
 trace_2011_8_11.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2166,7 +2166,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00003a.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003a.tmp saved
 trace_2011_8_154.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2185,7 +2185,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00003b.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003b.tmp saved
 trace_2011_8_16.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2204,7 +2204,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00003c.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003c.tmp saved
 trace_2011_8_163.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2223,7 +2223,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00003d.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003d.tmp saved
 trace_2011_8_186.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2242,7 +2242,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00003e.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003e.tmp saved
 trace_2011_8_192.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2261,7 +2261,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00003f.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003f.tmp saved
 trace_2011_8_193.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2280,7 +2280,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00003g.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003g.tmp saved
 trace_2011_8_2.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2299,7 +2299,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00003h.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003h.tmp saved
 trace_2011_8_33.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2318,7 +2318,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00003i.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003i.tmp saved
 trace_2011_8_4.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2337,7 +2337,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00003j.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003j.tmp saved
 trace_2011_8_6.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2356,7 +2356,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00003k.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003k.tmp saved
 trace_2011_8_8.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2375,7 +2375,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00003l.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003l.tmp saved
 trace_2011_9_11.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2394,7 +2394,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00003m.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003m.tmp saved
 trace_2011_9_120.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2413,7 +2413,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00003n.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003n.tmp saved
 trace_2011_9_136.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2432,7 +2432,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00003o.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003o.tmp saved
 trace_2011_9_155.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2451,7 +2451,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00003p.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003p.tmp saved
 trace_2011_9_159.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2470,7 +2470,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00003q.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003q.tmp saved
 trace_2011_9_2.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2489,7 +2489,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00003r.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003r.tmp saved
 trace_2011_9_207.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2508,7 +2508,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as int
-file C:\Users\garre\AppData\Local\Temp\ST_0d00003s.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003s.tmp saved
 trace_2011_9_3.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2527,7 +2527,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00003t.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003t.tmp saved
 trace_2011_9_4.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2546,7 +2546,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00003u.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003u.tmp saved
 trace_2011_9_54.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2565,7 +2565,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00003v.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003v.tmp saved
 trace_2011_9_6.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2584,7 +2584,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00003w.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003w.tmp saved
 trace_2011_9_8.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2603,7 +2603,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d00003x.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003x.tmp saved
 trace_2011_9_90.csv
 (3 vars, 25001 obs)
 (25000 observations deleted)
@@ -2622,7 +2622,7 @@ Q_sd already numeric; no replace
 year has all characters numeric; replaced as int
 month has all characters numeric; replaced as byte
 prod has all characters numeric; replaced as byte
-file C:\Users\garre\AppData\Local\Temp\ST_0d000040.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0e000040.tmp saved
 
 . 
 . disp "All files parsed. Combining."
@@ -2671,11 +2671,9 @@ prod already numeric; no replace
 
 . 
 . save trace_sum, replace
-(note: file trace_sum.dta not found)
 file trace_sum.dta saved
 
 . export delim trace_sum.csv, replace delim(",")
-(note: file trace_sum.csv not found)
 file trace_sum.csv saved
 
 . 
@@ -2683,5 +2681,5 @@ file trace_sum.csv saved
       name:  <unnamed>
        log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\supply_side\module\trace_parse.txt
   log type:  text
- closed on:  21 Aug 2017, 08:36:47
+ closed on:  28 Aug 2017, 08:39:35
 --------------------------------------------------------------------------------------------------------------
