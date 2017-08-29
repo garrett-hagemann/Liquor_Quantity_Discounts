@@ -93,9 +93,9 @@ function sparse_int(f::Function, a::Float64, b::Float64)
 	nodes = Float64[.01975439999999995,.11270170000000002,.28287810000000002,.5,.71712189999999998, .88729829999999998,.98024560000000005]
     res::Float64 = 0.0
     for (n,w) in zip(nodes,weights)
-        res += f(n)*w
+        res += f((b-a)*n+a)*w
     end
-    return res
+    return res*(b-a)
 
     #return dot([f((b-a)*u + a) for u in nodes], weights)*(b-a)::Float64
 end
@@ -526,13 +526,13 @@ end
 function optimal_price_sched(params::WholesaleParams, N::Int64, product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
   #= params contains the parameters for the wholesaler. This means the marginal
   cost as well as the parameters of the Kumaraswamy distribution. =#
-  function g1(x,n::Int64)
+  function g1(x::Float64,n::Int64)
       #= g1 is for scalar version for N=2. Avoids having to elegantly deal with
       type checking for sort, etc. in g2 =#
       return ps_opt_g(x,params,n,product,coefs,inc_dist,mkt)*2000000
   end
   ps_count = 0.0
-  function g2(x,n::Int64)
+  function g2(x::Array{Float64,1},n::Int64)
       #= un comment for NLopt
         if length(grad) > 0
             wholesaler_focs!(grad,x,params,n,product,coefs,inc_dist,mkt)
@@ -545,7 +545,7 @@ function optimal_price_sched(params::WholesaleParams, N::Int64, product::Liquor,
       if (rhos == sort(rhos,rev=true)) & (t == sort(t)) # constraining search to look only at PS with right shape
           return ps_opt_g(x,params,n,product,coefs,inc_dist,mkt)*2000000
       else
-          return   Inf #ps_opt_g(x,params,n,product,coefs,inc_dist,mkt)*2000000
+          return ps_opt_g(x,params,n,product,coefs,inc_dist,mkt)*2000000
       end
   end
  focs!(g,x,n::Int64) = wholesaler_focs!(g,x,params,n,product,coefs,inc_dist,mkt)
@@ -589,17 +589,16 @@ function optimal_price_sched(params::WholesaleParams, N::Int64, product::Liquor,
         optim_rho=ps_minx[1:hs_n-1]
         optim_t=ps_minx[hs_n:end]
         =#
-        println(hs_x0)
-      ps_optim_res = Optim.optimize((x)->g2(x,hs_n),(g,x)->focs!(g,x,hs_n),(m,x)->hess!(m,x,hs_n),hs_x0,method=Newton(), g_tol=1e-6, iterations=10000, show_trace=true, extended_trace=false,allow_f_increases=false)
-      optim_rho = Optim.minimizer(ps_optim_res)[1:hs_n-1]
-      optim_t = Optim.minimizer(ps_optim_res)[hs_n:end]
-      res_ps = PriceSched(optim_rho,[0.0; optim_t],hs_n) # constrained
-      # best guess for N+1 is current sched with last value repated
-      hs_rhos = [optim_rho ; (optim_rho[end]*.5 + params.c*.5)]
-      hs_res = Optim.optimize((x)->g2([hs_rhos;optim_t;x],(hs_n+1)),0.0,1,show_trace=false) # gettting good guess for lambda for n=3
-      hs_type_plus_one = Optim.minimizer(hs_res) # guess for n=3
-      hs_types = [optim_t ; hs_type_plus_one]
-      hs_x0 = [hs_rhos ; hs_types]
+        ps_optim_res = Optim.optimize((x)->g2(x,hs_n),(g,x)->focs!(g,x,hs_n),(m,x)->hess!(m,x,hs_n),hs_x0,method=Newton(), g_tol=1e-4, iterations=50000, show_trace=false, extended_trace=false,allow_f_increases=false)
+        optim_rho = Optim.minimizer(ps_optim_res)[1:hs_n-1]
+        optim_t = Optim.minimizer(ps_optim_res)[hs_n:end]
+        res_ps = PriceSched(optim_rho,[0.0; optim_t],hs_n) # constrained
+        # best guess for N+1
+        hs_rhos = [optim_rho ; (optim_rho[end]*.5 + params.c*.5)]
+        hs_res = Optim.optimize((x)->g2([hs_rhos;optim_t;x],(hs_n+1)),0.0,1,show_trace=false) # gettting good guess for lambda for n=3
+        hs_type_plus_one = Optim.minimizer(hs_res) # guess for n=3
+        hs_types = [optim_t ; hs_type_plus_one]
+        hs_x0 = [hs_rhos ; hs_types]
     end
   end
   return res_ps

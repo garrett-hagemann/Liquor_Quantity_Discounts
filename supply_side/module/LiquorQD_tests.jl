@@ -85,7 +85,7 @@ ps_curve_res = d2_pstar_d2_rho(test_mc,test_prod1,test_coefs,test_inc,test_mkt)
 println("Curve of pstar at $test_mc: ", ps_curve_res)
 
 # Testing price schedule optimization
-test_w_params = WholesaleParams(6.0,1.0,1.0)
+test_w_params = WholesaleParams(6.0,1.0,15.0)
 #=
 # Testing wholesaler FOCs
 innerx0 = [20.0, 10.0, 5.0, 3.0, 0.3, 0.6, 0.9]
