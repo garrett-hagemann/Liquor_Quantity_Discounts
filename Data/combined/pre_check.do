@@ -12,7 +12,7 @@ capture log close
 clear
 set more off
 
-log using "NYS_UPC_match.txt", text replace
+log using "pre_check.txt", text replace
 
 /* To improve the quality of the match we're going to do this by year,month
 and product size. There may be some duplicate listings in the price schedules
@@ -65,7 +65,7 @@ foreach year in `years'{
 
 clear
 
-use "../Nielsen_Panel/analysis/individual_logit_sample"
+use "../Nielsen_Panel/analysis/prod_chars_individual"
 drop if product == 0 // don't need to match for non liquor purchases
 gen purchase_month = month(dofm(date_m))
 gen purchase_year = year(dofm(date_m))

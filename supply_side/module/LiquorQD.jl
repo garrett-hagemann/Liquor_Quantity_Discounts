@@ -12,7 +12,7 @@ mutable struct Liquor # should be thought of as a product. Products have charact
   # maybe should add name as well
   id::Int64 # product number
   group::String # string indicating group. Looks up relevant nesting parameter
-  price::Any # price of liquor. Can be changed. Is type Any to support ForwardDiff
+  price::Float64 # price of liquor. Can be changed. Is type Any to support ForwardDiff
   obs_price::Float64 # field so we can reset price to observed
   imported::Float64 # imported flag. Should not change
   proof::Float64 # Proof. Should not change
@@ -64,18 +64,18 @@ function ks_dist(x::Float64,a::Float64,b::Float64)
   return 1.0 - (1.0-x^a)^b
 end
 
-function ks_dens(x,a::Float64,b::Float64)
-  if a <= 0.0
+function ks_dens(x::Real,a::Float64,b::Float64)
+  if (a <= 0.0)::Bool
     error("Must have a > 0")
   end
-  if b <= 0.0
+  if (b <= 0.0)::Bool
     error("Must have b > 0")
   end
-  if (x < 0.0) | (x > 1.0)
+  if ((x < 0.0)::Bool | (x > 1.0)::Bool)::Bool
     #error("Density is defined only on x=[0,1]. Tried to evaluate at $x")
     return 0.0
   end
-  return a*b*x^(a-1.0)*(1.0-x^a)^(b-1.0)
+  return a*b*x^(a-1.0)*(1.0-x^a)^(b-1.0)::Float64
 end
 
 function sparse_int(f::Function, a::Float64, b::Float64)
@@ -89,9 +89,15 @@ function sparse_int(f::Function, a::Float64, b::Float64)
 	f = one dimensional function
 	a = lower bound of integration
 	b = upperbound of integration	=#
-	weights = [.052328105232810528, .13424401342440137, .20069872006987202, .22545832254583226, .20069872006987202, .13424401342440137, .052328105232810528]
-	nodes = [.01975439999999995,.11270170000000002,.28287810000000002,.5,.71712189999999998, .88729829999999998,.98024560000000005]
-	return dot([f((b-a)*u + a) for u in nodes], weights)*(b-a)::Float64
+	weights = Float64[.052328105232810528, .13424401342440137, .20069872006987202, .22545832254583226, .20069872006987202, .13424401342440137, .052328105232810528]
+	nodes = Float64[.01975439999999995,.11270170000000002,.28287810000000002,.5,.71712189999999998, .88729829999999998,.98024560000000005]
+    res::Float64 = 0.0
+    for (n,w) in zip(nodes,weights)
+        res += f(n)*w
+    end
+    return res
+
+    #return dot([f((b-a)*u + a) for u in nodes], weights)*(b-a)::Float64
 end
 
 #=
@@ -155,7 +161,7 @@ function nlogit_prob(product::Liquor, coefs::DemandCoefs, inc::Float64, mkt::Mar
 end
 =#
 
-function logit_prob(product::Liquor, coefs::DemandCoefs, inc::Float64, mkt::Market)
+function logit_prob(p::Real, product::Liquor, coefs::DemandCoefs, inc::Float64, mkt::Market)
   #= The estimated share function has some discrete variation in addition to
     possible random coefficients. In particular, the price, proof, and imported
     coefficients vary according to 4 income categories. Thus, for a given
@@ -168,7 +174,7 @@ function logit_prob(product::Liquor, coefs::DemandCoefs, inc::Float64, mkt::Mark
   =#
   linc = log(inc/10000.0)
   other_prods = filter(e->e!=product,mkt.products)
-  num = exp(coefs.price*product.price + coefs.price_y*product.price*linc + product.prod_util)
+  num = exp(coefs.price*p + coefs.price_y*p*linc + product.prod_util)
 
   res = 0.0
   for j in other_prods
@@ -178,22 +184,20 @@ function logit_prob(product::Liquor, coefs::DemandCoefs, inc::Float64, mkt::Mark
   return num/denom
 end
 
-function share(price,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
+function share(price::Real,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
   #= coefs argument should be a Lx1 vector where each row contains a pointer to
   a set of coefficients (a DemandCoefs object). The wight vector must be in the
   corresponding order. The length can be as long as needed (i.e. however many
   levels are needed) =#
 
-  product.price = price # changing price of product of interest
   res = 0.0
   for (inc,w) in zip(inc_dist.incomes,inc_dist.prob)
-    res = res + logit_prob(product,coefs,inc,mkt)*w
+    res = res + logit_prob(price,product,coefs,inc,mkt)*w
   end
-  product.price = product.obs_price # undoing change to price for subsequent calls
   return res
 end
 
-function d_share(price,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
+function d_share(price::Real,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
     #=
   product.price = price # changing price of product of interest
   res = 0.0
@@ -210,12 +214,12 @@ function d_share(price,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,m
   return ds(price)
 end
 
-function dd_share(price,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
+function dd_share(price::Real,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
     ds(p) = d_share(p,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
     dds(p) = ForwardDiff.derivative(ds,p)
     return dds(price)
 end
-function ddd_share(price,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
+function ddd_share(price::Real,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
     dds(p) = dd_share(p,product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
     ddds(p) = ForwardDiff.derivative(dds,p)
     return ddds(price)
@@ -523,7 +527,9 @@ function optimal_price_sched(params::WholesaleParams, N::Int64, product::Liquor,
   #= params contains the parameters for the wholesaler. This means the marginal
   cost as well as the parameters of the Kumaraswamy distribution. =#
   function g1(x,n::Int64)
-      return ps_opt_g(x,params,n,product,coefs,inc_dist,mkt)*10000
+      #= g1 is for scalar version for N=2. Avoids having to elegantly deal with
+      type checking for sort, etc. in g2 =#
+      return ps_opt_g(x,params,n,product,coefs,inc_dist,mkt)*2000000
   end
   ps_count = 0.0
   function g2(x,n::Int64)
@@ -539,7 +545,7 @@ function optimal_price_sched(params::WholesaleParams, N::Int64, product::Liquor,
       if (rhos == sort(rhos,rev=true)) & (t == sort(t)) # constraining search to look only at PS with right shape
           return ps_opt_g(x,params,n,product,coefs,inc_dist,mkt)*2000000
       else
-          return ps_opt_g(x,params,n,product,coefs,inc_dist,mkt)*2000000 # Inf
+          return   Inf #ps_opt_g(x,params,n,product,coefs,inc_dist,mkt)*2000000
       end
   end
  focs!(g,x,n::Int64) = wholesaler_focs!(g,x,params,n,product,coefs,inc_dist,mkt)
@@ -561,7 +567,7 @@ function optimal_price_sched(params::WholesaleParams, N::Int64, product::Liquor,
       ps_optim_res = Optim.optimize((x)->g1(x,hs_n),params.c,ub,show_trace=false)  # Optim still good for univariate minimization
       optim_rho = Optim.minimizer(ps_optim_res)
       res_ps = PriceSched([optim_rho],[0.0],hs_n) # constrained
-      hs_rhos = [optim_rho,params.c]
+      hs_rhos = [optim_rho,(optim_rho*.5 + params.c*.5)]
       hs_res = Optim.optimize((x)->g2([hs_rhos;x],(hs_n+1)),0.0,1,show_trace=false) # gettting good guess for lambda for n=3
       hs_types = Optim.minimizer(hs_res) # guess for n=3
       hs_x0 = [hs_rhos ; hs_types] #
@@ -583,12 +589,13 @@ function optimal_price_sched(params::WholesaleParams, N::Int64, product::Liquor,
         optim_rho=ps_minx[1:hs_n-1]
         optim_t=ps_minx[hs_n:end]
         =#
-      ps_optim_res = Optim.optimize((x)->g2(x,hs_n),(g,x)->focs!(g,x,hs_n),(m,x)->hess!(m,x,hs_n),hs_x0,method=Newton(), g_tol=1e-4, iterations=50000, show_trace=false, extended_trace=false,allow_f_increases=false)
+        println(hs_x0)
+      ps_optim_res = Optim.optimize((x)->g2(x,hs_n),(g,x)->focs!(g,x,hs_n),(m,x)->hess!(m,x,hs_n),hs_x0,method=Newton(), g_tol=1e-6, iterations=10000, show_trace=true, extended_trace=false,allow_f_increases=false)
       optim_rho = Optim.minimizer(ps_optim_res)[1:hs_n-1]
       optim_t = Optim.minimizer(ps_optim_res)[hs_n:end]
       res_ps = PriceSched(optim_rho,[0.0; optim_t],hs_n) # constrained
       # best guess for N+1 is current sched with last value repated
-      hs_rhos = [optim_rho ; params.c]
+      hs_rhos = [optim_rho ; (optim_rho[end]*.5 + params.c*.5)]
       hs_res = Optim.optimize((x)->g2([hs_rhos;optim_t;x],(hs_n+1)),0.0,1,show_trace=false) # gettting good guess for lambda for n=3
       hs_type_plus_one = Optim.minimizer(hs_res) # guess for n=3
       hs_types = [optim_t ; hs_type_plus_one]

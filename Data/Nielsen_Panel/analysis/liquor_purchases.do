@@ -20,7 +20,7 @@ local years = "2008 2009 2010 2011 2012 2013 2014"
 
 if `rebuild_upcs' {
 	/* Importing UPCs to keep just the liquor ones */
-	import delimited using "../nielsen_extracts/HMS/Master_Files/Latest/products.tsv"
+	import delimited using "../nielsen_extracts/HMS/Master_Files/Latest/products.tsv", stringcol(1)
 
 	/* Keeping only Liquor records. CAn narrow it down to Alcoholic beverage first,
 	but no need. Only other Alocohol is coded as Beer or Wine. There may be some
@@ -36,6 +36,7 @@ if `rebuild_upcs' {
 	drop if multi >= 1 */
 
 	save liquor_upcs, replace
+
 
 	clear
 }

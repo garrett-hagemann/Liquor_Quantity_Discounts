@@ -3,7 +3,7 @@
        log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\Nielsen_Panel\analysis\individual_log
 > it_sample.txt
   log type:  text
- opened on:  15 Aug 2017, 21:52:24
+ opened on:  28 Aug 2017, 18:36:28
 
 . 
 . local rebuild_data = 1 // set to 1 to rebuild data from scratch. Very slow
@@ -38,6 +38,94 @@
 . 
 .         save liquor_upcs, replace
 file liquor_upcs.dta saved
+.         
+.         clear
+.         
+.         foreach year in `years'{
+  2.                 import delimited using "../nielsen_extracts/HMS/`year'/Annual_Files/products_extra_`year'
+> .tsv", clear stringcol(1)
+  3.                 keep upc* flavor* type*
+  4.                 tempfile extra_`year'
+  5.                 save `extra_`year''
+  6.         }
+(42 vars, 713336 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0f000001.tmp saved
+(42 vars, 731044 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0f000002.tmp saved
+(42 vars, 999540 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0f000003.tmp saved
+(42 vars, 1031831 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0f000004.tmp saved
+(42 vars, 1061482 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0f000005.tmp saved
+(42 vars, 832098 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0f000006.tmp saved
+.         
+.         use liquor_upcs
+.         /* merging in other information like flavor */
+.         foreach year in `years'{
+  2.                 merge 1:1 upc upc_ver_uc using `extra_`year'', keep(1 3) force
+  3.                 drop _merge
+  4.         }
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                        25,625
+        from master                    25,625  (_merge==1)
+        from using                          0  (_merge==2)
+
+    matched                             6,820  (_merge==3)
+    -----------------------------------------
+(note: variable flavor_descr was byte in the using data, but will be str30 now)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                        25,595
+        from master                    25,595  (_merge==1)
+        from using                          0  (_merge==2)
+
+    matched                             6,850  (_merge==3)
+    -----------------------------------------
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                        18,627
+        from master                    18,627  (_merge==1)
+        from using                          0  (_merge==2)
+
+    matched                            13,818  (_merge==3)
+    -----------------------------------------
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                        17,376
+        from master                    17,376  (_merge==1)
+        from using                          0  (_merge==2)
+
+    matched                            15,069  (_merge==3)
+    -----------------------------------------
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                        16,196
+        from master                    16,196  (_merge==1)
+        from using                          0  (_merge==2)
+
+    matched                            16,249  (_merge==3)
+    -----------------------------------------
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                        16,017
+        from master                    16,017  (_merge==1)
+        from using                          0  (_merge==2)
+
+    matched                            16,428  (_merge==3)
+    -----------------------------------------
+.         
+.         save liquor_upcs, replace
+file liquor_upcs.dta saved
+.         
 . 
 .         /* generating varibles that we want */
 .         //dropping unwanted types of products
@@ -108,7 +196,7 @@ proof has all characters numeric; replaced as double
 . 
 .         tempfile small_upc_file
 .         save `small_upc_file'
-file C:\Users\garre\AppData\Local\Temp\ST_0d000005.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0f000007.tmp saved
 . 
 .         foreach year in `years'{
   2.                 
@@ -154,8 +242,8 @@ file C:\Users\garre\AppData\Local\Temp\ST_0d000005.tmp saved
 .                 tempfile obs`year'
  22.                 save `obs`year''
  23.         }
-(note: file C:\Users\garre\AppData\Local\Temp\ST_0d000006.tmp not found)
-file C:\Users\garre\AppData\Local\Temp\ST_0d000006.tmp saved
+(note: file C:\Users\garre\AppData\Local\Temp\ST_0f000008.tmp not found)
+file C:\Users\garre\AppData\Local\Temp\ST_0f000008.tmp saved
 (5 vars, 63686904 obs)
 
     Result                           # of obs.
@@ -191,9 +279,9 @@ file C:\Users\garre\AppData\Local\Temp\ST_0d000006.tmp saved
 (4941 observations deleted)
 (3688152 observations deleted)
 (19945 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_0d000007.tmp saved
-(note: file C:\Users\garre\AppData\Local\Temp\ST_0d000008.tmp not found)
-file C:\Users\garre\AppData\Local\Temp\ST_0d000008.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0f000009.tmp saved
+(note: file C:\Users\garre\AppData\Local\Temp\ST_0f00000a.tmp not found)
+file C:\Users\garre\AppData\Local\Temp\ST_0f00000a.tmp saved
 (5 vars, 62817813 obs)
 
     Result                           # of obs.
@@ -229,9 +317,9 @@ file C:\Users\garre\AppData\Local\Temp\ST_0d000008.tmp saved
 (4270 observations deleted)
 (3525231 observations deleted)
 (18131 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_0d000009.tmp saved
-(note: file C:\Users\garre\AppData\Local\Temp\ST_0d00000a.tmp not found)
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000a.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0f00000b.tmp saved
+(note: file C:\Users\garre\AppData\Local\Temp\ST_0f00000c.tmp not found)
+file C:\Users\garre\AppData\Local\Temp\ST_0f00000c.tmp saved
 (5 vars, 66321848 obs)
 
     Result                           # of obs.
@@ -267,9 +355,9 @@ file C:\Users\garre\AppData\Local\Temp\ST_0d00000a.tmp saved
 (5103 observations deleted)
 (3731423 observations deleted)
 (22371 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000b.tmp saved
-(note: file C:\Users\garre\AppData\Local\Temp\ST_0d00000c.tmp not found)
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000c.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0f00000d.tmp saved
+(note: file C:\Users\garre\AppData\Local\Temp\ST_0f00000e.tmp not found)
+file C:\Users\garre\AppData\Local\Temp\ST_0f00000e.tmp saved
 (5 vars, 62952271 obs)
 
     Result                           # of obs.
@@ -305,9 +393,9 @@ file C:\Users\garre\AppData\Local\Temp\ST_0d00000c.tmp saved
 (5907 observations deleted)
 (3423505 observations deleted)
 (22115 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000d.tmp saved
-(note: file C:\Users\garre\AppData\Local\Temp\ST_0d00000e.tmp not found)
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000e.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0f00000f.tmp saved
+(note: file C:\Users\garre\AppData\Local\Temp\ST_0f00000g.tmp not found)
+file C:\Users\garre\AppData\Local\Temp\ST_0f00000g.tmp saved
 (5 vars, 63142825 obs)
 
     Result                           # of obs.
@@ -343,9 +431,9 @@ file C:\Users\garre\AppData\Local\Temp\ST_0d00000e.tmp saved
 (5279 observations deleted)
 (3345048 observations deleted)
 (22412 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000f.tmp saved
-(note: file C:\Users\garre\AppData\Local\Temp\ST_0d00000g.tmp not found)
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000g.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0f00000h.tmp saved
+(note: file C:\Users\garre\AppData\Local\Temp\ST_0f00000i.tmp not found)
+file C:\Users\garre\AppData\Local\Temp\ST_0f00000i.tmp saved
 (5 vars, 64717120 obs)
 
     Result                           # of obs.
@@ -381,7 +469,7 @@ file C:\Users\garre\AppData\Local\Temp\ST_0d00000g.tmp saved
 (5194 observations deleted)
 (3244694 observations deleted)
 (22922 observations deleted)
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000h.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0f00000j.tmp saved
 . 
 .         clear
 . 
@@ -447,7 +535,7 @@ file top_upc_individual.dta saved
 .         replace product = (`J'+3) if product == (`J'+1) & d_g_sch == 1
 (824 real changes made)
 .         replace product = (`J'+4) if product == (`J'+1) & d_g_brb == 1
-(862 real changes made)
+(887 real changes made)
 .         replace product = (`J'+5) if product == (`J'+1) & d_g_whs == 1
 (561 real changes made)
 .         replace product = (`J'+6) if product == (`J'+1) & d_g_teq == 1
@@ -458,8 +546,8 @@ file top_upc_individual.dta saved
 (1448 real changes made)
 . 
 .         gen case = _n // Each "purchase" is a case. Now need to construct alternatives
-.         egen brand_string = concat(brand_descr upc_descr size1_amount size1_units), punct(";") // used to ma
-> tch to price schedules
+.         egen brand_string = concat(brand_descr upc_descr size1_amount size1_units flavor_descr type_descr), 
+> punct(";") // used to match to price schedules
 .         egen mkt = group(date_m)
 .         save prod_chars_individual, replace
 file prod_chars_individual.dta saved
@@ -536,13 +624,13 @@ Original case count: 64611
 (31095 missing values generated)
 (11037 real changes made)
 (31095 missing values generated)
-(8934 real changes made)
+(8909 real changes made)
 
 . 
 . tempfile all_choices
 
 . save `all_choices'
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000k.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0f00000m.tmp saved
 
 . 
 . fillin product case // generate 1 product record per choice situation
@@ -569,7 +657,7 @@ file C:\Users\garre\AppData\Local\Temp\ST_0d00000k.tmp saved
 (64611 real changes made)
 (64611 real changes made)
 (64611 real changes made)
-(64592 real changes made)
+(64603 real changes made)
 (64611 real changes made)
 
 . 
@@ -612,7 +700,7 @@ file C:\Users\garre\AppData\Local\Temp\ST_0d00000k.tmp saved
 . 
 . // fixing average price when not missing
 . bys product date_m (avg_price): replace avg_price = avg_price[1]
-(8800266 real changes made)
+(8798972 real changes made)
 
 . 
 . // interpolating missing avg_price
@@ -629,11 +717,11 @@ file C:\Users\garre\AppData\Local\Temp\ST_0d00000k.tmp saved
                 delta:  1 month
 
 .         gen avg_price_inter = avg_price
-(9104 missing values generated)
+(9106 missing values generated)
 
 .         // filling forward
 .         bys product (date_m): replace avg_price_inter = avg_price_inter[_n-1] if avg_price_inter == .
-(7966 real changes made)
+(7968 real changes made)
 
 .         // filling backward to handle missings at begining of data
 .         gen rev = -date_m
@@ -648,7 +736,7 @@ file C:\Users\garre\AppData\Local\Temp\ST_0d00000k.tmp saved
 .         tempfile ipol
 
 .         save `ipol'
-file C:\Users\garre\AppData\Local\Temp\ST_0d00000m.tmp saved
+file C:\Users\garre\AppData\Local\Temp\ST_0f00000o.tmp saved
 
 . restore
 
@@ -727,8 +815,8 @@ file C:\Users\garre\AppData\Local\Temp\ST_0d00000m.tmp saved
   oldest_age was float now byte
   choice was float now byte
   product was float now int
-  brand_string was str69 now str59
-  (836,712,450 bytes saved)
+  brand_string was str97 now str77
+  (1,004,054,940 bytes saved)
 
 . 
 . //drop if date_m < tm(2008m1)
@@ -743,5 +831,5 @@ file individual_logit_sample.dta saved
        log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\Nielsen_Panel\analysis\individual_log
 > it_sample.txt
   log type:  text
- closed on:  15 Aug 2017, 22:47:33
+ closed on:  28 Aug 2017, 19:32:32
 --------------------------------------------------------------------------------------------------------------

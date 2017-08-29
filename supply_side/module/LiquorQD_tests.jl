@@ -1,5 +1,5 @@
 include("LiquorQD.jl")
-using LiquorQD,ForwardDiff
+using LiquorQD,ForwardDiff,QuadGK, BenchmarkTools
 srand(69510606) #seeding random number gen
 
 # setting up fake products, markets, and coefficients
@@ -31,19 +31,28 @@ test_inc = IncomeDist(inc_levels,inc_weights)
 ks_a = 1.0
 ks_b = 1.0
 
-println("Integrating density: ", sparse_int(x->ks_dens(x,ks_a,ks_b),0.0,1.0)) # should be 1
+println("Integrating density: ",sparse_int(x->ks_dens(x,ks_a,ks_b),0.0,1.0)) # should be 1
+@time sparse_int(x->ks_dens(x,ks_a,ks_b),0.0,1.0)
+println("Integrating density: ",quadgk(x->ks_dens(x,ks_a,ks_b),0.0,1.0)[1]) # should be 1
+@time quadgk(x->ks_dens(x,ks_a,ks_b),0.0,1.0)[1]
 println("F(.5): ", sparse_int(x->ks_dens(x,ks_a,ks_b),0.0,0.5)) # should be 1/2 when a=b=1.0
-println("Closed form F(.5): ", ks_dist(0.5,ks_a,ks_b))
+@time sparse_int(x->ks_dens(x,ks_a,ks_b),0.0,0.5)
+println("Closed form F(.5): ",ks_dist(0.5,ks_a,ks_b))
+@time ks_dist(0.5,ks_a,ks_b)
 
 # testing share function
 test_price = 10.0
-res = share(test_price,test_prod1,test_coefs,test_inc,test_mkt)
+share(test_price,test_prod1,test_coefs,test_inc,test_mkt)
+@time res = share(test_price,test_prod1,test_coefs,test_inc,test_mkt)
 println("Share at $test_price: ", res)
-res2 = d_share(test_price,test_prod1,test_coefs,test_inc,test_mkt)
+d_share(test_price,test_prod1,test_coefs,test_inc,test_mkt)
+@time res2 = d_share(test_price,test_prod1,test_coefs,test_inc,test_mkt)
 println("Slope at $test_price: ", res2)
-res3 = dd_share(test_price,test_prod1,test_coefs,test_inc,test_mkt)
+dd_share(test_price,test_prod1,test_coefs,test_inc,test_mkt)
+@time res3 = dd_share(test_price,test_prod1,test_coefs,test_inc,test_mkt)
 println("Curve at $test_price: ", res3)
-res4 = ddd_share(test_price,test_prod1,test_coefs,test_inc,test_mkt)
+ddd_share(test_price,test_prod1,test_coefs,test_inc,test_mkt)
+@time res4 = ddd_share(test_price,test_prod1,test_coefs,test_inc,test_mkt)
 println("Tripple deriv at $test_price: ", res4)
 test_s(p)=share(p,test_prod1,test_coefs,test_inc,test_mkt)
 test_ds(p) = ForwardDiff.derivative(test_s,p)
@@ -59,7 +68,8 @@ println(res7)
 #testing p_star function
 test_mc = 10.0
 eps=1e-9
-ps_res = p_star(test_mc,test_prod1,test_coefs,test_inc,test_mkt)
+p_star(test_mc,test_prod1,test_coefs,test_inc,test_mkt)
+@time ps_res = p_star(test_mc,test_prod1,test_coefs,test_inc,test_mkt)
 println("Optimal price at $test_mc: ", ps_res)
 pstar_up = p_star(test_mc+eps,test_prod1,test_coefs,test_inc,test_mkt)
 pstar_dn = p_star(test_mc-eps,test_prod1,test_coefs,test_inc,test_mkt)
@@ -75,7 +85,7 @@ ps_curve_res = d2_pstar_d2_rho(test_mc,test_prod1,test_coefs,test_inc,test_mkt)
 println("Curve of pstar at $test_mc: ", ps_curve_res)
 
 # Testing price schedule optimization
-test_w_params = WholesaleParams(6.0,1.0,15.0)
+test_w_params = WholesaleParams(6.0,1.0,1.0)
 #=
 # Testing wholesaler FOCs
 innerx0 = [20.0, 10.0, 5.0, 3.0, 0.3, 0.6, 0.9]
@@ -106,7 +116,6 @@ test_N = 6
 @time test_ps = optimal_price_sched(test_w_params,test_N,test_prod1,test_coefs,test_inc,test_mkt)
 println("Optimal price schedule: ", test_ps)
 println("Profit at optimal schedule: ", wholesaler_profit(test_ps,test_w_params,test_prod1,test_coefs,test_inc,test_mkt))
-
 # testing deviation generation
 test_δ = 0.025
 test_devs = dev_gen(test_ps,test_δ)
@@ -149,6 +158,10 @@ profit_dn = wholesaler_profit(test_ps_dn,test_w_params,test_prod1,test_coefs,tes
 
 println(test_ps_up)
 println(test_ps_dn)
+
+println(test_profit)
+println(profit_up)
+println(profit_dn)
 
 zeta_lb = profit_up - test_profit
 zeta_ub = test_profit - profit_dn

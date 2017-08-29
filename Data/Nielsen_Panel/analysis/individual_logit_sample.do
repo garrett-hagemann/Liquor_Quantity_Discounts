@@ -29,6 +29,25 @@ if `rebuild_data' {
 	drop if multi > 1 */
 
 	save liquor_upcs, replace
+	
+	clear
+	
+	foreach year in `years'{
+		import delimited using "../nielsen_extracts/HMS/`year'/Annual_Files/products_extra_`year'.tsv", clear stringcol(1)
+		keep upc* flavor* type*
+		tempfile extra_`year'
+		save `extra_`year''
+	}
+	
+	use liquor_upcs
+	/* merging in other information like flavor */
+	foreach year in `years'{
+		merge 1:1 upc upc_ver_uc using `extra_`year'', keep(1 3) force
+		drop _merge
+	}
+	
+	save liquor_upcs, replace
+	
 
 	/* generating varibles that we want */
 	//dropping unwanted types of products
@@ -156,7 +175,7 @@ if `rebuild_data' {
 	replace product = (`J'+8) if product == (`J'+1) & d_g_rum == 1
 
 	gen case = _n // Each "purchase" is a case. Now need to construct alternatives
-	egen brand_string = concat(brand_descr upc_descr size1_amount size1_units), punct(";") // used to match to price schedules
+	egen brand_string = concat(brand_descr upc_descr size1_amount size1_units flavor_descr type_descr), punct(";") // used to match to price schedules
 	egen mkt = group(date_m)
 	save prod_chars_individual, replace
 }

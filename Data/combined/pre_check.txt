@@ -1,0 +1,1464 @@
+--------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\combined\pre_check.txt
+  log type:  text
+ opened on:  28 Aug 2017, 21:16:07
+
+. 
+. /* To improve the quality of the match we're going to do this by year,month
+> and product size. There may be some duplicate listings in the price schedules
+> by these categories, due to different wholesalers. However, a quick look
+> shows that the difference in the prices is pretty minimal. This is likely
+> something that should be fixed */
+. 
+. local years = "2011"
+
+. local months = "1 2 3 4 5 6 7 8 9 10 11 12"
+
+. local sizes = "375ML 750ML 1L 1.75L"
+
+. 
+. /* first use the old format NYS data */
+. use "../NY_price_schedules/old_format_months"
+
+. 
+. drop _merge // need to drop for reshape
+
+. // reshaping wide so record num is unique key
+. reshape wide disc_p disc_q disc_dollars actual_p tariff norm_p norm_tariff, i(record_num) j(option)
+(note: j = 0 1 2 3 4 5 6 7 8 9 10 11)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                  1.7e+06   ->  488766
+Number of variables                  33   ->     109
+j variable (12 values)           option   ->   (dropped)
+xij variables:
+                                 disc_p   ->   disc_p0 disc_p1 ... disc_p11
+                                 disc_q   ->   disc_q0 disc_q1 ... disc_q11
+                           disc_dollars   ->   disc_dollars0 disc_dollars1 ... disc_dollars11
+                               actual_p   ->   actual_p0 actual_p1 ... actual_p11
+                                 tariff   ->   tariff0 tariff1 ... tariff11
+                                 norm_p   ->   norm_p0 norm_p1 ... norm_p11
+                            norm_tariff   ->   norm_tariff0 norm_tariff1 ... norm_tariff11
+-----------------------------------------------------------------------------
+
+. 
+. // making one long string that is to be matched. Contains brand, product, and size
+. gen brand_string = brand_name + ";" + product_item_name + ";" + size
+
+. 
+. foreach year in `years'{
+  2.         foreach month in `months'{
+  3.                 foreach size in `sizes'{
+  4.                         if "`size'" == "1.75L"{
+  5.                                 tempfile ps_y`year'_m`month'_s175L
+  6.                                 preserve
+  7.                                         keep if (posting_month == `month' - 1) ///
+>                                                 & (posting_year == `year') ///
+>                                                 & (size == "`size'")
+  8.                                         
+.                                         save `ps_y`year'_m`month'_s175L' 
+  9.                                 restore
+ 10.                                 disp "y`year',m`month',s`size'"
+ 11.                         }
+ 12.                         else {
+ 13.                                 tempfile ps_y`year'_m`month'_s`size'
+ 14.                                 preserve
+ 15.                                         keep if (posting_month == `month' - 1) ///
+>                                                 & (posting_year == `year') ///
+>                                                 & (size == "`size'")
+ 16.                                         
+.                                         save `ps_y`year'_m`month'_s`size''
+ 17.                                 restore
+ 18.                                 disp "y`year',m`month',s`size'"
+ 19.                         }
+ 20.                 }
+ 21.         }
+ 22. }
+(487748 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000001.tmp saved
+y2011,m1,s375ML
+(484993 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000003.tmp saved
+y2011,m1,s750ML
+(486957 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000005.tmp saved
+y2011,m1,s1L
+(487495 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000007.tmp saved
+y2011,m1,s1.75L
+(487703 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000009.tmp saved
+y2011,m2,s375ML
+(484904 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000b.tmp saved
+y2011,m2,s750ML
+(486916 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000d.tmp saved
+y2011,m2,s1L
+(487459 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000f.tmp saved
+y2011,m2,s1.75L
+(487645 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000h.tmp saved
+y2011,m3,s375ML
+(484739 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000j.tmp saved
+y2011,m3,s750ML
+(486801 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000l.tmp saved
+y2011,m3,s1L
+(487345 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000n.tmp saved
+y2011,m3,s1.75L
+(487704 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000p.tmp saved
+y2011,m4,s375ML
+(484880 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000r.tmp saved
+y2011,m4,s750ML
+(486870 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000t.tmp saved
+y2011,m4,s1L
+(487427 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000v.tmp saved
+y2011,m4,s1.75L
+(487698 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00000x.tmp saved
+y2011,m5,s375ML
+(484846 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000011.tmp saved
+y2011,m5,s750ML
+(486851 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000013.tmp saved
+y2011,m5,s1L
+(487430 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000015.tmp saved
+y2011,m5,s1.75L
+(487703 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000017.tmp saved
+y2011,m6,s375ML
+(484837 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000019.tmp saved
+y2011,m6,s750ML
+(486855 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001b.tmp saved
+y2011,m6,s1L
+(487409 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001d.tmp saved
+y2011,m6,s1.75L
+(487884 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001f.tmp saved
+y2011,m7,s375ML
+(485296 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001h.tmp saved
+y2011,m7,s750ML
+(487160 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001j.tmp saved
+y2011,m7,s1L
+(487642 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001l.tmp saved
+y2011,m7,s1.75L
+(487897 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001n.tmp saved
+y2011,m8,s375ML
+(485259 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001p.tmp saved
+y2011,m8,s750ML
+(487179 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001r.tmp saved
+y2011,m8,s1L
+(487647 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001t.tmp saved
+y2011,m8,s1.75L
+(487894 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001v.tmp saved
+y2011,m9,s375ML
+(485176 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00001x.tmp saved
+y2011,m9,s750ML
+(487158 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000021.tmp saved
+y2011,m9,s1L
+(487632 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000023.tmp saved
+y2011,m9,s1.75L
+(487904 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000025.tmp saved
+y2011,m10,s375ML
+(485171 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000027.tmp saved
+y2011,m10,s750ML
+(487153 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000029.tmp saved
+y2011,m10,s1L
+(487624 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002b.tmp saved
+y2011,m10,s1.75L
+(487883 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002d.tmp saved
+y2011,m11,s375ML
+(485129 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002f.tmp saved
+y2011,m11,s750ML
+(487130 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002h.tmp saved
+y2011,m11,s1L
+(487606 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002j.tmp saved
+y2011,m11,s1.75L
+(487894 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002l.tmp saved
+y2011,m12,s375ML
+(485123 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002n.tmp saved
+y2011,m12,s750ML
+(487138 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002p.tmp saved
+y2011,m12,s1L
+(487614 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002r.tmp saved
+y2011,m12,s1.75L
+
+. 
+. clear
+
+. 
+. use "../Nielsen_Panel/analysis/prod_chars_individual"
+
+. drop if product == 0 // don't need to match for non liquor purchases
+(31095 observations deleted)
+
+. gen purchase_month = month(dofm(date_m))
+
+. gen purchase_year = year(dofm(date_m))
+
+. /* limiting to one product record per month. All relevant matching data 
+> is the same across records */
+. bys date_m product: keep if _n == 1 // only need one record of product per mkt. Not per case. Keeps matched 
+> records
+(23788 observations deleted)
+
+. 
+. egen upc_id = concat(purchase_month purchase_year product), punct("")
+
+. destring upc_id, replace
+upc_id has all characters numeric; replaced as long
+
+. save upc_file, replace
+file upc_file.dta saved
+
+. /* Now we need to separate purchases by month, year, and size to allign
+> with the price schedule data. Then we can apply the matching algorithm */
+. 
+. foreach year in `years'{
+  2.         foreach month in `months'{
+  3.                 foreach size in `sizes'{
+  4.                         if "`size'" == "1.75L"{
+  5.                                 tempfile res_y`year'_m`month'_s175L
+  6.                                 tempfile raw_y`year'_m`month'_s175L
+  7.                                 preserve
+  8.                                         keep if (purchase_month == `month') ///
+>                                         & (purchase_year == `year') ///
+>                                         & (d_s_175L)    
+  9. 
+.                                         matchit upc_id brand_string using `ps_y`year'_m`month'_s175L', idusi
+> ng(record_num) txtusing(brand_string) override sim(ngram_circ, 2) threshold(0)
+ 10. 
+.                                         gen neg_similscore = -similscore
+ 11. 
+.                                         sort upc_id neg_similscore // sorting by each UPC and then by match 
+> rank within
+ 12. 
+.                                         save  `raw_y`year'_m`month'_s175L' // useful to fix hand matches
+ 13. 
+.                                         by upc_id: keep if _n <= 3 // keeping top 3 matches 
+ 14. 
+.                                         save `res_y`year'_m`month'_s175L'
+ 15.                                         
+.                                 restore
+ 16.                         }
+ 17. 
+.                         if "`size'" == "1L"{
+ 18.                                 tempfile res_y`year'_m`month'_s1L
+ 19.                                 tempfile raw_y`year'_m`month'_s1L
+ 20.                                 preserve
+ 21.                                         keep if (purchase_month == `month') ///
+>                                         & (purchase_year == `year') ///
+>                                         & (d_s_1L)      
+ 22. 
+.                                         matchit upc_id brand_string using `ps_y`year'_m`month'_s1L', idusing
+> (record_num) txtusing(brand_string) override sim(ngram_circ, 2) threshold(0)
+ 23. 
+.                                         gen neg_similscore = -similscore
+ 24. 
+.                                         sort upc_id neg_similscore // sorting by each UPC and then by match 
+> rank within
+ 25. 
+.                                         save  `raw_y`year'_m`month'_s1L' // useful to fix hand matches
+ 26. 
+.                                         by upc_id: keep if _n <= 3 // keeping top 3 matches 
+ 27. 
+.                                         save `res_y`year'_m`month'_s1L'
+ 28.                                 restore
+ 29.                         }
+ 30. 
+.                         if "`size'" == "750ML"{
+ 31.                                 tempfile res_y`year'_m`month'_s750ML
+ 32.                                 tempfile raw_y`year'_m`month'_s750ML
+ 33.                                 preserve
+ 34.                                         keep if (purchase_month == `month') ///
+>                                         & (purchase_year == `year') ///
+>                                         & (d_s_750ML)   
+ 35. 
+.                                         matchit upc_id brand_string using `ps_y`year'_m`month'_s750ML', idus
+> ing(record_num) txtusing(brand_string) override sim(ngram_circ, 2) threshold(0)
+ 36. 
+.                                         gen neg_similscore = -similscore
+ 37. 
+.                                         sort upc_id neg_similscore // sorting by each UPC and then by match 
+> rank within
+ 38. 
+.                                         save  `raw_y`year'_m`month'_s750ML' // useful to fix hand matches
+ 39. 
+.                                         by upc_id: keep if _n <= 3 // keeping top 3 matches 
+ 40. 
+.                                         save `res_y`year'_m`month'_s750ML'
+ 41.                                 restore
+ 42.                         }
+ 43.                         if "`size'" == "375ML"{
+ 44.                                 tempfile res_y`year'_m`month'_s375ML
+ 45.                                 tempfile raw_y`year'_m`month'_s375ML
+ 46.                                 preserve
+ 47.                                         keep if (purchase_month == `month') ///
+>                                         & (purchase_year == `year') ///
+>                                         & (d_s_375ML)   
+ 48. 
+.                                         matchit upc_id brand_string using `ps_y`year'_m`month'_s375ML', idus
+> ing(record_num) txtusing(brand_string) override sim(ngram_circ, 2) threshold(0)
+ 49. 
+.                                         gen neg_similscore = -similscore
+ 50. 
+.                                         sort upc_id neg_similscore // sorting by each UPC and then by match 
+> rank within
+ 51. 
+.                                         save  `raw_y`year'_m`month'_s375ML' // useful to fix hand matches
+ 52. 
+.                                         by upc_id: keep if _n <= 3 // keeping top 3 matches 
+ 53. 
+.                                         save `res_y`year'_m`month'_s375ML'
+ 54.                                 restore
+ 55.                         }
+ 56.                 }
+ 57.         }
+ 58. }
+(9722 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e000001.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e000001.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        40%               ...   (0%)
+        60%               ...   (1%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 1%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002u.tmp saved
+(6090 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002t.tmp saved
+(9709 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e000003.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e000003.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002x.tmp saved
+(71630 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00002w.tmp saved
+(9678 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e000005.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e000005.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (1%)
+        60%               ...   (1%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e000032.tmp saved
+(90300 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000031.tmp saved
+(9655 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e000007.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e000007.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 1%
+file C:\Users\garre\AppData\Local\Temp\ST_0e000035.tmp saved
+(92564 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000034.tmp saved
+(9724 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e000009.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e000009.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        100%              ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e000038.tmp saved
+(4240 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000037.tmp saved
+(9715 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00000b.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00000b.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 1%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003b.tmp saved
+(50167 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003a.tmp saved
+(9687 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00000d.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00000d.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003e.tmp saved
+(75727 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003d.tmp saved
+(9661 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00000f.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00000f.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (1%)
+        40%               ...   (1%)
+        60%               ...   (1%)
+        80%               ...   (1%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003h.tmp saved
+(87368 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003g.tmp saved
+(9722 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00000h.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00000h.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003k.tmp saved
+(6708 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003j.tmp saved
+(9712 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00000j.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00000j.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003n.tmp saved
+(64384 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003m.tmp saved
+(9686 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00000l.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00000l.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (1%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 1%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003q.tmp saved
+(82404 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003p.tmp saved
+(9656 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00000n.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00000n.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 1%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003t.tmp saved
+(102096 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003s.tmp saved
+(9716 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00000p.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00000p.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003w.tmp saved
+(12708 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00003v.tmp saved
+(9712 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00000r.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00000r.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e000041.tmp saved
+(62128 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000040.tmp saved
+(9697 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00000t.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00000t.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e000044.tmp saved
+(58683 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000043.tmp saved
+(9652 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00000v.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00000v.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (1%)
+        60%               ...   (1%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e000047.tmp saved
+(101536 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000046.tmp saved
+(9723 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00000x.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00000x.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        100%              ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00004a.tmp saved
+(5325 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000049.tmp saved
+(9711 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e000011.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e000011.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00004d.tmp saved
+(66589 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00004c.tmp saved
+(9682 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e000013.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e000013.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 1%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00004g.tmp saved
+(87952 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00004f.tmp saved
+(9652 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e000015.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e000015.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (1%)
+        40%               ...   (0%)
+        60%               ...   (1%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00004j.tmp saved
+(101308 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00004i.tmp saved
+(9723 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e000017.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e000017.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        100%              ...   (1%)
+        Done!
+Total search space saved by index: 1%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00004m.tmp saved
+(5300 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00004l.tmp saved
+(9713 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e000019.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e000019.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00004p.tmp saved
+(58890 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00004o.tmp saved
+(9685 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00001b.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00001b.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (1%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00004s.tmp saved
+(82044 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00004r.tmp saved
+(9650 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00001d.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00001d.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        100%              ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00004v.tmp saved
+(105612 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00004u.tmp saved
+(9723 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00001f.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00001f.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        100%              ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e000050.tmp saved
+(4395 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00004x.tmp saved
+(9710 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00001h.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00001h.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (1%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e000053.tmp saved
+(62406 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000052.tmp saved
+(9689 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00001j.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00001j.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        100%              ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e000056.tmp saved
+(62517 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000055.tmp saved
+(9649 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00001l.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00001l.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e000059.tmp saved
+(88559 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000058.tmp saved
+(9725 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00001n.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00001n.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        100%              ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00005c.tmp saved
+(2598 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00005b.tmp saved
+(9712 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00001p.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00001p.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (1%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00005f.tmp saved
+(56064 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00005e.tmp saved
+(9693 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00001r.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00001r.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (1%)
+        60%               ...   (1%)
+        80%               ...   (1%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00005i.tmp saved
+(55440 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00005h.tmp saved
+(9646 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00001t.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00001t.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00005l.tmp saved
+(91512 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00005k.tmp saved
+(9722 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00001v.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00001v.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00005o.tmp saved
+(5214 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00005n.tmp saved
+(9712 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00001x.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00001x.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (1%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00005r.tmp saved
+(57392 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00005q.tmp saved
+(9696 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e000021.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e000021.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00005u.tmp saved
+(51360 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00005t.tmp saved
+(9650 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e000023.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e000023.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (1%)
+        100%              ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00005x.tmp saved
+(88218 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00005w.tmp saved
+(9725 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e000025.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e000025.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        100%              ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e000062.tmp saved
+(2577 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000061.tmp saved
+(9705 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e000027.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e000027.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e000065.tmp saved
+(82616 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000064.tmp saved
+(9690 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e000029.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e000029.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e000068.tmp saved
+(61180 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000067.tmp saved
+(9659 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00002b.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00002b.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00006b.tmp saved
+(78591 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00006a.tmp saved
+(9723 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00002d.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00002d.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        100%              ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00006e.tmp saved
+(4400 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00006d.tmp saved
+(9707 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00002f.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00002f.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (1%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 1%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00006h.tmp saved
+(76314 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00006g.tmp saved
+(9686 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00002h.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00002h.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (1%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00006k.tmp saved
+(68586 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00006j.tmp saved
+(9657 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00002j.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00002j.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00006n.tmp saved
+(82147 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00006m.tmp saved
+(9721 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00002l.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00002l.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        80%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00006q.tmp saved
+(6083 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00006p.tmp saved
+(9701 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00002n.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00002n.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (1%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 1%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00006t.tmp saved
+(98280 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00006s.tmp saved
+(9671 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00002p.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00002p.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e00006w.tmp saved
+(92625 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e00006v.tmp saved
+(9643 observations deleted)
+Matching current dataset with C:\Users\garre\AppData\Local\Temp\ST_0e00002r.tmp
+Similarity function: ngram_circ
+Loading USING file: C:\Users\garre\AppData\Local\Temp\ST_0e00002r.tmp
+Indexing USING file.
+0%
+20%
+40%
+60%
+80%
+Done!
+Computing results
+        Percent completed ...   (search space saved by index so far)
+        20%               ...   (0%)
+        40%               ...   (0%)
+        60%               ...   (0%)
+        80%               ...   (0%)
+        Done!
+Total search space saved by index: 0%
+file C:\Users\garre\AppData\Local\Temp\ST_0e000071.tmp saved
+(97665 observations deleted)
+file C:\Users\garre\AppData\Local\Temp\ST_0e000070.tmp saved
+
+. 
+. clear
+
+. 
+. local sizes = "175L 1L 750ML 375ML"
+
+. 
+. foreach year in `years'{
+  2.         foreach month in `months'{
+  3.                 foreach size in `sizes'{
+  4.                         append using `res_y`year'_m`month'_s`size''
+  5.                 }
+  6.         }
+  7. }                       
+(note: variable brand_string1 was str105, now str112 to accommodate using data's values)
+(note: variable brand_string was str76, now str78 to accommodate using data's values)
+(note: variable brand_string was str78, now str84 to accommodate using data's values)
+
+. 
+. save upc_crosswalk, replace
+file upc_crosswalk.dta saved
+
+. export delim using "upc_crosswalk.csv", replace delim(",") quote
+file upc_crosswalk.csv saved
+
+. 
+. clear
+
+. 
+. foreach year in `years'{
+  2.         foreach month in `months'{
+  3.                 foreach size in `sizes'{
+  4.                         append using `raw_y`year'_m`month'_s`size''
+  5.                 }
+  6.         }
+  7. }                       
+(note: variable brand_string1 was str105, now str112 to accommodate using data's values)
+(note: variable brand_string was str76, now str78 to accommodate using data's values)
+(note: variable brand_string was str78, now str84 to accommodate using data's values)
+
+. 
+. save upc_match_raw, replace
+file upc_match_raw.dta saved
+
+. 
+. log close
+      name:  <unnamed>
+       log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\combined\pre_check.txt
+  log type:  text
+ closed on:  28 Aug 2017, 21:21:10
+--------------------------------------------------------------------------------------------------------------

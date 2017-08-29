@@ -2,7 +2,7 @@ capture log close
 clear
 set more off
 
-log using "match_upc_to_prices.txt", text replace
+log using "post_check.txt", text replace
 
 /* This file matches the nielsen UPCs to the NYS price schedule data.
 This uses the hand-checked UPC crosswalk file to do the match. The
