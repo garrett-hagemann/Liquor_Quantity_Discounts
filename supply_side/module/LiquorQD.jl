@@ -589,7 +589,7 @@ function optimal_price_sched(params::WholesaleParams, N::Int64, product::Liquor,
         optim_rho=ps_minx[1:hs_n-1]
         optim_t=ps_minx[hs_n:end]
         =#
-        ps_optim_res = Optim.optimize((x)->g2(x,hs_n),(g,x)->focs!(g,x,hs_n),(m,x)->hess!(m,x,hs_n),hs_x0,method=Newton(), g_tol=1e-4, iterations=50000, show_trace=false, extended_trace=false,allow_f_increases=false)
+        ps_optim_res = Optim.optimize((x)->g2(x,hs_n),(g,x)->focs!(g,x,hs_n),(m,x)->hess!(m,x,hs_n),hs_x0,method=Newton(), g_tol=1e-4, iterations=10000, show_trace=false, extended_trace=false,allow_f_increases=false)
         optim_rho = Optim.minimizer(ps_optim_res)[1:hs_n-1]
         optim_t = Optim.minimizer(ps_optim_res)[hs_n:end]
         res_ps = PriceSched(optim_rho,[0.0; optim_t],hs_n) # constrained

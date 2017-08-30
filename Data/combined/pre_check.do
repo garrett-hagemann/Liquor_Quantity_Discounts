@@ -31,6 +31,8 @@ drop _merge // need to drop for reshape
 // reshaping wide so record num is unique key
 reshape wide disc_p disc_q disc_dollars actual_p tariff norm_p norm_tariff, i(record_num) j(option)
 
+keep if discount_size_type == "CASE"
+
 // making one long string that is to be matched. Contains brand, product, and size
 gen brand_string = brand_name + ";" + product_item_name + ";" + size
 
