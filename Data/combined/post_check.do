@@ -68,8 +68,6 @@ replace product = (`J'+8) if product == (`J'+1) & d_g_rum == 1
 
 sort date_m product
 
-egen mkt = group(date_m) // doesnt matter if it doesn't match mkt definition elsewhere. No mkt specific variables
-
 //bys date_m product (_merge_ps): keep if _n == _N // only need one record of product per mkt. Not per case. Keeps matched records
 
 save merged_sample, replace
