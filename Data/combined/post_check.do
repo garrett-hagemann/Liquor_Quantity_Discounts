@@ -67,10 +67,24 @@ replace product = (`J'+8) if product == (`J'+1) & d_g_rum == 1
 //duplicates drop product date_m if product <= 100, force
 
 sort date_m product
+egen mkt = group(date_m)
+egen mkt_matches = max(_merge_ps), by(mkt)
 
 //bys date_m product (_merge_ps): keep if _n == _N // only need one record of product per mkt. Not per case. Keeps matched records
 
+// export all months in one big file
 save merged_sample, replace
 export delimited merged_sample.csv, replace
+
+// exporting month by month for distributed estimation on TACC
+keep if mkt_matches == 3 // keeping only months with matches
+
+levels mkt, local(mkts)
+foreach m of local mkts{
+	preserve
+		keep if mkt == `m'
+		export delimited "matched_months/merge_sample_`m'.csv", replace
+	restore
+}
 
 log close

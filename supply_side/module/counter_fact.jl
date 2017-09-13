@@ -1,6 +1,8 @@
 # addprocs(68)
 # addprocs(2)
 
+data_file_arg = ARGS[1] # needs a command line argument passed
+
 @everywhere srand(69510606) #seeding random number gen
 
 @everywhere include("LiquorQD.jl")
@@ -8,7 +10,7 @@
 @everywhere using DataSetup, LiquorQD, DataFrames, DataArrays
 
 # setting up data
-markets_array = data_setup()
+markets_array = data_setup(data_file_arg)
 
 # importing estimated coefficients
 ss_coefs_df = readtable("trace_sum.csv")
@@ -28,52 +30,71 @@ end
     if key in keys(coefs_dict)
         cf_M = 2000000.0
         wp = WholesaleParams(coefs_dict[key][1],1.0,coefs_dict[key][2])
-        obs_ps = get(j.ps) # because it's nullable
-        println("Observed N: ",obs_ps.N)
-        println("Estimated parameters: ", wp)
-        #finding zeta
-        base_ps = optimal_price_sched(wp,(obs_ps.N),j,nested_coefs,obs_inc_dist,m) # this ensures inequality defining zeta is true. Can't use observed
-        ps_up = optimal_price_sched(wp,(obs_ps.N+1),j,nested_coefs,obs_inc_dist,m)
-        ps_dn = optimal_price_sched(wp,(obs_ps.N-1),j,nested_coefs,obs_inc_dist,m)
+        try
+            obs_ps = get(j.ps) # because it's nullable
+            println("Observed N: ",obs_ps.N)
+            println("Estimated parameters: ", wp)
+            #finding zeta
+            base_ps = optimal_price_sched(wp,(obs_ps.N),j,nested_coefs,obs_inc_dist,m) # this ensures inequality defining zeta is true. Can't use observed
+            ps_up = optimal_price_sched(wp,(obs_ps.N+1),j,nested_coefs,obs_inc_dist,m)
+            ps_dn = optimal_price_sched(wp,(obs_ps.N-1),j,nested_coefs,obs_inc_dist,m)
 
-        base_w_profit =  wholesaler_profit(base_ps,wp,j,nested_coefs,obs_inc_dist,m)*cf_M
-        profit_up = wholesaler_profit(ps_up,wp,j,nested_coefs,obs_inc_dist,m)*cf_M
-        profit_dn = wholesaler_profit(ps_dn,wp,j,nested_coefs,obs_inc_dist,m)*cf_M
+            base_w_profit =  wholesaler_profit(base_ps,wp,j,nested_coefs,obs_inc_dist,m)*cf_M
+            profit_up = wholesaler_profit(ps_up,wp,j,nested_coefs,obs_inc_dist,m)*cf_M
+            profit_dn = wholesaler_profit(ps_dn,wp,j,nested_coefs,obs_inc_dist,m)*cf_M
 
-        print("Recovering zeta. ")
-        zeta_lb = profit_up - base_w_profit
-        zeta_ub = base_w_profit - profit_dn
-        zeta_mid = (zeta_lb + zeta_ub)/2.0
-        println("Bounds on zeta: [",zeta_lb,",",zeta_ub,"].")
+            print("Recovering zeta. ")
+            zeta_lb = profit_up - base_w_profit
+            zeta_ub = base_w_profit - profit_dn
+            zeta_mid = (zeta_lb + zeta_ub)/2.0
+            println("Bounds on zeta: [",zeta_lb,",",zeta_ub,"].")
 
-        # change in  wholesaler profit
-        lin_ps = optimal_price_sched(wp,2,j,nested_coefs,obs_inc_dist,m)
-        lin_w_profit = wholesaler_profit(lin_ps,wp,j,nested_coefs,obs_inc_dist,m)*cf_M
-        delta_w_profit = (lin_w_profit - 2*zeta_mid) - (base_w_profit - zeta_mid*obs_ps.N)
-        println("Change in wholesaler profits under linear price: ", delta_w_profit)
+            # change in  wholesaler profit
+            lin_ps = optimal_price_sched(wp,2,j,nested_coefs,obs_inc_dist,m)
+            lin_w_profit = wholesaler_profit(lin_ps,wp,j,nested_coefs,obs_inc_dist,m)*cf_M
+            delta_w_profit = (lin_w_profit - 2*zeta_mid) - (base_w_profit - zeta_mid*obs_ps.N)
+            println("Change in wholesaler profits under linear price: ", delta_w_profit)
 
-        # change in retailer profit
-        base_r_profit = ps_ret_profits(base_ps,wp,j,nested_coefs,obs_inc_dist,m)*cf_M
-        lin_r_profit = ps_ret_profits(lin_ps,wp,j,nested_coefs,obs_inc_dist,m)*cf_M
-        delta_r_profit = lin_r_profit - base_r_profit
-        println("Change in retailer profit: ", delta_r_profit)
+            # change in retailer profit
+            base_r_profit = ps_ret_profits(base_ps,wp,j,nested_coefs,obs_inc_dist,m)*cf_M
+            lin_r_profit = ps_ret_profits(lin_ps,wp,j,nested_coefs,obs_inc_dist,m)*cf_M
+            delta_r_profit = lin_r_profit - base_r_profit
+            println("Change in retailer profit: ", delta_r_profit)
 
-        # change in consumer surplus
-        base_cs = ps_cons_surplus(base_ps,wp,j,nested_coefs,obs_inc_dist,m)*cf_M
-        lin_cs = ps_cons_surplus(lin_ps,wp,j,nested_coefs,obs_inc_dist,m)*cf_M
-        delta_cs = lin_cs - base_cs
-        println("Change in consumer surplus: ", delta_cs)
+            # change in consumer surplus
+            base_cs = ps_cons_surplus(base_ps,wp,j,nested_coefs,obs_inc_dist,m)*cf_M
+            lin_cs = ps_cons_surplus(lin_ps,wp,j,nested_coefs,obs_inc_dist,m)*cf_M
+            delta_cs = lin_cs - base_cs
+            println("Change in consumer surplus: ", delta_cs)
 
-        base_avg_p = ps_avg_ret_price(base_ps,wp,j,nested_coefs,obs_inc_dist,m)
-        lin_avg_p = ps_avg_ret_price(lin_ps,wp,j,nested_coefs,obs_inc_dist,m)
-        println("Avg retail price under observed schedule: ", base_avg_p)
-        println("Avg retail price under linear price: ", lin_avg_p)
+            base_avg_p = ps_avg_ret_price(base_ps,wp,j,nested_coefs,obs_inc_dist,m)
+            lin_avg_p = ps_avg_ret_price(lin_ps,wp,j,nested_coefs,obs_inc_dist,m)
+            println("Avg retail price under observed schedule: ", base_avg_p)
+            println("Avg retail price under linear price: ", lin_avg_p)
 
-        base_wavg_p = ps_swavg_ret_price(base_ps,wp,j,nested_coefs,obs_inc_dist,m)
-        println("Weighted avg retail price under observed schedule: ", base_wavg_p)
+            base_wavg_p = ps_swavg_ret_price(base_ps,wp,j,nested_coefs,obs_inc_dist,m)
+            println("Weighted avg retail price under observed schedule: ", base_wavg_p)
 
-        res_array = [zeta_lb; zeta_ub; zeta_mid; delta_w_profit ; delta_r_profit ; delta_cs ; base_avg_p ; lin_avg_p ; base_wavg_p]
-        out[(m,j)] = res_array
+            #= calculating required points to find difference in profit as a function of
+            retailer type =#
+            t_r_prof_array = Float64[]
+            lin_r_p_star = p_star(lin_ps.rhos[1],j,nested_coefs,obs_inc_dist,m)
+            lin_r_share = share(lin_r_p_star,j,nested_coefs,obs_inc_dist,m)
+            base_ff = recover_ff(base_ps,j,nested_coefs,obs_inc_dist,m)
+
+            for (rho,t,ff) in zip(base_ps.rhos,base_ps.t_cuts,base_ff)
+                tmp_p_star = p_star(rho,j,nested_coefs,obs_inc_dist,m)
+                tmp_t_r_prof = t*cf_M*((tmp_p_star - rho)*share(tmp_p_star,j,nested_coefs,obs_inc_dist,m) - (lin_r_p_star - lin_ps.rhos[1])*lin_r_share) - ff
+                push!(t_r_prof_array,tmp_t_r_prof)
+            end
+            # adding one more for type = 1
+            last_t_r_prof = (t_r_prof_array[end] + base_ff[end])/lin_ps.t_cuts[end] - base_ff[end]
+            push!(t_r_prof_array,last_t_r_prof)
+
+            res_array = [zeta_lb; zeta_ub; zeta_mid; (base_w_profit - zeta_mid*obs_ps.N) ; (lin_w_profit - 2*zeta_mid);
+                base_r_profit ; lin_r_profit ; base_cs ; lin_cs ; base_avg_p ; lin_avg_p ; base_wavg_p ; base_ps.t_cuts; t_r_prof_array]
+            out[(m,j)] = res_array
+        end
     else
         println("Product has no parameter estimates.")
     end
@@ -83,14 +104,22 @@ end
 mkts_for_est = [(m,j) for m in markets_array for j in m.products] # array of tuples
 res = pmap((x)->cf_calcs(x,est_coefs),mkts_for_est)
 
-outfile = open("counter_fact_calcs.csv","w")
-write(outfile,"year,month,prod,zeta_lb,zeta_ub,zeta_mid,delta_w_profit,delta_r_profit,delta_cs,base_avg_p,lin_avg_p,base_wavg_p","\n")
+#outfile = open("counter_fact_calcs.csv","w")
+#write(outfile,"year,month,prod,zeta_lb,zeta_ub,zeta_mid,delta_w_profit,delta_r_profit,delta_cs,base_avg_p,lin_avg_p,base_wavg_p","\n")
 for d in res
     for (key,v) in d # should only be single element, but just in case
         m = key[1]
         j = key[2]
+        tmp_ps = get(j.ps)
+        type_string = join(["t_cut_$i" for i=1:(tmp_ps.N-1)],",")
+        r_prof_string = join(["r_t_prof_$i" for i=1:(tmp_ps.N-1)],",")
+
         row = [m.year;m.month;j.id;v]'
-        writecsv(outfile,row)
+        out_str = "cf/cf_$(m.year)_$(m.month)_$(j.id).csv"
+        f_out = open(out_str,"w")
+        write(f_out,"year,month,prod,zeta_lb,zeta_ub,zeta_mid,base_w_profit,lin_w_profit,base_r_profit,lin_r_profit,base_cs,lin_cs,base_avg_p,lin_avg_p,base_wavg_p",
+        type_string,r_prof_string,"\n")
+        writecsv(f_out,row)
+        close(f_out)
     end
 end
-close(outfile)

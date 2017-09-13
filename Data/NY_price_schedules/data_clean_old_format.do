@@ -96,7 +96,7 @@ merge m:1 nv_serial_number posting_year posting_month posting_type discount_code
 
 drop if _merge == 2 //dropping unused discount codes
 /* some records appear to refer to the same product but have different prices.
-Nothing in the data disctinguishes them. So, dropping for now */
+Nothing in the data distinguishes them. So, dropping for now */
 duplicates drop nv_serial_number posting_year posting_month posting_type discount_code, force // droping unwated records. May want these later
 
 save old_format_months, replace

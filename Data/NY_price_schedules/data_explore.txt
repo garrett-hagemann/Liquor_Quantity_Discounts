@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\NY_price_schedules\data_explore.txt
   log type:  text
- opened on:  23 Aug 2017, 23:23:38
+ opened on:  13 Sep 2017, 09:03:35
 
 . 
 . use old_format_months
@@ -556,5 +556,5 @@ proof_alcohol_cont |   .0007748    .000051    15.19   0.000     .0006748    .000
       name:  <unnamed>
        log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\NY_price_schedules\data_explore.txt
   log type:  text
- closed on:  23 Aug 2017, 23:31:07
+ closed on:  13 Sep 2017, 09:10:50
 --------------------------------------------------------------------------------------------------------------

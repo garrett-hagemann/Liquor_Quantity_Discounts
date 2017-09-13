@@ -208,7 +208,7 @@ replace sample_weight = sample_weight / _N // converting to percents
 
 // end of sampling code
 
-keep case product choice price d_*_* proof imported date_m household_income white oldest_age NYC pop_weight sample_weight brand_string
+keep case product choice price d_*_* proof imported date_m household_income white oldest_age NYC pop_weight sample_weight brand_string mkt
 egen avg_price = mean(price), by(product date_m)
 
 /* replacing imported, proof, and size dummies with avg value for aggregate products */

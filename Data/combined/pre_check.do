@@ -67,8 +67,8 @@ foreach year in `years'{
 
 clear
 
-use "../Nielsen_Panel/analysis/prod_chars_individual"
-drop if product == 0 // don't need to match for non liquor purchases
+use "../Nielsen_Panel/analysis/individual_logit_sample"
+drop if product == 0 | choice == 0 // don't need to match for non liquor purchases and non chosen records
 gen purchase_month = month(dofm(date_m))
 gen purchase_year = year(dofm(date_m))
 /* limiting to one product record per month. All relevant matching data 

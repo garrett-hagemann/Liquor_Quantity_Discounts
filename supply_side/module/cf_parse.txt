@@ -1,0 +1,3562 @@
+--------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\supply_side\module\cf_parse.txt
+  log type:  text
+ opened on:  10 Sep 2017, 16:39:39
+
+. 
+. /* generating list of files */
+. local cfs : dir "cf/" files "*.csv"
+
+. 
+. foreach cf of local cfs {
+  2.         disp "`cf'"
+  3.         import delim "cf/`cf'", clear
+  4.         
+.         local save_str : subinstr local cf ".csv" "", all
+  5.         
+.         tempfile tmp`save_str'
+  6.         save `tmp`save_str''
+  7. }
+cf_2011_10_1.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000001.tmp saved
+cf_2011_10_100.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000002.tmp saved
+cf_2011_10_103.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000003.tmp saved
+cf_2011_10_105.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000004.tmp saved
+cf_2011_10_107.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000005.tmp saved
+cf_2011_10_109.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000006.tmp saved
+cf_2011_10_11.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000007.tmp saved
+cf_2011_10_113.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000008.tmp saved
+cf_2011_10_114.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000009.tmp saved
+cf_2011_10_12.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00000a.tmp saved
+cf_2011_10_123.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00000b.tmp saved
+cf_2011_10_124.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00000c.tmp saved
+cf_2011_10_126.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00000d.tmp saved
+cf_2011_10_13.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00000e.tmp saved
+cf_2011_10_138.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00000f.tmp saved
+cf_2011_10_14.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00000g.tmp saved
+cf_2011_10_140.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00000h.tmp saved
+cf_2011_10_141.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00000i.tmp saved
+cf_2011_10_142.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00000j.tmp saved
+cf_2011_10_15.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00000k.tmp saved
+cf_2011_10_153.csv
+(32 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00000l.tmp saved
+cf_2011_10_157.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00000m.tmp saved
+cf_2011_10_158.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00000n.tmp saved
+cf_2011_10_159.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00000o.tmp saved
+cf_2011_10_16.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00000p.tmp saved
+cf_2011_10_164.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00000q.tmp saved
+cf_2011_10_17.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00000r.tmp saved
+cf_2011_10_19.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00000s.tmp saved
+cf_2011_10_193.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00000t.tmp saved
+cf_2011_10_197.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00000u.tmp saved
+cf_2011_10_199.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00000v.tmp saved
+cf_2011_10_2.csv
+(32 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00000w.tmp saved
+cf_2011_10_20.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00000x.tmp saved
+cf_2011_10_21.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000010.tmp saved
+cf_2011_10_214.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000011.tmp saved
+cf_2011_10_22.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000012.tmp saved
+cf_2011_10_232.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000013.tmp saved
+cf_2011_10_234.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000014.tmp saved
+cf_2011_10_24.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000015.tmp saved
+cf_2011_10_242.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000016.tmp saved
+cf_2011_10_25.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000017.tmp saved
+cf_2011_10_27.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000018.tmp saved
+cf_2011_10_28.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000019.tmp saved
+cf_2011_10_3.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00001a.tmp saved
+cf_2011_10_32.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00001b.tmp saved
+cf_2011_10_33.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00001c.tmp saved
+cf_2011_10_34.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00001d.tmp saved
+cf_2011_10_35.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00001e.tmp saved
+cf_2011_10_37.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00001f.tmp saved
+cf_2011_10_38.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00001g.tmp saved
+cf_2011_10_39.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00001h.tmp saved
+cf_2011_10_4.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00001i.tmp saved
+cf_2011_10_40.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00001j.tmp saved
+cf_2011_10_45.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00001k.tmp saved
+cf_2011_10_50.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00001l.tmp saved
+cf_2011_10_53.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00001m.tmp saved
+cf_2011_10_54.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00001n.tmp saved
+cf_2011_10_56.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00001o.tmp saved
+cf_2011_10_57.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00001p.tmp saved
+cf_2011_10_58.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00001q.tmp saved
+cf_2011_10_59.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00001r.tmp saved
+cf_2011_10_6.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00001s.tmp saved
+cf_2011_10_60.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00001t.tmp saved
+cf_2011_10_62.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00001u.tmp saved
+cf_2011_10_63.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00001v.tmp saved
+cf_2011_10_66.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00001w.tmp saved
+cf_2011_10_67.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00001x.tmp saved
+cf_2011_10_69.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000020.tmp saved
+cf_2011_10_70.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000021.tmp saved
+cf_2011_10_73.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000022.tmp saved
+cf_2011_10_74.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000023.tmp saved
+cf_2011_10_75.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000024.tmp saved
+cf_2011_10_77.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000025.tmp saved
+cf_2011_10_79.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000026.tmp saved
+cf_2011_10_8.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000027.tmp saved
+cf_2011_10_80.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000028.tmp saved
+cf_2011_10_81.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000029.tmp saved
+cf_2011_10_84.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00002a.tmp saved
+cf_2011_10_88.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00002b.tmp saved
+cf_2011_10_89.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00002c.tmp saved
+cf_2011_10_9.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00002d.tmp saved
+cf_2011_10_90.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00002e.tmp saved
+cf_2011_10_91.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00002f.tmp saved
+cf_2011_10_94.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00002g.tmp saved
+cf_2011_10_97.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00002h.tmp saved
+cf_2011_10_98.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00002i.tmp saved
+cf_2011_11_1.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00002j.tmp saved
+cf_2011_11_10.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00002k.tmp saved
+cf_2011_11_103.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00002l.tmp saved
+cf_2011_11_106.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00002m.tmp saved
+cf_2011_11_109.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00002n.tmp saved
+cf_2011_11_11.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00002o.tmp saved
+cf_2011_11_113.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00002p.tmp saved
+cf_2011_11_114.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00002q.tmp saved
+cf_2011_11_12.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00002r.tmp saved
+cf_2011_11_120.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00002s.tmp saved
+cf_2011_11_13.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00002t.tmp saved
+cf_2011_11_130.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00002u.tmp saved
+cf_2011_11_136.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00002v.tmp saved
+cf_2011_11_14.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00002w.tmp saved
+cf_2011_11_141.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00002x.tmp saved
+cf_2011_11_146.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000030.tmp saved
+cf_2011_11_15.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000031.tmp saved
+cf_2011_11_151.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000032.tmp saved
+cf_2011_11_153.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000033.tmp saved
+cf_2011_11_154.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000034.tmp saved
+cf_2011_11_156.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000035.tmp saved
+cf_2011_11_157.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000036.tmp saved
+cf_2011_11_16.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000037.tmp saved
+cf_2011_11_164.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000038.tmp saved
+cf_2011_11_17.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000039.tmp saved
+cf_2011_11_170.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00003a.tmp saved
+cf_2011_11_172.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00003b.tmp saved
+cf_2011_11_181.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00003c.tmp saved
+cf_2011_11_183.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00003d.tmp saved
+cf_2011_11_19.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00003e.tmp saved
+cf_2011_11_190.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00003f.tmp saved
+cf_2011_11_193.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00003g.tmp saved
+cf_2011_11_195.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00003h.tmp saved
+cf_2011_11_197.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00003i.tmp saved
+cf_2011_11_198.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00003j.tmp saved
+cf_2011_11_199.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00003k.tmp saved
+cf_2011_11_2.csv
+(32 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00003l.tmp saved
+cf_2011_11_20.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00003m.tmp saved
+cf_2011_11_208.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00003n.tmp saved
+cf_2011_11_21.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00003o.tmp saved
+cf_2011_11_214.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00003p.tmp saved
+cf_2011_11_215.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00003q.tmp saved
+cf_2011_11_22.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00003r.tmp saved
+cf_2011_11_229.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00003s.tmp saved
+cf_2011_11_234.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00003t.tmp saved
+cf_2011_11_236.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00003u.tmp saved
+cf_2011_11_24.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00003v.tmp saved
+cf_2011_11_242.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00003w.tmp saved
+cf_2011_11_246.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00003x.tmp saved
+cf_2011_11_25.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000040.tmp saved
+cf_2011_11_27.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000041.tmp saved
+cf_2011_11_28.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000042.tmp saved
+cf_2011_11_3.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000043.tmp saved
+cf_2011_11_32.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000044.tmp saved
+cf_2011_11_33.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000045.tmp saved
+cf_2011_11_34.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000046.tmp saved
+cf_2011_11_35.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000047.tmp saved
+cf_2011_11_37.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000048.tmp saved
+cf_2011_11_38.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000049.tmp saved
+cf_2011_11_39.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00004a.tmp saved
+cf_2011_11_4.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00004b.tmp saved
+cf_2011_11_40.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00004c.tmp saved
+cf_2011_11_41.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00004d.tmp saved
+cf_2011_11_45.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00004e.tmp saved
+cf_2011_11_46.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00004f.tmp saved
+cf_2011_11_47.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00004g.tmp saved
+cf_2011_11_50.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00004h.tmp saved
+cf_2011_11_51.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00004i.tmp saved
+cf_2011_11_52.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00004j.tmp saved
+cf_2011_11_53.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00004k.tmp saved
+cf_2011_11_54.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00004l.tmp saved
+cf_2011_11_56.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00004m.tmp saved
+cf_2011_11_58.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00004n.tmp saved
+cf_2011_11_6.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00004o.tmp saved
+cf_2011_11_60.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00004p.tmp saved
+cf_2011_11_63.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00004q.tmp saved
+cf_2011_11_66.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00004r.tmp saved
+cf_2011_11_68.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00004s.tmp saved
+cf_2011_11_73.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00004t.tmp saved
+cf_2011_11_74.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00004u.tmp saved
+cf_2011_11_75.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00004v.tmp saved
+cf_2011_11_77.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00004w.tmp saved
+cf_2011_11_79.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00004x.tmp saved
+cf_2011_11_8.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000050.tmp saved
+cf_2011_11_80.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000051.tmp saved
+cf_2011_11_81.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000052.tmp saved
+cf_2011_11_88.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000053.tmp saved
+cf_2011_11_89.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000054.tmp saved
+cf_2011_11_9.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000055.tmp saved
+cf_2011_11_90.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000056.tmp saved
+cf_2011_11_92.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000057.tmp saved
+cf_2011_11_94.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000058.tmp saved
+cf_2011_11_96.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000059.tmp saved
+cf_2011_11_97.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00005a.tmp saved
+cf_2011_11_98.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00005b.tmp saved
+cf_2011_12_1.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00005c.tmp saved
+cf_2011_12_100.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00005d.tmp saved
+cf_2011_12_102.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00005e.tmp saved
+cf_2011_12_103.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00005f.tmp saved
+cf_2011_12_104.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00005g.tmp saved
+cf_2011_12_106.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00005h.tmp saved
+cf_2011_12_109.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00005i.tmp saved
+cf_2011_12_11.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00005j.tmp saved
+cf_2011_12_110.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00005k.tmp saved
+cf_2011_12_113.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00005l.tmp saved
+cf_2011_12_114.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00005m.tmp saved
+cf_2011_12_12.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00005n.tmp saved
+cf_2011_12_120.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00005o.tmp saved
+cf_2011_12_121.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00005p.tmp saved
+cf_2011_12_123.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00005q.tmp saved
+cf_2011_12_124.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00005r.tmp saved
+cf_2011_12_126.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00005s.tmp saved
+cf_2011_12_127.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00005t.tmp saved
+cf_2011_12_129.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00005u.tmp saved
+cf_2011_12_13.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00005v.tmp saved
+cf_2011_12_131.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00005w.tmp saved
+cf_2011_12_136.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00005x.tmp saved
+cf_2011_12_138.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000060.tmp saved
+cf_2011_12_14.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000061.tmp saved
+cf_2011_12_141.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000062.tmp saved
+cf_2011_12_142.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000063.tmp saved
+cf_2011_12_146.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000064.tmp saved
+cf_2011_12_148.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000065.tmp saved
+cf_2011_12_15.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000066.tmp saved
+cf_2011_12_152.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000067.tmp saved
+cf_2011_12_153.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000068.tmp saved
+cf_2011_12_156.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000069.tmp saved
+cf_2011_12_16.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00006a.tmp saved
+cf_2011_12_17.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00006b.tmp saved
+cf_2011_12_172.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00006c.tmp saved
+cf_2011_12_176.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00006d.tmp saved
+cf_2011_12_179.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00006e.tmp saved
+cf_2011_12_181.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00006f.tmp saved
+cf_2011_12_184.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00006g.tmp saved
+cf_2011_12_189.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00006h.tmp saved
+cf_2011_12_19.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00006i.tmp saved
+cf_2011_12_190.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00006j.tmp saved
+cf_2011_12_193.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00006k.tmp saved
+cf_2011_12_199.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00006l.tmp saved
+cf_2011_12_2.csv
+(32 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00006m.tmp saved
+cf_2011_12_20.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00006n.tmp saved
+cf_2011_12_208.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00006o.tmp saved
+cf_2011_12_209.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00006p.tmp saved
+cf_2011_12_21.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00006q.tmp saved
+cf_2011_12_214.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00006r.tmp saved
+cf_2011_12_215.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00006s.tmp saved
+cf_2011_12_216.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00006t.tmp saved
+cf_2011_12_22.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00006u.tmp saved
+cf_2011_12_222.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00006v.tmp saved
+cf_2011_12_228.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00006w.tmp saved
+cf_2011_12_23.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00006x.tmp saved
+cf_2011_12_231.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000070.tmp saved
+cf_2011_12_232.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000071.tmp saved
+cf_2011_12_24.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000072.tmp saved
+cf_2011_12_245.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000073.tmp saved
+cf_2011_12_247.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000074.tmp saved
+cf_2011_12_25.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000075.tmp saved
+cf_2011_12_27.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000076.tmp saved
+cf_2011_12_28.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000077.tmp saved
+cf_2011_12_29.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000078.tmp saved
+cf_2011_12_3.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000079.tmp saved
+cf_2011_12_30.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00007a.tmp saved
+cf_2011_12_32.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00007b.tmp saved
+cf_2011_12_33.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00007c.tmp saved
+cf_2011_12_34.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00007d.tmp saved
+cf_2011_12_35.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00007e.tmp saved
+cf_2011_12_37.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00007f.tmp saved
+cf_2011_12_38.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00007g.tmp saved
+cf_2011_12_39.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00007h.tmp saved
+cf_2011_12_4.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00007i.tmp saved
+cf_2011_12_40.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00007j.tmp saved
+cf_2011_12_41.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00007k.tmp saved
+cf_2011_12_45.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00007l.tmp saved
+cf_2011_12_46.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00007m.tmp saved
+cf_2011_12_47.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00007n.tmp saved
+cf_2011_12_50.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00007o.tmp saved
+cf_2011_12_53.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00007p.tmp saved
+cf_2011_12_54.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00007q.tmp saved
+cf_2011_12_56.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00007r.tmp saved
+cf_2011_12_57.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00007s.tmp saved
+cf_2011_12_58.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00007t.tmp saved
+cf_2011_12_59.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00007u.tmp saved
+cf_2011_12_6.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00007v.tmp saved
+cf_2011_12_60.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00007w.tmp saved
+cf_2011_12_61.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00007x.tmp saved
+cf_2011_12_62.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000080.tmp saved
+cf_2011_12_63.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000081.tmp saved
+cf_2011_12_67.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000082.tmp saved
+cf_2011_12_68.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000083.tmp saved
+cf_2011_12_69.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000084.tmp saved
+cf_2011_12_73.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000085.tmp saved
+cf_2011_12_74.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000086.tmp saved
+cf_2011_12_77.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000087.tmp saved
+cf_2011_12_78.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000088.tmp saved
+cf_2011_12_79.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000089.tmp saved
+cf_2011_12_8.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00008a.tmp saved
+cf_2011_12_80.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00008b.tmp saved
+cf_2011_12_81.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00008c.tmp saved
+cf_2011_12_84.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00008d.tmp saved
+cf_2011_12_89.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00008e.tmp saved
+cf_2011_12_9.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00008f.tmp saved
+cf_2011_12_90.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00008g.tmp saved
+cf_2011_12_91.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00008h.tmp saved
+cf_2011_12_92.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00008i.tmp saved
+cf_2011_12_93.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00008j.tmp saved
+cf_2011_12_94.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00008k.tmp saved
+cf_2011_12_96.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00008l.tmp saved
+cf_2011_1_1.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00008m.tmp saved
+cf_2011_1_10.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00008n.tmp saved
+cf_2011_1_100.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00008o.tmp saved
+cf_2011_1_101.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00008p.tmp saved
+cf_2011_1_102.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00008q.tmp saved
+cf_2011_1_103.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00008r.tmp saved
+cf_2011_1_105.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00008s.tmp saved
+cf_2011_1_107.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00008t.tmp saved
+cf_2011_1_109.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00008u.tmp saved
+cf_2011_1_11.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00008v.tmp saved
+cf_2011_1_110.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00008w.tmp saved
+cf_2011_1_112.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00008x.tmp saved
+cf_2011_1_113.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000090.tmp saved
+cf_2011_1_114.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000091.tmp saved
+cf_2011_1_115.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000092.tmp saved
+cf_2011_1_12.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000093.tmp saved
+cf_2011_1_120.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000094.tmp saved
+cf_2011_1_121.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000095.tmp saved
+cf_2011_1_124.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000096.tmp saved
+cf_2011_1_13.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000097.tmp saved
+cf_2011_1_131.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000098.tmp saved
+cf_2011_1_133.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000099.tmp saved
+cf_2011_1_136.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00009a.tmp saved
+cf_2011_1_138.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00009b.tmp saved
+cf_2011_1_139.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00009c.tmp saved
+cf_2011_1_140.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00009d.tmp saved
+cf_2011_1_141.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00009e.tmp saved
+cf_2011_1_142.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00009f.tmp saved
+cf_2011_1_144.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00009g.tmp saved
+cf_2011_1_15.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00009h.tmp saved
+cf_2011_1_152.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00009i.tmp saved
+cf_2011_1_153.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00009j.tmp saved
+cf_2011_1_155.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00009k.tmp saved
+cf_2011_1_158.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00009l.tmp saved
+cf_2011_1_159.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00009m.tmp saved
+cf_2011_1_16.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00009n.tmp saved
+cf_2011_1_160.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00009o.tmp saved
+cf_2011_1_164.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00009p.tmp saved
+cf_2011_1_17.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00009q.tmp saved
+cf_2011_1_170.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00009r.tmp saved
+cf_2011_1_174.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00009s.tmp saved
+cf_2011_1_175.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00009t.tmp saved
+cf_2011_1_179.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00009u.tmp saved
+cf_2011_1_181.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00009v.tmp saved
+cf_2011_1_183.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00009w.tmp saved
+cf_2011_1_184.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g00009x.tmp saved
+cf_2011_1_19.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000a0.tmp saved
+cf_2011_1_199.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000a1.tmp saved
+cf_2011_1_2.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000a2.tmp saved
+cf_2011_1_20.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000a3.tmp saved
+cf_2011_1_203.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000a4.tmp saved
+cf_2011_1_206.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000a5.tmp saved
+cf_2011_1_21.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000a6.tmp saved
+cf_2011_1_214.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000a7.tmp saved
+cf_2011_1_219.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000a8.tmp saved
+cf_2011_1_222.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000a9.tmp saved
+cf_2011_1_225.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000aa.tmp saved
+cf_2011_1_229.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ab.tmp saved
+cf_2011_1_23.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ac.tmp saved
+cf_2011_1_24.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ad.tmp saved
+cf_2011_1_242.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ae.tmp saved
+cf_2011_1_245.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000af.tmp saved
+cf_2011_1_249.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ag.tmp saved
+cf_2011_1_25.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ah.tmp saved
+cf_2011_1_28.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ai.tmp saved
+cf_2011_1_3.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000aj.tmp saved
+cf_2011_1_32.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ak.tmp saved
+cf_2011_1_33.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000al.tmp saved
+cf_2011_1_35.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000am.tmp saved
+cf_2011_1_37.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000an.tmp saved
+cf_2011_1_39.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ao.tmp saved
+cf_2011_1_4.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ap.tmp saved
+cf_2011_1_40.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000aq.tmp saved
+cf_2011_1_41.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ar.tmp saved
+cf_2011_1_45.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000as.tmp saved
+cf_2011_1_47.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000at.tmp saved
+cf_2011_1_48.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000au.tmp saved
+cf_2011_1_50.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000av.tmp saved
+cf_2011_1_53.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000aw.tmp saved
+cf_2011_1_54.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ax.tmp saved
+cf_2011_1_56.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000b0.tmp saved
+cf_2011_1_57.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000b1.tmp saved
+cf_2011_1_58.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000b2.tmp saved
+cf_2011_1_6.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000b3.tmp saved
+cf_2011_1_60.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000b4.tmp saved
+cf_2011_1_62.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000b5.tmp saved
+cf_2011_1_63.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000b6.tmp saved
+cf_2011_1_66.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000b7.tmp saved
+cf_2011_1_67.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000b8.tmp saved
+cf_2011_1_68.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000b9.tmp saved
+cf_2011_1_70.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ba.tmp saved
+cf_2011_1_72.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000bb.tmp saved
+cf_2011_1_74.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000bc.tmp saved
+cf_2011_1_79.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000bd.tmp saved
+cf_2011_1_8.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000be.tmp saved
+cf_2011_1_81.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000bf.tmp saved
+cf_2011_1_83.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000bg.tmp saved
+cf_2011_1_84.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000bh.tmp saved
+cf_2011_1_88.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000bi.tmp saved
+cf_2011_1_89.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000bj.tmp saved
+cf_2011_1_9.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000bk.tmp saved
+cf_2011_1_90.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000bl.tmp saved
+cf_2011_1_91.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000bm.tmp saved
+cf_2011_1_94.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000bn.tmp saved
+cf_2011_2_1.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000bo.tmp saved
+cf_2011_2_10.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000bp.tmp saved
+cf_2011_2_103.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000bq.tmp saved
+cf_2011_2_105.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000br.tmp saved
+cf_2011_2_106.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000bs.tmp saved
+cf_2011_2_112.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000bt.tmp saved
+cf_2011_2_113.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000bu.tmp saved
+cf_2011_2_12.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000bv.tmp saved
+cf_2011_2_121.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000bw.tmp saved
+cf_2011_2_124.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000bx.tmp saved
+cf_2011_2_126.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000c0.tmp saved
+cf_2011_2_13.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000c1.tmp saved
+cf_2011_2_133.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000c2.tmp saved
+cf_2011_2_136.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000c3.tmp saved
+cf_2011_2_14.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000c4.tmp saved
+cf_2011_2_140.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000c5.tmp saved
+cf_2011_2_144.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000c6.tmp saved
+cf_2011_2_146.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000c7.tmp saved
+cf_2011_2_15.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000c8.tmp saved
+cf_2011_2_151.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000c9.tmp saved
+cf_2011_2_153.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ca.tmp saved
+cf_2011_2_155.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000cb.tmp saved
+cf_2011_2_159.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000cc.tmp saved
+cf_2011_2_16.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000cd.tmp saved
+cf_2011_2_160.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ce.tmp saved
+cf_2011_2_169.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000cf.tmp saved
+cf_2011_2_17.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000cg.tmp saved
+cf_2011_2_170.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ch.tmp saved
+cf_2011_2_173.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ci.tmp saved
+cf_2011_2_183.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000cj.tmp saved
+cf_2011_2_19.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ck.tmp saved
+cf_2011_2_191.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000cl.tmp saved
+cf_2011_2_192.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000cm.tmp saved
+cf_2011_2_193.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000cn.tmp saved
+cf_2011_2_198.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000co.tmp saved
+cf_2011_2_199.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000cp.tmp saved
+cf_2011_2_2.csv
+(32 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000cq.tmp saved
+cf_2011_2_20.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000cr.tmp saved
+cf_2011_2_203.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000cs.tmp saved
+cf_2011_2_204.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ct.tmp saved
+cf_2011_2_209.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000cu.tmp saved
+cf_2011_2_21.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000cv.tmp saved
+cf_2011_2_219.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000cw.tmp saved
+cf_2011_2_22.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000cx.tmp saved
+cf_2011_2_231.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000d0.tmp saved
+cf_2011_2_238.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000d1.tmp saved
+cf_2011_2_24.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000d2.tmp saved
+cf_2011_2_25.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000d3.tmp saved
+cf_2011_2_27.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000d4.tmp saved
+cf_2011_2_28.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000d5.tmp saved
+cf_2011_2_3.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000d6.tmp saved
+cf_2011_2_30.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000d7.tmp saved
+cf_2011_2_32.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000d8.tmp saved
+cf_2011_2_33.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000d9.tmp saved
+cf_2011_2_34.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000da.tmp saved
+cf_2011_2_35.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000db.tmp saved
+cf_2011_2_38.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000dc.tmp saved
+cf_2011_2_39.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000dd.tmp saved
+cf_2011_2_4.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000de.tmp saved
+cf_2011_2_40.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000df.tmp saved
+cf_2011_2_41.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000dg.tmp saved
+cf_2011_2_43.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000dh.tmp saved
+cf_2011_2_46.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000di.tmp saved
+cf_2011_2_47.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000dj.tmp saved
+cf_2011_2_48.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000dk.tmp saved
+cf_2011_2_50.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000dl.tmp saved
+cf_2011_2_53.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000dm.tmp saved
+cf_2011_2_54.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000dn.tmp saved
+cf_2011_2_56.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000do.tmp saved
+cf_2011_2_57.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000dp.tmp saved
+cf_2011_2_58.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000dq.tmp saved
+cf_2011_2_6.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000dr.tmp saved
+cf_2011_2_62.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ds.tmp saved
+cf_2011_2_66.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000dt.tmp saved
+cf_2011_2_72.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000du.tmp saved
+cf_2011_2_73.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000dv.tmp saved
+cf_2011_2_74.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000dw.tmp saved
+cf_2011_2_75.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000dx.tmp saved
+cf_2011_2_77.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000e0.tmp saved
+cf_2011_2_79.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000e1.tmp saved
+cf_2011_2_8.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000e2.tmp saved
+cf_2011_2_81.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000e3.tmp saved
+cf_2011_2_84.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000e4.tmp saved
+cf_2011_2_88.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000e5.tmp saved
+cf_2011_2_89.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000e6.tmp saved
+cf_2011_2_9.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000e7.tmp saved
+cf_2011_2_96.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000e8.tmp saved
+cf_2011_2_97.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000e9.tmp saved
+cf_2011_3_1.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ea.tmp saved
+cf_2011_3_10.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000eb.tmp saved
+cf_2011_3_103.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ec.tmp saved
+cf_2011_3_104.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ed.tmp saved
+cf_2011_3_106.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ee.tmp saved
+cf_2011_3_107.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ef.tmp saved
+cf_2011_3_109.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000eg.tmp saved
+cf_2011_3_11.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000eh.tmp saved
+cf_2011_3_112.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ei.tmp saved
+cf_2011_3_113.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ej.tmp saved
+cf_2011_3_12.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ek.tmp saved
+cf_2011_3_121.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000el.tmp saved
+cf_2011_3_124.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000em.tmp saved
+cf_2011_3_126.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000en.tmp saved
+cf_2011_3_129.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000eo.tmp saved
+cf_2011_3_13.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ep.tmp saved
+cf_2011_3_133.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000eq.tmp saved
+cf_2011_3_138.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000er.tmp saved
+cf_2011_3_14.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000es.tmp saved
+cf_2011_3_141.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000et.tmp saved
+cf_2011_3_144.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000eu.tmp saved
+cf_2011_3_146.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ev.tmp saved
+cf_2011_3_15.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ew.tmp saved
+cf_2011_3_153.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ex.tmp saved
+cf_2011_3_157.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000f0.tmp saved
+cf_2011_3_158.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000f1.tmp saved
+cf_2011_3_159.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000f2.tmp saved
+cf_2011_3_16.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000f3.tmp saved
+cf_2011_3_160.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000f4.tmp saved
+cf_2011_3_164.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000f5.tmp saved
+cf_2011_3_17.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000f6.tmp saved
+cf_2011_3_171.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000f7.tmp saved
+cf_2011_3_181.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000f8.tmp saved
+cf_2011_3_183.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000f9.tmp saved
+cf_2011_3_19.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000fa.tmp saved
+cf_2011_3_190.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000fb.tmp saved
+cf_2011_3_191.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000fc.tmp saved
+cf_2011_3_193.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000fd.tmp saved
+cf_2011_3_194.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000fe.tmp saved
+cf_2011_3_197.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ff.tmp saved
+cf_2011_3_198.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000fg.tmp saved
+cf_2011_3_199.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000fh.tmp saved
+cf_2011_3_2.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000fi.tmp saved
+cf_2011_3_20.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000fj.tmp saved
+cf_2011_3_203.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000fk.tmp saved
+cf_2011_3_21.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000fl.tmp saved
+cf_2011_3_215.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000fm.tmp saved
+cf_2011_3_219.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000fn.tmp saved
+cf_2011_3_22.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000fo.tmp saved
+cf_2011_3_232.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000fp.tmp saved
+cf_2011_3_24.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000fq.tmp saved
+cf_2011_3_242.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000fr.tmp saved
+cf_2011_3_244.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000fs.tmp saved
+cf_2011_3_25.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ft.tmp saved
+cf_2011_3_28.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000fu.tmp saved
+cf_2011_3_3.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000fv.tmp saved
+cf_2011_3_30.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000fw.tmp saved
+cf_2011_3_32.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000fx.tmp saved
+cf_2011_3_35.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000g0.tmp saved
+cf_2011_3_36.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000g1.tmp saved
+cf_2011_3_37.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000g2.tmp saved
+cf_2011_3_38.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000g3.tmp saved
+cf_2011_3_39.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000g4.tmp saved
+cf_2011_3_4.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000g5.tmp saved
+cf_2011_3_40.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000g6.tmp saved
+cf_2011_3_45.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000g7.tmp saved
+cf_2011_3_46.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000g8.tmp saved
+cf_2011_3_48.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000g9.tmp saved
+cf_2011_3_5.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ga.tmp saved
+cf_2011_3_50.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000gb.tmp saved
+cf_2011_3_53.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000gc.tmp saved
+cf_2011_3_54.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000gd.tmp saved
+cf_2011_3_56.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ge.tmp saved
+cf_2011_3_57.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000gf.tmp saved
+cf_2011_3_58.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000gg.tmp saved
+cf_2011_3_6.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000gh.tmp saved
+cf_2011_3_62.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000gi.tmp saved
+cf_2011_3_63.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000gj.tmp saved
+cf_2011_3_64.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000gk.tmp saved
+cf_2011_3_66.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000gl.tmp saved
+cf_2011_3_67.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000gm.tmp saved
+cf_2011_3_68.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000gn.tmp saved
+cf_2011_3_70.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000go.tmp saved
+cf_2011_3_72.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000gp.tmp saved
+cf_2011_3_73.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000gq.tmp saved
+cf_2011_3_74.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000gr.tmp saved
+cf_2011_3_79.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000gs.tmp saved
+cf_2011_3_8.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000gt.tmp saved
+cf_2011_3_88.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000gu.tmp saved
+cf_2011_3_9.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000gv.tmp saved
+cf_2011_3_90.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000gw.tmp saved
+cf_2011_3_91.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000gx.tmp saved
+cf_2011_3_92.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000h0.tmp saved
+cf_2011_3_94.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000h1.tmp saved
+cf_2011_3_96.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000h2.tmp saved
+cf_2011_3_97.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000h3.tmp saved
+cf_2011_3_98.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000h4.tmp saved
+cf_2011_4_1.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000h5.tmp saved
+cf_2011_4_100.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000h6.tmp saved
+cf_2011_4_104.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000h7.tmp saved
+cf_2011_4_106.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000h8.tmp saved
+cf_2011_4_107.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000h9.tmp saved
+cf_2011_4_11.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ha.tmp saved
+cf_2011_4_112.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000hb.tmp saved
+cf_2011_4_113.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000hc.tmp saved
+cf_2011_4_115.csv
+(32 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000hd.tmp saved
+cf_2011_4_118.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000he.tmp saved
+cf_2011_4_12.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000hf.tmp saved
+cf_2011_4_120.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000hg.tmp saved
+cf_2011_4_121.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000hh.tmp saved
+cf_2011_4_124.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000hi.tmp saved
+cf_2011_4_13.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000hj.tmp saved
+cf_2011_4_133.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000hk.tmp saved
+cf_2011_4_14.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000hl.tmp saved
+cf_2011_4_141.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000hm.tmp saved
+cf_2011_4_144.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000hn.tmp saved
+cf_2011_4_146.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ho.tmp saved
+cf_2011_4_148.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000hp.tmp saved
+cf_2011_4_15.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000hq.tmp saved
+cf_2011_4_157.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000hr.tmp saved
+cf_2011_4_16.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000hs.tmp saved
+cf_2011_4_17.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ht.tmp saved
+cf_2011_4_171.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000hu.tmp saved
+cf_2011_4_172.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000hv.tmp saved
+cf_2011_4_178.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000hw.tmp saved
+cf_2011_4_181.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000hx.tmp saved
+cf_2011_4_183.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000i0.tmp saved
+cf_2011_4_19.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000i1.tmp saved
+cf_2011_4_190.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000i2.tmp saved
+cf_2011_4_192.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000i3.tmp saved
+cf_2011_4_193.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000i4.tmp saved
+cf_2011_4_197.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000i5.tmp saved
+cf_2011_4_198.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000i6.tmp saved
+cf_2011_4_2.csv
+(32 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000i7.tmp saved
+cf_2011_4_20.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000i8.tmp saved
+cf_2011_4_208.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000i9.tmp saved
+cf_2011_4_21.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ia.tmp saved
+cf_2011_4_215.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ib.tmp saved
+cf_2011_4_219.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ic.tmp saved
+cf_2011_4_22.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000id.tmp saved
+cf_2011_4_221.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ie.tmp saved
+cf_2011_4_225.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000if.tmp saved
+cf_2011_4_228.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ig.tmp saved
+cf_2011_4_23.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ih.tmp saved
+cf_2011_4_232.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ii.tmp saved
+cf_2011_4_234.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ij.tmp saved
+cf_2011_4_24.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ik.tmp saved
+cf_2011_4_25.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000il.tmp saved
+cf_2011_4_28.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000im.tmp saved
+cf_2011_4_29.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000in.tmp saved
+cf_2011_4_3.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000io.tmp saved
+cf_2011_4_33.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ip.tmp saved
+cf_2011_4_34.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000iq.tmp saved
+cf_2011_4_35.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ir.tmp saved
+cf_2011_4_36.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000is.tmp saved
+cf_2011_4_37.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000it.tmp saved
+cf_2011_4_38.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000iu.tmp saved
+cf_2011_4_39.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000iv.tmp saved
+cf_2011_4_4.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000iw.tmp saved
+cf_2011_4_40.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ix.tmp saved
+cf_2011_4_45.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000j0.tmp saved
+cf_2011_4_46.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000j1.tmp saved
+cf_2011_4_48.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000j2.tmp saved
+cf_2011_4_5.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000j3.tmp saved
+cf_2011_4_50.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000j4.tmp saved
+cf_2011_4_53.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000j5.tmp saved
+cf_2011_4_54.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000j6.tmp saved
+cf_2011_4_56.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000j7.tmp saved
+cf_2011_4_57.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000j8.tmp saved
+cf_2011_4_58.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000j9.tmp saved
+cf_2011_4_6.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ja.tmp saved
+cf_2011_4_61.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000jb.tmp saved
+cf_2011_4_62.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000jc.tmp saved
+cf_2011_4_63.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000jd.tmp saved
+cf_2011_4_66.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000je.tmp saved
+cf_2011_4_67.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000jf.tmp saved
+cf_2011_4_70.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000jg.tmp saved
+cf_2011_4_73.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000jh.tmp saved
+cf_2011_4_74.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ji.tmp saved
+cf_2011_4_75.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000jj.tmp saved
+cf_2011_4_77.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000jk.tmp saved
+cf_2011_4_78.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000jl.tmp saved
+cf_2011_4_79.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000jm.tmp saved
+cf_2011_4_8.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000jn.tmp saved
+cf_2011_4_80.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000jo.tmp saved
+cf_2011_4_81.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000jp.tmp saved
+cf_2011_4_89.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000jq.tmp saved
+cf_2011_4_9.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000jr.tmp saved
+cf_2011_4_91.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000js.tmp saved
+cf_2011_4_93.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000jt.tmp saved
+cf_2011_4_94.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ju.tmp saved
+cf_2011_4_98.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000jv.tmp saved
+cf_2011_5_1.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000jw.tmp saved
+cf_2011_5_10.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000jx.tmp saved
+cf_2011_5_103.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000k0.tmp saved
+cf_2011_5_105.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000k1.tmp saved
+cf_2011_5_109.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000k2.tmp saved
+cf_2011_5_11.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000k3.tmp saved
+cf_2011_5_110.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000k4.tmp saved
+cf_2011_5_112.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000k5.tmp saved
+cf_2011_5_118.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000k6.tmp saved
+cf_2011_5_119.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000k7.tmp saved
+cf_2011_5_12.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000k8.tmp saved
+cf_2011_5_120.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000k9.tmp saved
+cf_2011_5_121.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ka.tmp saved
+cf_2011_5_126.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000kb.tmp saved
+cf_2011_5_127.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000kc.tmp saved
+cf_2011_5_13.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000kd.tmp saved
+cf_2011_5_133.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ke.tmp saved
+cf_2011_5_136.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000kf.tmp saved
+cf_2011_5_138.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000kg.tmp saved
+cf_2011_5_14.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000kh.tmp saved
+cf_2011_5_142.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ki.tmp saved
+cf_2011_5_144.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000kj.tmp saved
+cf_2011_5_146.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000kk.tmp saved
+cf_2011_5_148.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000kl.tmp saved
+cf_2011_5_15.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000km.tmp saved
+cf_2011_5_151.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000kn.tmp saved
+cf_2011_5_152.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ko.tmp saved
+cf_2011_5_154.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000kp.tmp saved
+cf_2011_5_157.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000kq.tmp saved
+cf_2011_5_158.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000kr.tmp saved
+cf_2011_5_159.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ks.tmp saved
+cf_2011_5_16.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000kt.tmp saved
+cf_2011_5_169.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ku.tmp saved
+cf_2011_5_17.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000kv.tmp saved
+cf_2011_5_171.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000kw.tmp saved
+cf_2011_5_179.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000kx.tmp saved
+cf_2011_5_181.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000l0.tmp saved
+cf_2011_5_183.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000l1.tmp saved
+cf_2011_5_185.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000l2.tmp saved
+cf_2011_5_19.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000l3.tmp saved
+cf_2011_5_191.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000l4.tmp saved
+cf_2011_5_193.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000l5.tmp saved
+cf_2011_5_197.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000l6.tmp saved
+cf_2011_5_198.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000l7.tmp saved
+cf_2011_5_199.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000l8.tmp saved
+cf_2011_5_2.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000l9.tmp saved
+cf_2011_5_20.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000la.tmp saved
+cf_2011_5_204.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000lb.tmp saved
+cf_2011_5_21.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000lc.tmp saved
+cf_2011_5_214.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ld.tmp saved
+cf_2011_5_215.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000le.tmp saved
+cf_2011_5_216.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000lf.tmp saved
+cf_2011_5_22.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000lg.tmp saved
+cf_2011_5_225.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000lh.tmp saved
+cf_2011_5_227.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000li.tmp saved
+cf_2011_5_228.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000lj.tmp saved
+cf_2011_5_232.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000lk.tmp saved
+cf_2011_5_234.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ll.tmp saved
+cf_2011_5_236.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000lm.tmp saved
+cf_2011_5_24.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ln.tmp saved
+cf_2011_5_244.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000lo.tmp saved
+cf_2011_5_245.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000lp.tmp saved
+cf_2011_5_247.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000lq.tmp saved
+cf_2011_5_25.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000lr.tmp saved
+cf_2011_5_28.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ls.tmp saved
+cf_2011_5_3.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000lt.tmp saved
+cf_2011_5_30.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000lu.tmp saved
+cf_2011_5_32.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000lv.tmp saved
+cf_2011_5_33.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000lw.tmp saved
+cf_2011_5_34.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000lx.tmp saved
+cf_2011_5_35.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000m0.tmp saved
+cf_2011_5_37.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000m1.tmp saved
+cf_2011_5_38.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000m2.tmp saved
+cf_2011_5_39.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000m3.tmp saved
+cf_2011_5_4.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000m4.tmp saved
+cf_2011_5_40.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000m5.tmp saved
+cf_2011_5_41.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000m6.tmp saved
+cf_2011_5_45.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000m7.tmp saved
+cf_2011_5_46.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000m8.tmp saved
+cf_2011_5_48.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000m9.tmp saved
+cf_2011_5_5.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ma.tmp saved
+cf_2011_5_50.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000mb.tmp saved
+cf_2011_5_51.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000mc.tmp saved
+cf_2011_5_53.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000md.tmp saved
+cf_2011_5_54.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000me.tmp saved
+cf_2011_5_56.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000mf.tmp saved
+cf_2011_5_58.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000mg.tmp saved
+cf_2011_5_6.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000mh.tmp saved
+cf_2011_5_62.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000mi.tmp saved
+cf_2011_5_63.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000mj.tmp saved
+cf_2011_5_64.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000mk.tmp saved
+cf_2011_5_66.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ml.tmp saved
+cf_2011_5_73.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000mm.tmp saved
+cf_2011_5_74.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000mn.tmp saved
+cf_2011_5_75.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000mo.tmp saved
+cf_2011_5_77.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000mp.tmp saved
+cf_2011_5_78.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000mq.tmp saved
+cf_2011_5_79.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000mr.tmp saved
+cf_2011_5_8.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ms.tmp saved
+cf_2011_5_80.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000mt.tmp saved
+cf_2011_5_81.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000mu.tmp saved
+cf_2011_5_83.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000mv.tmp saved
+cf_2011_5_88.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000mw.tmp saved
+cf_2011_5_89.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000mx.tmp saved
+cf_2011_5_9.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000n0.tmp saved
+cf_2011_5_90.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000n1.tmp saved
+cf_2011_5_91.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000n2.tmp saved
+cf_2011_5_92.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000n3.tmp saved
+cf_2011_5_96.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000n4.tmp saved
+cf_2011_5_98.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000n5.tmp saved
+cf_2011_6_1.csv
+(32 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000n6.tmp saved
+cf_2011_6_10.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000n7.tmp saved
+cf_2011_6_103.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000n8.tmp saved
+cf_2011_6_104.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000n9.tmp saved
+cf_2011_6_105.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000na.tmp saved
+cf_2011_6_106.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000nb.tmp saved
+cf_2011_6_11.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000nc.tmp saved
+cf_2011_6_112.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000nd.tmp saved
+cf_2011_6_113.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ne.tmp saved
+cf_2011_6_114.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000nf.tmp saved
+cf_2011_6_115.csv
+(32 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ng.tmp saved
+cf_2011_6_118.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000nh.tmp saved
+cf_2011_6_12.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ni.tmp saved
+cf_2011_6_124.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000nj.tmp saved
+cf_2011_6_13.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000nk.tmp saved
+cf_2011_6_133.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000nl.tmp saved
+cf_2011_6_138.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000nm.tmp saved
+cf_2011_6_14.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000nn.tmp saved
+cf_2011_6_141.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000no.tmp saved
+cf_2011_6_142.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000np.tmp saved
+cf_2011_6_144.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000nq.tmp saved
+cf_2011_6_146.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000nr.tmp saved
+cf_2011_6_148.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ns.tmp saved
+cf_2011_6_15.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000nt.tmp saved
+cf_2011_6_151.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000nu.tmp saved
+cf_2011_6_155.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000nv.tmp saved
+cf_2011_6_157.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000nw.tmp saved
+cf_2011_6_158.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000nx.tmp saved
+cf_2011_6_16.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000o0.tmp saved
+cf_2011_6_160.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000o1.tmp saved
+cf_2011_6_169.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000o2.tmp saved
+cf_2011_6_17.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000o3.tmp saved
+cf_2011_6_19.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000o4.tmp saved
+cf_2011_6_197.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000o5.tmp saved
+cf_2011_6_198.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000o6.tmp saved
+cf_2011_6_199.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000o7.tmp saved
+cf_2011_6_2.csv
+(32 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000o8.tmp saved
+cf_2011_6_20.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000o9.tmp saved
+cf_2011_6_203.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000oa.tmp saved
+cf_2011_6_204.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ob.tmp saved
+cf_2011_6_206.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000oc.tmp saved
+cf_2011_6_209.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000od.tmp saved
+cf_2011_6_21.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000oe.tmp saved
+cf_2011_6_214.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000of.tmp saved
+cf_2011_6_22.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000og.tmp saved
+cf_2011_6_232.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000oh.tmp saved
+cf_2011_6_24.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000oi.tmp saved
+cf_2011_6_242.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000oj.tmp saved
+cf_2011_6_246.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ok.tmp saved
+cf_2011_6_247.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ol.tmp saved
+cf_2011_6_25.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000om.tmp saved
+cf_2011_6_28.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000on.tmp saved
+cf_2011_6_29.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000oo.tmp saved
+cf_2011_6_3.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000op.tmp saved
+cf_2011_6_30.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000oq.tmp saved
+cf_2011_6_32.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000or.tmp saved
+cf_2011_6_34.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000os.tmp saved
+cf_2011_6_35.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ot.tmp saved
+cf_2011_6_36.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ou.tmp saved
+cf_2011_6_37.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ov.tmp saved
+cf_2011_6_38.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ow.tmp saved
+cf_2011_6_39.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ox.tmp saved
+cf_2011_6_4.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000p0.tmp saved
+cf_2011_6_40.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000p1.tmp saved
+cf_2011_6_41.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000p2.tmp saved
+cf_2011_6_45.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000p3.tmp saved
+cf_2011_6_46.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000p4.tmp saved
+cf_2011_6_5.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000p5.tmp saved
+cf_2011_6_50.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000p6.tmp saved
+cf_2011_6_53.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000p7.tmp saved
+cf_2011_6_54.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000p8.tmp saved
+cf_2011_6_56.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000p9.tmp saved
+cf_2011_6_57.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000pa.tmp saved
+cf_2011_6_58.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000pb.tmp saved
+cf_2011_6_6.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000pc.tmp saved
+cf_2011_6_62.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000pd.tmp saved
+cf_2011_6_63.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000pe.tmp saved
+cf_2011_6_66.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000pf.tmp saved
+cf_2011_6_68.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000pg.tmp saved
+cf_2011_6_74.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ph.tmp saved
+cf_2011_6_75.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000pi.tmp saved
+cf_2011_6_76.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000pj.tmp saved
+cf_2011_6_77.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000pk.tmp saved
+cf_2011_6_79.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000pl.tmp saved
+cf_2011_6_8.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000pm.tmp saved
+cf_2011_6_80.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000pn.tmp saved
+cf_2011_6_81.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000po.tmp saved
+cf_2011_6_88.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000pp.tmp saved
+cf_2011_6_89.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000pq.tmp saved
+cf_2011_6_9.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000pr.tmp saved
+cf_2011_6_90.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ps.tmp saved
+cf_2011_6_91.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000pt.tmp saved
+cf_2011_6_92.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000pu.tmp saved
+cf_2011_6_96.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000pv.tmp saved
+cf_2011_6_97.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000pw.tmp saved
+cf_2011_7_1.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000px.tmp saved
+cf_2011_7_10.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000q0.tmp saved
+cf_2011_7_100.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000q1.tmp saved
+cf_2011_7_103.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000q2.tmp saved
+cf_2011_7_104.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000q3.tmp saved
+cf_2011_7_105.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000q4.tmp saved
+cf_2011_7_11.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000q5.tmp saved
+cf_2011_7_110.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000q6.tmp saved
+cf_2011_7_112.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000q7.tmp saved
+cf_2011_7_114.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000q8.tmp saved
+cf_2011_7_119.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000q9.tmp saved
+cf_2011_7_12.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000qa.tmp saved
+cf_2011_7_121.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000qb.tmp saved
+cf_2011_7_124.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000qc.tmp saved
+cf_2011_7_129.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000qd.tmp saved
+cf_2011_7_13.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000qe.tmp saved
+cf_2011_7_133.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000qf.tmp saved
+cf_2011_7_136.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000qg.tmp saved
+cf_2011_7_137.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000qh.tmp saved
+cf_2011_7_138.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000qi.tmp saved
+cf_2011_7_14.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000qj.tmp saved
+cf_2011_7_141.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000qk.tmp saved
+cf_2011_7_142.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ql.tmp saved
+cf_2011_7_144.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000qm.tmp saved
+cf_2011_7_15.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000qn.tmp saved
+cf_2011_7_152.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000qo.tmp saved
+cf_2011_7_154.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000qp.tmp saved
+cf_2011_7_155.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000qq.tmp saved
+cf_2011_7_157.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000qr.tmp saved
+cf_2011_7_159.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000qs.tmp saved
+cf_2011_7_16.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000qt.tmp saved
+cf_2011_7_160.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000qu.tmp saved
+cf_2011_7_164.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000qv.tmp saved
+cf_2011_7_17.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000qw.tmp saved
+cf_2011_7_171.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000qx.tmp saved
+cf_2011_7_176.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000r0.tmp saved
+cf_2011_7_183.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000r1.tmp saved
+cf_2011_7_192.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000r2.tmp saved
+cf_2011_7_193.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000r3.tmp saved
+cf_2011_7_197.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000r4.tmp saved
+cf_2011_7_2.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000r5.tmp saved
+cf_2011_7_20.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000r6.tmp saved
+cf_2011_7_21.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000r7.tmp saved
+cf_2011_7_214.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000r8.tmp saved
+cf_2011_7_216.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000r9.tmp saved
+cf_2011_7_22.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ra.tmp saved
+cf_2011_7_223.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000rb.tmp saved
+cf_2011_7_227.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000rc.tmp saved
+cf_2011_7_234.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000rd.tmp saved
+cf_2011_7_24.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000re.tmp saved
+cf_2011_7_242.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000rf.tmp saved
+cf_2011_7_245.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000rg.tmp saved
+cf_2011_7_247.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000rh.tmp saved
+cf_2011_7_249.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ri.tmp saved
+cf_2011_7_25.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000rj.tmp saved
+cf_2011_7_28.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000rk.tmp saved
+cf_2011_7_29.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000rl.tmp saved
+cf_2011_7_3.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000rm.tmp saved
+cf_2011_7_30.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000rn.tmp saved
+cf_2011_7_32.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ro.tmp saved
+cf_2011_7_34.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000rp.tmp saved
+cf_2011_7_35.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000rq.tmp saved
+cf_2011_7_36.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000rr.tmp saved
+cf_2011_7_37.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000rs.tmp saved
+cf_2011_7_38.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000rt.tmp saved
+cf_2011_7_39.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ru.tmp saved
+cf_2011_7_4.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000rv.tmp saved
+cf_2011_7_40.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000rw.tmp saved
+cf_2011_7_41.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000rx.tmp saved
+cf_2011_7_45.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000s0.tmp saved
+cf_2011_7_46.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000s1.tmp saved
+cf_2011_7_47.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000s2.tmp saved
+cf_2011_7_5.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000s3.tmp saved
+cf_2011_7_50.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000s4.tmp saved
+cf_2011_7_53.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000s5.tmp saved
+cf_2011_7_54.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000s6.tmp saved
+cf_2011_7_56.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000s7.tmp saved
+cf_2011_7_57.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000s8.tmp saved
+cf_2011_7_58.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000s9.tmp saved
+cf_2011_7_6.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000sa.tmp saved
+cf_2011_7_62.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000sb.tmp saved
+cf_2011_7_63.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000sc.tmp saved
+cf_2011_7_67.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000sd.tmp saved
+cf_2011_7_73.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000se.tmp saved
+cf_2011_7_75.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000sf.tmp saved
+cf_2011_7_77.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000sg.tmp saved
+cf_2011_7_78.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000sh.tmp saved
+cf_2011_7_79.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000si.tmp saved
+cf_2011_7_8.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000sj.tmp saved
+cf_2011_7_81.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000sk.tmp saved
+cf_2011_7_88.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000sl.tmp saved
+cf_2011_7_89.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000sm.tmp saved
+cf_2011_7_9.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000sn.tmp saved
+cf_2011_7_90.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000so.tmp saved
+cf_2011_7_91.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000sp.tmp saved
+cf_2011_7_93.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000sq.tmp saved
+cf_2011_7_94.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000sr.tmp saved
+cf_2011_7_96.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ss.tmp saved
+cf_2011_8_1.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000st.tmp saved
+cf_2011_8_10.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000su.tmp saved
+cf_2011_8_104.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000sv.tmp saved
+cf_2011_8_11.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000sw.tmp saved
+cf_2011_8_110.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000sx.tmp saved
+cf_2011_8_112.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000t0.tmp saved
+cf_2011_8_114.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000t1.tmp saved
+cf_2011_8_119.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000t2.tmp saved
+cf_2011_8_12.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000t3.tmp saved
+cf_2011_8_126.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000t4.tmp saved
+cf_2011_8_13.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000t5.tmp saved
+cf_2011_8_130.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000t6.tmp saved
+cf_2011_8_133.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000t7.tmp saved
+cf_2011_8_136.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000t8.tmp saved
+cf_2011_8_137.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000t9.tmp saved
+cf_2011_8_138.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ta.tmp saved
+cf_2011_8_14.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000tb.tmp saved
+cf_2011_8_141.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000tc.tmp saved
+cf_2011_8_142.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000td.tmp saved
+cf_2011_8_144.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000te.tmp saved
+cf_2011_8_15.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000tf.tmp saved
+cf_2011_8_152.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000tg.tmp saved
+cf_2011_8_153.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000th.tmp saved
+cf_2011_8_155.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ti.tmp saved
+cf_2011_8_157.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000tj.tmp saved
+cf_2011_8_158.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000tk.tmp saved
+cf_2011_8_16.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000tl.tmp saved
+cf_2011_8_160.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000tm.tmp saved
+cf_2011_8_164.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000tn.tmp saved
+cf_2011_8_17.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000to.tmp saved
+cf_2011_8_170.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000tp.tmp saved
+cf_2011_8_173.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000tq.tmp saved
+cf_2011_8_176.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000tr.tmp saved
+cf_2011_8_179.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ts.tmp saved
+cf_2011_8_183.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000tt.tmp saved
+cf_2011_8_189.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000tu.tmp saved
+cf_2011_8_19.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000tv.tmp saved
+cf_2011_8_190.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000tw.tmp saved
+cf_2011_8_197.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000tx.tmp saved
+cf_2011_8_198.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000u0.tmp saved
+cf_2011_8_2.csv
+(32 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000u1.tmp saved
+cf_2011_8_20.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000u2.tmp saved
+cf_2011_8_21.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000u3.tmp saved
+cf_2011_8_214.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000u4.tmp saved
+cf_2011_8_216.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000u5.tmp saved
+cf_2011_8_22.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000u6.tmp saved
+cf_2011_8_223.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000u7.tmp saved
+cf_2011_8_23.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000u8.tmp saved
+cf_2011_8_234.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000u9.tmp saved
+cf_2011_8_236.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ua.tmp saved
+cf_2011_8_24.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ub.tmp saved
+cf_2011_8_25.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000uc.tmp saved
+cf_2011_8_28.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ud.tmp saved
+cf_2011_8_3.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ue.tmp saved
+cf_2011_8_30.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000uf.tmp saved
+cf_2011_8_32.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ug.tmp saved
+cf_2011_8_33.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000uh.tmp saved
+cf_2011_8_34.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ui.tmp saved
+cf_2011_8_35.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000uj.tmp saved
+cf_2011_8_37.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000uk.tmp saved
+cf_2011_8_38.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ul.tmp saved
+cf_2011_8_4.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000um.tmp saved
+cf_2011_8_40.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000un.tmp saved
+cf_2011_8_41.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000uo.tmp saved
+cf_2011_8_45.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000up.tmp saved
+cf_2011_8_46.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000uq.tmp saved
+cf_2011_8_47.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ur.tmp saved
+cf_2011_8_50.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000us.tmp saved
+cf_2011_8_53.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ut.tmp saved
+cf_2011_8_54.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000uu.tmp saved
+cf_2011_8_56.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000uv.tmp saved
+cf_2011_8_57.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000uw.tmp saved
+cf_2011_8_58.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ux.tmp saved
+cf_2011_8_6.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000v0.tmp saved
+cf_2011_8_60.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000v1.tmp saved
+cf_2011_8_62.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000v2.tmp saved
+cf_2011_8_63.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000v3.tmp saved
+cf_2011_8_67.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000v4.tmp saved
+cf_2011_8_68.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000v5.tmp saved
+cf_2011_8_74.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000v6.tmp saved
+cf_2011_8_75.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000v7.tmp saved
+cf_2011_8_77.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000v8.tmp saved
+cf_2011_8_78.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000v9.tmp saved
+cf_2011_8_79.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000va.tmp saved
+cf_2011_8_8.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000vb.tmp saved
+cf_2011_8_80.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000vc.tmp saved
+cf_2011_8_89.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000vd.tmp saved
+cf_2011_8_9.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ve.tmp saved
+cf_2011_8_90.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000vf.tmp saved
+cf_2011_8_91.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000vg.tmp saved
+cf_2011_8_93.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000vh.tmp saved
+cf_2011_8_94.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000vi.tmp saved
+cf_2011_8_96.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000vj.tmp saved
+cf_2011_8_98.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000vk.tmp saved
+cf_2011_9_1.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000vl.tmp saved
+cf_2011_9_10.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000vm.tmp saved
+cf_2011_9_103.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000vn.tmp saved
+cf_2011_9_105.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000vo.tmp saved
+cf_2011_9_107.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000vp.tmp saved
+cf_2011_9_11.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000vq.tmp saved
+cf_2011_9_112.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000vr.tmp saved
+cf_2011_9_113.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000vs.tmp saved
+cf_2011_9_115.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000vt.tmp saved
+cf_2011_9_12.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000vu.tmp saved
+cf_2011_9_123.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000vv.tmp saved
+cf_2011_9_126.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000vw.tmp saved
+cf_2011_9_13.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000vx.tmp saved
+cf_2011_9_14.csv
+(30 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000w0.tmp saved
+cf_2011_9_141.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000w1.tmp saved
+cf_2011_9_142.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000w2.tmp saved
+cf_2011_9_146.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000w3.tmp saved
+cf_2011_9_15.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000w4.tmp saved
+cf_2011_9_151.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000w5.tmp saved
+cf_2011_9_152.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000w6.tmp saved
+cf_2011_9_157.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000w7.tmp saved
+cf_2011_9_158.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000w8.tmp saved
+cf_2011_9_159.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000w9.tmp saved
+cf_2011_9_16.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000wa.tmp saved
+cf_2011_9_17.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000wb.tmp saved
+cf_2011_9_176.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000wc.tmp saved
+cf_2011_9_180.csv
+(20 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000wd.tmp saved
+cf_2011_9_19.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000we.tmp saved
+cf_2011_9_199.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000wf.tmp saved
+cf_2011_9_2.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000wg.tmp saved
+cf_2011_9_20.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000wh.tmp saved
+cf_2011_9_203.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000wi.tmp saved
+cf_2011_9_207.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000wj.tmp saved
+cf_2011_9_21.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000wk.tmp saved
+cf_2011_9_214.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000wl.tmp saved
+cf_2011_9_219.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000wm.tmp saved
+cf_2011_9_22.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000wn.tmp saved
+cf_2011_9_223.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000wo.tmp saved
+cf_2011_9_224.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000wp.tmp saved
+cf_2011_9_227.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000wq.tmp saved
+cf_2011_9_228.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000wr.tmp saved
+cf_2011_9_234.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ws.tmp saved
+cf_2011_9_24.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000wt.tmp saved
+cf_2011_9_240.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000wu.tmp saved
+cf_2011_9_25.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000wv.tmp saved
+cf_2011_9_28.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000ww.tmp saved
+cf_2011_9_29.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000wx.tmp saved
+cf_2011_9_3.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000x0.tmp saved
+cf_2011_9_30.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000x1.tmp saved
+cf_2011_9_32.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000x2.tmp saved
+cf_2011_9_33.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000x3.tmp saved
+cf_2011_9_34.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000x4.tmp saved
+cf_2011_9_35.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000x5.tmp saved
+cf_2011_9_37.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000x6.tmp saved
+cf_2011_9_38.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000x7.tmp saved
+cf_2011_9_4.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000x8.tmp saved
+cf_2011_9_40.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000x9.tmp saved
+cf_2011_9_41.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000xa.tmp saved
+cf_2011_9_45.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000xb.tmp saved
+cf_2011_9_47.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000xc.tmp saved
+cf_2011_9_50.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000xd.tmp saved
+cf_2011_9_52.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000xe.tmp saved
+cf_2011_9_53.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000xf.tmp saved
+cf_2011_9_54.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000xg.tmp saved
+cf_2011_9_56.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000xh.tmp saved
+cf_2011_9_57.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000xi.tmp saved
+cf_2011_9_58.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000xj.tmp saved
+cf_2011_9_6.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000xk.tmp saved
+cf_2011_9_62.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000xl.tmp saved
+cf_2011_9_63.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000xm.tmp saved
+cf_2011_9_66.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000xn.tmp saved
+cf_2011_9_67.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000xo.tmp saved
+cf_2011_9_70.csv
+(22 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000xp.tmp saved
+cf_2011_9_73.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000xq.tmp saved
+cf_2011_9_74.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000xr.tmp saved
+cf_2011_9_75.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000xs.tmp saved
+cf_2011_9_77.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000xt.tmp saved
+cf_2011_9_79.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000xu.tmp saved
+cf_2011_9_8.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000xv.tmp saved
+cf_2011_9_81.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000xw.tmp saved
+cf_2011_9_84.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g0000xx.tmp saved
+cf_2011_9_89.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000100.tmp saved
+cf_2011_9_9.csv
+(28 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000101.tmp saved
+cf_2011_9_90.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000102.tmp saved
+cf_2011_9_93.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000103.tmp saved
+cf_2011_9_94.csv
+(26 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000104.tmp saved
+cf_2011_9_98.csv
+(24 vars, 1 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0g000105.tmp saved
+
+. 
+. disp "All files parsed. Combining."
+All files parsed. Combining.
+
+. 
+. clear
+
+. 
+. foreach cf of local cfs {
+  2.         local save_str : subinstr local cf ".csv" "", all
+  3.         append using `tmp`save_str''
+  4. }
+(note: variable prod was byte, now int to accommodate using data's values)
+
+. 
+. 
+. merge 1:1 month year prod using trace_sum
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                             0
+    matched                             1,161  (_merge==3)
+    -----------------------------------------
+
+. drop _merge
+
+. rename prod product
+
+. rename month purchase_month
+
+. rename year purchase_year
+
+. 
+. merge 1:1 product purchase_month purchase_year using "../../Data/combined/merged_sample", gen(_merge_cf)
+(note: variable purchase_month was byte, now float to accommodate using data's values)
+(note: variable purchase_year was int, now float to accommodate using data's values)
+(label _merge already defined)
+
+    Result                           # of obs.
+    -----------------------------------------
+    not matched                         8,567
+        from master                         0  (_merge_cf==1)
+        from using                      8,567  (_merge_cf==2)
+
+    matched                             1,161  (_merge_cf==3)
+    -----------------------------------------
+
+. 
+. save cf_sum, replace
+file cf_sum.dta saved
+
+. 
+. log close
+      name:  <unnamed>
+       log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\supply_side\module\cf_parse.txt
+  log type:  text
+ closed on:  10 Sep 2017, 16:39:50
+--------------------------------------------------------------------------------------------------------------

@@ -64,8 +64,8 @@ const obs_inc_dist = IncomeDist(inc_levels,inc_weights)
 
 const M = 2000000.0
 
-function data_setup()
-    prod_char_df = readtable("E:/Box/Box Sync/Snuffles Backup/gh8728/Projects/Liquor/Data/combined/merged_sample.csv")
+function data_setup(file_str::String)
+    prod_char_df = readtable(file_str)
     # estimated price schedule
     rho_cols = [:actual_p0, :actual_p1, :actual_p2, :actual_p3, :actual_p4, :actual_p5, :actual_p6,
       :actual_p7, :actual_p8, :actual_p9]
@@ -105,8 +105,8 @@ function data_setup()
             end
           end
           if case
-            obs_rhos = obs_rhos ./ 12.0
-            obs_cutoff_q = obs_cutoff_q .* 12.0
+            obs_rhos = obs_rhos ./ row[:bottles_per_case]
+            obs_cutoff_q = obs_cutoff_q .* row[:bottles_per_case]
           end
           obs_ff = [0.0] # first fixed fee is by definition, and corresponds to A1
           for k = 2:length(obs_cutoff_q)

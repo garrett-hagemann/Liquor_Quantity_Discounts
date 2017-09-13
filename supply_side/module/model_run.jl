@@ -1,13 +1,15 @@
 # addprocs(68) # for Stampede 2 on 1 node
 #addprocs(2) # for home computer testing
 
+data_file_arg = ARGS[1] # needs a command line argument passed. Is the data file
+
 @everywhere srand(69510606) #seeding random number gen
 
 @everywhere include("LiquorQD.jl")
 @everywhere include("DataSetup.jl")
 @everywhere using DataSetup, LiquorQD
 
-markets_array = data_setup()
+markets_array = data_setup(data_file_arg)
 
 @everywhere function mkt_est(tup::Tuple{Market,Liquor})
     m = tup[1]
@@ -42,10 +44,9 @@ markets_array = data_setup()
       println("Done.")
       min_rho = minimum(tmp_ps.rhos)
       sol,xtrace,ftrace = optimize_moment(tmp_ps,dev_ps,j,nested_coefs,obs_inc_dist,m,500,pre_calc,s_pre_calc,x0=[min_rho/2.0,1.0])
-      println(sol)
-      println(ftrace)
-      #trace = [vcat(xtrace'...) ftrace]
-      trace = [sol.c sol.b ftrace]
+      #println(sol)
+      trace = [vcat(xtrace'...) ftrace]
+      #trace = [sol.c sol.b ftrace]
       out[(m,j)] = trace
     else
         println("No matching price schedule data.")

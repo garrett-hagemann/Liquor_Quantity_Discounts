@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\combined\post_check.txt
   log type:  text
- opened on:  30 Aug 2017, 21:34:59
+ opened on:   3 Sep 2017, 13:55:49
 
 . 
 . /* This file matches the nielsen UPCs to the NYS price schedule data.
@@ -42,17 +42,16 @@ purchase_year has all characters numeric; replaced as int
 . /* merging top upc info back in */
 . 
 . merge 1:m purchase_month purchase_year brand_string using upc_file, keep(2 3) gen(_merge_matched)
-(note: variable brand_string was str84, now str97 to accommodate using data's values)
 (note: variable purchase_month was byte, now float to accommodate using data's values)
 (note: variable purchase_year was int, now float to accommodate using data's values)
 
     Result                           # of obs.
     -----------------------------------------
-    not matched                         8,497
+    not matched                         8,567
         from master                         0  (_merge_matched==1)
-        from using                      8,497  (_merge_matched==2)
+        from using                      8,567  (_merge_matched==2)
 
-    matched                             1,231  (_merge_matched==3)
+    matched                             1,161  (_merge_matched==3)
     -----------------------------------------
 
 . drop if product == 0
@@ -98,11 +97,11 @@ file C:\Users\garre\AppData\Local\Temp\ST_0f000002.tmp saved
 
     Result                           # of obs.
     -----------------------------------------
-    not matched                         8,497
-        from master                     8,497  (_merge_ps==1)
+    not matched                         8,567
+        from master                     8,567  (_merge_ps==1)
         from using                          0  (_merge_ps==2)
 
-    matched                             1,231  (_merge_ps==3)
+    matched                             1,161  (_merge_ps==3)
     -----------------------------------------
 
 . 
@@ -156,10 +155,15 @@ type was str1 now str3
 . 
 . sort date_m product
 
+. egen mkt = group(date_m)
+
+. egen mkt_matches = max(_merge_ps), by(mkt)
+
 . 
 . //bys date_m product (_merge_ps): keep if _n == _N // only need one record of product per mkt. Not per case.
 >  Keeps matched records
 . 
+. // export all months in one big file
 . save merged_sample, replace
 file merged_sample.dta saved
 
@@ -167,9 +171,61 @@ file merged_sample.dta saved
 file merged_sample.csv saved
 
 . 
+. // exporting month by month for distributed estimation on TACC
+. keep if mkt_matches == 3 // keeping only months with matches
+(8042 observations deleted)
+
+. 
+. levels mkt, local(mkts)
+26 27 28 29 30 31 32 33 34 35 36 37
+
+. foreach m of local mkts{
+  2.         preserve
+  3.                 keep if mkt == `m'
+  4.                 export delimited "matched_months/merge_sample_`m'.csv", replace
+  5.         restore
+  6. }
+(1538 observations deleted)
+(note: file matched_months/merge_sample_26.csv not found)
+file matched_months/merge_sample_26.csv saved
+(1561 observations deleted)
+(note: file matched_months/merge_sample_27.csv not found)
+file matched_months/merge_sample_27.csv saved
+(1550 observations deleted)
+(note: file matched_months/merge_sample_28.csv not found)
+file matched_months/merge_sample_28.csv saved
+(1551 observations deleted)
+(note: file matched_months/merge_sample_29.csv not found)
+file matched_months/merge_sample_29.csv saved
+(1542 observations deleted)
+(note: file matched_months/merge_sample_30.csv not found)
+file matched_months/merge_sample_30.csv saved
+(1545 observations deleted)
+(note: file matched_months/merge_sample_31.csv not found)
+file matched_months/merge_sample_31.csv saved
+(1545 observations deleted)
+(note: file matched_months/merge_sample_32.csv not found)
+file matched_months/merge_sample_32.csv saved
+(1550 observations deleted)
+(note: file matched_months/merge_sample_33.csv not found)
+file matched_months/merge_sample_33.csv saved
+(1554 observations deleted)
+(note: file matched_months/merge_sample_34.csv not found)
+file matched_months/merge_sample_34.csv saved
+(1553 observations deleted)
+(note: file matched_months/merge_sample_35.csv not found)
+file matched_months/merge_sample_35.csv saved
+(1547 observations deleted)
+(note: file matched_months/merge_sample_36.csv not found)
+file matched_months/merge_sample_36.csv saved
+(1510 observations deleted)
+(note: file matched_months/merge_sample_37.csv not found)
+file matched_months/merge_sample_37.csv saved
+
+. 
 . log close
       name:  <unnamed>
        log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\combined\post_check.txt
   log type:  text
- closed on:  30 Aug 2017, 21:35:30
+ closed on:   3 Sep 2017, 13:56:20
 --------------------------------------------------------------------------------------------------------------

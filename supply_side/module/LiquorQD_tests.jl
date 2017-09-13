@@ -3,7 +3,7 @@ using LiquorQD,ForwardDiff,QuadGK, BenchmarkTools
 srand(69510606) #seeding random number gen
 
 # setting up fake products, markets, and coefficients
-test_prod1 = Liquor(1,"gin",13.56,13.56,0,90.0,0.0, -0.5986714,nothing) # null price sched
+test_prod1 = Liquor(1,"gin",13.56,13.56,0,90.0,0.0, -5.5986714,nothing) # null price sched
 test_prod2 = Liquor(2,"vod",9.30,9.30,0,40.0,0.0,0.0,nothing) # null price sched
 
 test_mkt = Market([test_prod1],6,2009)
@@ -85,7 +85,7 @@ ps_curve_res = d2_pstar_d2_rho(test_mc,test_prod1,test_coefs,test_inc,test_mkt)
 println("Curve of pstar at $test_mc: ", ps_curve_res)
 
 # Testing price schedule optimization
-test_w_params = WholesaleParams(3.22,1.0,5.5)
+test_w_params = WholesaleParams(0.0,1.0,20.5)
 #=
 # Testing wholesaler FOCs
 innerx0 = [20.0, 10.0, 5.0, 3.0, 0.3, 0.6, 0.9]
@@ -112,7 +112,7 @@ wholesaler_hess!(htest,innerx0,test_w_params,5,test_prod1,test_coefs,test_inc,te
 println("Numerical Hessian: ", (gtest1 - gtest2)/(2*step))
 println(htest[k,:])
 =#
-test_N = 8
+test_N = 4
 @time test_ps = optimal_price_sched(test_w_params,test_N,test_prod1,test_coefs,test_inc,test_mkt)
 println("Optimal price schedule: ", test_ps)
 println("Profit at optimal schedule: ", wholesaler_profit(test_ps,test_w_params,test_prod1,test_coefs,test_inc,test_mkt))
