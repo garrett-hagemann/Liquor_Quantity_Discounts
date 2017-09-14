@@ -211,3 +211,28 @@ println("Weighted Avg retail price under linear price: ", lin_avg_p)
 
 # change in total welfare
 println("Change in total welfare: ", delta_cs + delta_profit + delta_r_profit)
+
+#= calculating required points to find difference in profit as a function of
+retailer type =#
+t_r_prof_array = Float64[]
+lin_r_p_star = p_star(lin_ps.rhos[1],test_prod1,test_coefs,test_inc,test_mkt)
+lin_r_share = share(lin_r_p_star,test_prod1,test_coefs,test_inc,test_mkt)
+base_ff = recover_ff(test_ps,test_prod1,test_coefs,test_inc,test_mkt)
+
+for (rho,t,ff) in zip(test_ps.rhos,test_ps.t_cuts,base_ff)
+    tmp_p_star = p_star(rho,test_prod1,test_coefs,test_inc,test_mkt)
+    tmp_t_r_prof = t*M*((lin_r_p_star - lin_ps.rhos[1])*lin_r_share - (tmp_p_star - rho)*share(tmp_p_star,test_prod1,test_coefs,test_inc,test_mkt)) + ff*M
+    push!(t_r_prof_array,tmp_t_r_prof)
+end
+t=1.0
+rho=test_ps.rhos[end]
+ff=base_ff[end]
+tmp_p_star = p_star(rho,test_prod1,test_coefs,test_inc,test_mkt)
+tmp_t_r_prof = t*M*((lin_r_p_star - lin_ps.rhos[1])*lin_r_share - (tmp_p_star - rho)*share(tmp_p_star,test_prod1,test_coefs,test_inc,test_mkt)) + ff*M
+push!(t_r_prof_array,tmp_t_r_prof)
+
+println(t_r_prof_array)
+
+
+cutoff_dist = map((x)->ks_dist(x,test_w_params.a,test_w_params.b),test_ps.t_cuts)
+println(cutoff_dist)

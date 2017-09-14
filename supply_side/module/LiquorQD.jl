@@ -605,6 +605,7 @@ function optimal_price_sched(params::WholesaleParams, N::Int64, product::Liquor,
 end
 
 function recover_ff(ps::PriceSched,product::Liquor,coefs::DemandCoefs,inc::IncomeDist,mkt::Market)
+    #= Returns UNSCALED fixed fees. To scale, just multiply by M=#
     out_ff = Float64[0.0] # A_1 = 0 due to constraint
     for i=2:(ps.N-1)
         tmp_p1 = p_star(ps.rhos[i],product,coefs,inc,mkt)

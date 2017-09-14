@@ -84,11 +84,12 @@ end
 
             for (rho,t,ff) in zip(base_ps.rhos,base_ps.t_cuts,base_ff)
                 tmp_p_star = p_star(rho,j,nested_coefs,obs_inc_dist,m)
-                tmp_t_r_prof = t*cf_M*((tmp_p_star - rho)*share(tmp_p_star,j,nested_coefs,obs_inc_dist,m) - (lin_r_p_star - lin_ps.rhos[1])*lin_r_share) - ff
+                tmp_t_r_prof = t*cf_M*((lin_r_p_star - lin_ps.rhos[1])*lin_r_share - (tmp_p_star - rho)*share(tmp_p_star,j,nested_coefs,obs_inc_dist,m)) + ff*cf_M
                 push!(t_r_prof_array,tmp_t_r_prof)
             end
             # adding one more for type = 1
-            last_t_r_prof = (t_r_prof_array[end] + base_ff[end])/lin_ps.t_cuts[end] - base_ff[end]
+	    last_t_p_star = p_star(base_ps.rhos[end],j,nested_coefs,obs_inc_dist,m)
+            last_t_r_prof = 1.0*cf_M*((lin_r_p_star - lin_ps.rhos[1])*lin_r_share - (last_t_p_star - base_ps.rhos[end])*share(last_t_p_star,j,nested_coefs,obs_inc_dist,m)) - base_ff[end]*cf_M
             push!(t_r_prof_array,last_t_r_prof)
 
             res_array = [zeta_lb; zeta_ub; zeta_mid; (base_w_profit - zeta_mid*obs_ps.N) ; (lin_w_profit - 2*zeta_mid);
@@ -106,19 +107,20 @@ res = pmap((x)->cf_calcs(x,est_coefs),mkts_for_est)
 
 #outfile = open("counter_fact_calcs.csv","w")
 #write(outfile,"year,month,prod,zeta_lb,zeta_ub,zeta_mid,delta_w_profit,delta_r_profit,delta_cs,base_avg_p,lin_avg_p,base_wavg_p","\n")
+col_heads = "year,month,prod,zeta_lb,zeta_ub,zeta_mid,base_w_profit,lin_w_profit,base_r_profit,lin_r_profit,base_cs,lin_cs,base_avg_p,lin_avg_p,base_wavg_p"
 for d in res
     for (key,v) in d # should only be single element, but just in case
         m = key[1]
         j = key[2]
-        tmp_ps = get(j.ps)
+	tmp_ps = get(j.ps)
         type_string = join(["t_cut_$i" for i=1:(tmp_ps.N-1)],",")
         r_prof_string = join(["r_t_prof_$i" for i=1:(tmp_ps.N-1)],",")
 
         row = [m.year;m.month;j.id;v]'
         out_str = "cf/cf_$(m.year)_$(m.month)_$(j.id).csv"
+	header = join([col_heads;type_string;r_prof_string],",")
         f_out = open(out_str,"w")
-        write(f_out,"year,month,prod,zeta_lb,zeta_ub,zeta_mid,base_w_profit,lin_w_profit,base_r_profit,lin_r_profit,base_cs,lin_cs,base_avg_p,lin_avg_p,base_wavg_p",
-        type_string,r_prof_string,"\n")
+        write(f_out,header,"\n")
         writecsv(f_out,row)
         close(f_out)
     end

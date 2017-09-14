@@ -144,4 +144,16 @@ foreach var of varlist r_t_prof*{
 	replace `var' = -`var'
 }
 
+preserve
+	keep if product == 64 & purchase_year == 2011 & purchase_month == 5 // Bacardi Rum
+	reshape long t_cut_ r_t_prof_, i(product purchase_month purchase_year) j(option) string
+	//replace t_cut_ = 1.0 if option == "top"
+	twoway (connected r_t_prof_ t_cut) if option != "top", ///
+		title("Bacardi Superior 750ML, May 2011") ///
+		ytitle("Change in Type {&lambda} Retailer Profit") ///
+		xtitle("Type {&lambda}") ///
+		note("Approximately 38% of the distribution in first segment and 34% in second segment")
+	graph export r_change_by_type.pdf, replace
+restore
+
 log close

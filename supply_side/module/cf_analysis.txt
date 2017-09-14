@@ -2,7 +2,7 @@
       name:  <unnamed>
        log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\supply_side\module\cf_analysis.txt
   log type:  text
- opened on:  13 Sep 2017, 09:20:14
+ opened on:  14 Sep 2017, 11:45:16
 
 . 
 . use cf_sum
@@ -339,9 +339,41 @@ pos_change |      mean        sd        p5       p25       p50       p75       p
 (1161 real changes made)
 
 . 
+. preserve
+
+.         keep if product == 64 & purchase_year == 2011 & purchase_month == 5 // Bacardi Rum
+(9727 observations deleted)
+
+.         reshape long t_cut_ r_t_prof_, i(product purchase_month purchase_year) j(option) string
+(note: j = 1 2 3 4 5 6 7 8 top)
+(note: t_cut_top not found)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                        1   ->       9
+Number of variables                 202   ->     188
+j variable (9 values)                     ->   option
+xij variables:
+          t_cut_1 t_cut_2 ... t_cut_top   ->   t_cut_
+ r_t_prof_1 r_t_prof_2 ... r_t_prof_top   ->   r_t_prof_
+-----------------------------------------------------------------------------
+
+.         //replace t_cut_ = 1.0 if option == "top"
+.         twoway (connected r_t_prof_ t_cut) if option != "top", ///
+>                 title("Bacardi Superior 750ML, May 2011") ///
+>                 ytitle("Change in Type {&lambda} Retailer Profit") ///
+>                 xtitle("Type {&lambda}") ///
+>                 note("Approximately 38% of the distribution in first segment and 34% in second segment")
+
+.         graph export r_change_by_type.pdf, replace
+(file r_change_by_type.pdf written in PDF format)
+
+. restore
+
+. 
 . log close
       name:  <unnamed>
        log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\supply_side\module\cf_analysis.txt
   log type:  text
- closed on:  13 Sep 2017, 09:20:22
+ closed on:  14 Sep 2017, 11:45:25
 --------------------------------------------------------------------------------------------------------------
