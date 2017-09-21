@@ -33,16 +33,17 @@ drop if tag > 0
 reshape long // going back to long for a few things
 
 // for cases
-table total_options option if discount_size_type == "CASE", contents(mean actual_p sd actual_p med actual_p) format(%9.2f)
-table total_options option if discount_size_type == "CASE", contents(mean disc_q sd disc_q med disc_q) format(%9.2f)
+table total_options option if discount_size_type == "CASE", contents(mean actual_p sd actual_p med actual_p freq) format(%9.2f)
+table total_options option if discount_size_type == "CASE", contents(mean disc_q sd disc_q med disc_q freq) format(%9.2f)
 
 // now same tables with easy latex integration
-tabout total_options option using tab_options.txt, replace
+//tabout total_options option using tab_options.txt, replace
+
 
 reshape wide
 
 // distribution of number of price segments
-hist total_options, discrete percent xtitle("Price Schedule Parts")
+hist total_options if discount_size_type == "CASE", discrete percent xtitle("Price Schedule Parts")
 graph export option_hist.pdf, replace
 
 tab total_options
@@ -98,7 +99,10 @@ encode size, gen(size_n)
 
 drop if spirit_type == "mislabeled" | spirit_type == "cocktail" | spirit_type == "otr"
 
-poisson total_options actual_p1 disc_q2  proof_alcohol_cont i.spirit_type_n i.size_n
+poisson total_options actual_p1 disc_q2  proof_alcohol_cont i.spirit_type_n i.size_n i.month_n if discount_size_type == "CASE", cformat(%3.2f) pformat(%3.2f)
+
+reshape long
+reg actual_p i.option i.total_options proof_alcohol_cont i.spirit_type_n i.size_n i.month_n if discount_size_type == "CASE" & total_options <= 8 & total_options > 1
 
 
 log close

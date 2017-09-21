@@ -139,21 +139,59 @@ graph box delta_cs if good, over(total_options) noout ///
 	title("Change in Consumer Surplus by Number of Options")
 graph export cs_change_by_parts.pdf,replace
 
-/* becuase I forgot to flip around the retailer profit calculations...*/
-foreach var of varlist r_t_prof*{
-	replace `var' = -`var'
-}
+// renaming unnamed variables
+egen r_t_prof_top = rowfirst(v*)
 
 preserve
 	keep if product == 64 & purchase_year == 2011 & purchase_month == 5 // Bacardi Rum
 	reshape long t_cut_ r_t_prof_, i(product purchase_month purchase_year) j(option) string
-	//replace t_cut_ = 1.0 if option == "top"
+	replace t_cut_ = 1.0 if option == "top"
 	twoway (connected r_t_prof_ t_cut) if option != "top", ///
 		title("Bacardi Superior 750ML, May 2011") ///
 		ytitle("Change in Type {&lambda} Retailer Profit") ///
 		xtitle("Type {&lambda}") ///
 		note("Approximately 38% of the distribution in first segment and 34% in second segment")
 	graph export r_change_by_type.pdf, replace
+	
+	drop if t_cut_ == .
+	
+	set obs 1000 // set total number of interpolation points here
+	gen order = _n-1
+	
+	// second cut
+	gen tag = (order == (_N-1)/3)
+	replace order = (_N-1)/3 if order == 1
+	replace order = 1 if tag == 1
+	drop tag
+	
+	//third cut
+	gen tag = (order == 2*(_N-1)/3)
+	replace order = 2*(_N-1)/3 if order == 2
+	replace order = 2 if tag == 1
+	drop tag
+	
+	//last cut
+	gen tag = (order == 3*(_N-1)/3)
+	replace order = 3*(_N-1)/3 if order == 3
+	replace order = 3 if tag == 1
+	drop tag
+	
+	ipolate t_cut_ order, gen(ip_t_cut)
+	ipolate r_t_prof_ ip_t_cut, gen(ip_r_t_prof)
+	
+	sort order
+	
+	gen scaled = ip_r_t_prof*betaden(1,18.66937,ip_t_cut )
+	
+	twoway (connected scaled ip_t_cut, msize(0)), title("Bacardi Superior 750ML, May 2011") ///
+		ytitle("Change in Type {&lambda} Retailer Profit") ///
+		xtitle("Type {&lambda}") ///
+		note("Scaled by estimated density")
+	graph export r_change_by_type_smooth.pdf, replace
+	
+	
 restore
+
+sum price proof imported d_s_* if good
 
 log close
