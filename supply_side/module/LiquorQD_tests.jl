@@ -85,7 +85,7 @@ ps_curve_res = d2_pstar_d2_rho(test_mc,test_prod1,test_coefs,test_inc,test_mkt)
 println("Curve of pstar at $test_mc: ", ps_curve_res)
 
 # Testing price schedule optimization
-test_w_params = WholesaleParams(0.0,1.0,20.5)
+test_w_params = WholesaleParams(4.0,1.0,1.0)
 #=
 # Testing wholesaler FOCs
 innerx0 = [20.0, 10.0, 5.0, 3.0, 0.3, 0.6, 0.9]
@@ -112,10 +112,27 @@ wholesaler_hess!(htest,innerx0,test_w_params,5,test_prod1,test_coefs,test_inc,te
 println("Numerical Hessian: ", (gtest1 - gtest2)/(2*step))
 println(htest[k,:])
 =#
-test_N = 4
+test_N = 5
 @time test_ps = optimal_price_sched(test_w_params,test_N,test_prod1,test_coefs,test_inc,test_mkt)
 println("Optimal price schedule: ", test_ps)
 println("Profit at optimal schedule: ", wholesaler_profit(test_ps,test_w_params,test_prod1,test_coefs,test_inc,test_mkt))
+
+test_w_params_bmod = WholesaleParams(4.0,1.0,6.0)
+test_w_params_cmod = WholesaleParams(8.0,1.0,1.0)
+test_w_params_both = WholesaleParams(8.0,1.0,6.0)
+
+id_ps_base = test_ps
+id_ps_c = optimal_price_sched(test_w_params_cmod,test_N,test_prod1,test_coefs,test_inc,test_mkt)
+id_ps_b = optimal_price_sched(test_w_params_bmod,test_N,test_prod1,test_coefs,test_inc,test_mkt)
+id_ps_both = optimal_price_sched(test_w_params_both,test_N,test_prod1,test_coefs,test_inc,test_mkt)
+
+println("Price Schedules for identification graph")
+println("Base: ", id_ps_base)
+println("c change: ", id_ps_c)
+println("b change: ",id_ps_b)
+println("both change: ", id_ps_both)
+
+
 # testing deviation generation
 test_δ = 0.025
 test_devs = dev_gen(test_ps,test_δ)

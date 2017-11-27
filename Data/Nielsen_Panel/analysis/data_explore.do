@@ -32,6 +32,21 @@ clear
 use prod_chars_individual
 keep if product > 0 // dropping outside options
 
+gen purchase_month = month(date_d)
+gen purchase_year = year(date_d)
+
+egen group = group(purchase_month purchase_year upc)
+egen uniq_prices = nvals(price), by(group) // needs egenmore
+egen purch_freq = count(product), by(group)
+
+hist uniq_prices if product <= 250 & purch_freq > 1, disc percent ///
+	title("") ///
+	xtitle("Unique Prices") graphregion(color(white)) ///
+	fcolor(edkblue) lcolor(black) ylabel(,nogrid)
+graph export "uniq_prices.pdf", replace
+
+drop group uniq_prices purch_freq
+
 sum price proof imported d_s_* [weight = projection_factor]
 sum price proof imported d_s_* [weight = projection_factor] if product <= 250
 
@@ -44,7 +59,7 @@ restore
 /* Purchases by month and Year */
 tab purchase_year purchase_month
 
-gen date_q = qofd(date_n) // quarterly date. Useful for time graphs
+gen date_q = qofd(date_d) // quarterly date. Useful for time graphs
 format date_q %tq
 
 gen inc = .
@@ -63,12 +78,39 @@ replace inc = 47500 if household_income == 19
 replace inc = 55000 if household_income == 21
 replace inc = 65000 if household_income == 23
 replace inc = 85000 if household_income == 26
-replace inc = 150000 if household_income == 27
+replace inc = 150000 if household_income >= 27
 
 tab inc [weight = projection_factor]
 tab inc [weight = projection_factor] if NYC
 
+label define income 3 "0-5" ///
+					4 "5-8" ///
+					6 "8-10" ///
+					8 "10-12" ///
+					10 "12-15" ///
+					11 "15-20" ///
+					13 "20-25" ///
+					15 "25-30" ///
+					16 "30-35" ///
+					17 "35-40" ///
+					18 "40-45" ///
+					19 "45-50" ///
+					21 "50-60" ///
+					23 "60-70" ///
+					26 "70-100" ///
+					27 "100+" //
 
+gen hh_inc_2 = household_income
+replace hh_inc_2 = 27 if hh_inc_2 > 27
+label values hh_inc_2 income
+
+graph hbar (percent) household_code [weight=projection_factor], over(hh_inc_2 ) ///
+	l1title("Income Range ($000)") /// undocumented option
+	ytitle("Percent") title("Income Distribution") ///
+	graphregion(color(white)) bar(1,fcolor(edkblue) lcolor(black)) ylabel(,nogrid)
+graph export "consumer_income_dist.pdf",replace
+	
+	
 /* Distribution of household purchases. I.e. distribution of number of times
 a household appears in the data */
 

@@ -14,6 +14,31 @@ drop if posting_year == 2014 // only incomplete data for 2014. No need to keep i
 replace option=option+1 // correcting options which start at 0
 egen total_options = max(option), by(record_num) // calculating total number of options
 
+preserve
+	/*
+	keep if discount_size_type == "CASE"
+	collapse (p25) p25=actual_p (p50) p50=actual_p (p75) p75=actual_p , by(total_options option)
+	scatter p50 option [weight=total_options] if total_options >=2 & total_options <= 8 ///
+		, msymbol(Oh) title("Median Price Per Case by Option") ytitle("Price per Case") ///
+		xtitle("Price Segment") note("Size scaled by total options available") ///
+		xtick(1(1)8) graphregion(color(white)) fcolor(edkblue) lcolor(black) ylabel(,nogrid)
+	graph export "med_price_by_option.pdf",replace
+	*/
+	keep if discount_size_type == "CASE"
+	collapse (p25) p25=actual_p (p50) p50=actual_p (p75) p75=actual_p , by(total_options option)
+	twoway (connected p50 option if total_options == 2, msymbol(none) mlab(total_options) mlabpos(0)) ///
+		(connected p50 option if total_options == 3, msymbol(none) mlab(total_options) mlabpos(0)) ///
+		(connected p50 option if total_options == 4, msymbol(none) mlab(total_options) mlabpos(0)) ///
+		(connected p50 option if total_options == 5, msymbol(none) mlab(total_options) mlabpos(0)) ///
+		(connected p50 option if total_options == 6, msymbol(none) mlab(total_options) mlabpos(0)) ///
+		(connected p50 option if total_options == 7, msymbol(none) mlab(total_options) mlabpos(0)) ///
+		(connected p50 option if total_options == 8, msymbol(none) mlab(total_options) mlabpos(0)) ///
+		, title("Median Price Per Case by Option") ytitle("Price per Case") ///
+		xtitle("Price Segment") ///
+		xtick(1(1)8) graphregion(color(white)) ylabel(,nogrid) legend(off)
+	graph export "med_price_by_option.pdf",replace
+restore
+
 // Need to reshape to one record per row for some operations. Doing that first so everything is consistent
 reshape wide disc_p disc_q disc_dollars actual_p tariff norm_p norm_tariff, i(record_num) j(option)
 egen product = group(size brand_name product_item_name nv_serial_number) // "product" is a brand label id and a wholesaler id
@@ -43,10 +68,29 @@ table total_options option if discount_size_type == "CASE", contents(mean disc_q
 reshape wide
 
 // distribution of number of price segments
-hist total_options if discount_size_type == "CASE", discrete percent xtitle("Price Schedule Parts")
+hist total_options if discount_size_type == "CASE", ///
+	discrete percent xtitle("Price Segments") ///
+	graphregion(color(white)) fcolor(edkblue) lcolor(black) ylabel(,nogrid)
 graph export option_hist.pdf, replace
 
 tab total_options
+
+//egen max_p = rowmax(actual_p*) // seemingly defined elsewhere
+egen min_p = rowmin(actual_p*) 
+gen p_range = max_p - min_p
+
+hist p_range if discount_size_type == "CASE" & p_range < 200 & min_p > 0, ///
+	width(5) start(0) percent xtitle("Max. Price - Min. Price") ///
+	graphregion(color(white)) fcolor(edkblue) lcolor(black) ylabel(,nogrid)
+graph export p_range_hist.pdf, replace
+
+drop pct_discount // defined previously for some reason
+gen pct_discount = p_range / max_p * 100
+hist pct_discount if discount_size_type == "CASE" & pct_discount <80, ///
+	width(5) start(0) percent xtitle("Max. Pct. Discount") ///
+	graphregion(color(white)) fcolor(edkblue) lcolor(black) ylabel(,nogrid)
+graph export p_range_pct_hist.pdf, replace
+
 
 xtset product date_n
 

@@ -154,25 +154,32 @@ preserve
 	sum eps_y, det
 	count if eps_y > -1.0
 
-	kdensity eps_y if d_g_gin
+	kdensity eps_y if d_g_gin, graphregion(color(white)) note("") ///
+		xtitle("Demand Elasticity") ytitle("Density") title("") ylabel(,nogrid)
 	graph export eps_gin.pdf, replace
 
-	kdensity eps_y if d_g_vod
+	kdensity eps_y if d_g_vod, graphregion(color(white)) note("") ///
+		xtitle("Demand Elasticity") ytitle("Density") title("") ylabel(,nogrid)
 	graph export eps_vod.pdf, replace
 
-	kdensity eps_y if d_g_rum
+	kdensity eps_y if d_g_rum, graphregion(color(white)) note("") ///
+		xtitle("Demand Elasticity") ytitle("Density") title("") ylabel(,nogrid)
 	graph export eps_rum.pdf, replace
 
-	kdensity eps_y if d_g_sch
+	kdensity eps_y if d_g_sch, graphregion(color(white)) note("") ///
+		xtitle("Demand Elasticity") ytitle("Density") title("") ylabel(,nogrid)
 	graph export eps_sch.pdf, replace
 
-	kdensity eps_y if d_g_brb
+	kdensity eps_y if d_g_brb, graphregion(color(white)) note("") ///
+		xtitle("Demand Elasticity") ytitle("Density") title("") ylabel(,nogrid)
 	graph export eps_brb.pdf, replace
 
-	kdensity eps_y if d_g_teq
+	kdensity eps_y if d_g_teq, graphregion(color(white)) note("") ///
+		xtitle("Demand Elasticity") ytitle("Density") title("") ylabel(,nogrid)
 	graph export eps_teq.pdf, replace
 
-	kdensity eps_y if d_g_otr
+	kdensity eps_y if d_g_otr, graphregion(color(white)) note("") ///
+		xtitle("Demand Elasticity") ytitle("Density") title("") ylabel(,nogrid)
 	graph export eps_otr.pdf, replace
 restore
 

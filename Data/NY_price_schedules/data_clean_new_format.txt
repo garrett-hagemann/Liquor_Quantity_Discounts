@@ -1,9 +1,8 @@
--------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------------------
       name:  <unnamed>
-       log:  /home/gh8728/Liquor/Data/NY_price_schedules/data_clean_new_format.
-> txt
+       log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\Data\NY_price_schedules\data_clean_new_format.txt
   log type:  text
- opened on:  23 May 2016, 17:44:23
+ opened on:   2 Nov 2017, 12:44:51
 
 . 
 . local months "Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec"
@@ -12,59 +11,46 @@
 . 
 . foreach m in `months'{
   2.         disp "Parsing 2015`m'"
-  3.         import delimited using "2015/LR-`m'-2015.txt", encoding(UTF-16) cl
-> ear
+  3.         import delimited using "2015/LR-`m'-2015.txt", clear stringcols(_all)
   4.         tempfile tmp2015`m'
   5.         save `tmp2015`m''
   6. }
 Parsing 2015Jan
-(1 var, 0 obs)
-(note: dataset contains 0 observations)
-file /tmp/St29796.000001 saved
+(98 vars, 27810 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0h000006.tmp saved
 Parsing 2015Feb
-(1 var, 0 obs)
-(note: dataset contains 0 observations)
-file /tmp/St29796.000002 saved
+(98 vars, 27838 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0h000007.tmp saved
 Parsing 2015Mar
-(1 var, 0 obs)
-(note: dataset contains 0 observations)
-file /tmp/St29796.000003 saved
+(98 vars, 27785 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0h000008.tmp saved
 Parsing 2015Apr
-(1 var, 0 obs)
-(note: dataset contains 0 observations)
-file /tmp/St29796.000004 saved
+(98 vars, 27747 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0h000009.tmp saved
 Parsing 2015May
-(1 var, 0 obs)
-(note: dataset contains 0 observations)
-file /tmp/St29796.000005 saved
+(98 vars, 27633 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0h00000a.tmp saved
 Parsing 2015Jun
-(1 var, 0 obs)
-(note: dataset contains 0 observations)
-file /tmp/St29796.000006 saved
+(98 vars, 30225 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0h00000b.tmp saved
 Parsing 2015Jul
-(1 var, 0 obs)
-(note: dataset contains 0 observations)
-file /tmp/St29796.000007 saved
+(98 vars, 30244 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0h00000c.tmp saved
 Parsing 2015Aug
-(1 var, 0 obs)
-(note: dataset contains 0 observations)
-file /tmp/St29796.000008 saved
+(98 vars, 30444 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0h00000d.tmp saved
 Parsing 2015Sep
-(1 var, 0 obs)
-(note: dataset contains 0 observations)
-file /tmp/St29796.000009 saved
+(98 vars, 30570 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0h00000e.tmp saved
 Parsing 2015Oct
-(1 var, 0 obs)
-(note: dataset contains 0 observations)
-file /tmp/St29796.00000a saved
+(98 vars, 30891 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0h00000f.tmp saved
 Parsing 2015Nov
-(1 var, 0 obs)
-(note: dataset contains 0 observations)
-file /tmp/St29796.00000b saved
+(98 vars, 30794 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0h00000g.tmp saved
 Parsing 2015Dec
-(1 var, 0 obs)
-(note: dataset contains 0 observations)
-file /tmp/St29796.00000c saved
+(98 vars, 29386 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0h00000h.tmp saved
 
 . 
 . local 2014MonthsNew "May Jun Jul Aug Sep Oct Nov Dec"
@@ -72,43 +58,34 @@ file /tmp/St29796.00000c saved
 . 
 . foreach m in `2014MonthsNew'{
   2.         disp "Parsing 2014`m'"
-  3.         import delimited using "2014/LR-`m'-2014-new-format.txt", encoding
-> (UTF-16) clear
+  3.         import delimited using "2014/LR-`m'-2014-new-format.txt", clear stringcols(_all)
   4.         tempfile tmp2014`m'
   5.         save `tmp2014`m''
   6. }
 Parsing 2014May
-(1 var, 0 obs)
-(note: dataset contains 0 observations)
-file /tmp/St29796.00000d saved
+(98 vars, 51695 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0h00000i.tmp saved
 Parsing 2014Jun
-(1 var, 0 obs)
-(note: dataset contains 0 observations)
-file /tmp/St29796.00000e saved
+(98 vars, 51376 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0h00000j.tmp saved
 Parsing 2014Jul
-(1 var, 0 obs)
-(note: dataset contains 0 observations)
-file /tmp/St29796.00000f saved
+(98 vars, 26352 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0h00000k.tmp saved
 Parsing 2014Aug
-(1 var, 0 obs)
-(note: dataset contains 0 observations)
-file /tmp/St29796.00000g saved
+(98 vars, 26210 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0h00000l.tmp saved
 Parsing 2014Sep
-(1 var, 0 obs)
-(note: dataset contains 0 observations)
-file /tmp/St29796.00000h saved
+(98 vars, 26363 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0h00000m.tmp saved
 Parsing 2014Oct
-(1 var, 0 obs)
-(note: dataset contains 0 observations)
-file /tmp/St29796.00000i saved
+(98 vars, 27085 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0h00000n.tmp saved
 Parsing 2014Nov
-(1 var, 0 obs)
-(note: dataset contains 0 observations)
-file /tmp/St29796.00000j saved
+(98 vars, 27206 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0h00000o.tmp saved
 Parsing 2014Dec
-(1 var, 0 obs)
-(note: dataset contains 0 observations)
-file /tmp/St29796.00000k saved
+(98 vars, 31401 obs)
+file C:\Users\garre\AppData\Local\Temp\ST_0h00000p.tmp saved
 
 . 
 . clear // starting with a clean dataset
@@ -120,16 +97,47 @@ file /tmp/St29796.00000k saved
   4. }
 Appending 2015Jan
 Appending 2015Feb
+(note: variable brand_reg was str7, now str8 to accommodate using data's values)
+(note: variable amount_6 was str5, now str6 to accommodate using data's values)
+(note: variable cmbqty_4 was str1, now str2 to accommodate using data's values)
+(note: variable cmbqty_5 was str1, now str2 to accommodate using data's values)
 Appending 2015Mar
+(note: variable brand_name was str57, now str59 to accommodate using data's values)
 Appending 2015Apr
+(note: variable fullcase was str1, now str4 to accommodate using data's values)
+(note: variable unit_1 was str2, now str5 to accommodate using data's values)
+(note: variable unit_2 was str2, now str4 to accommodate using data's values)
+(note: variable unit_3 was str2, now str4 to accommodate using data's values)
+(note: variable unit_4 was str2, now str4 to accommodate using data's values)
+(note: variable unit_5 was str2, now str4 to accommodate using data's values)
+(note: variable unit_6 was str2, now str4 to accommodate using data's values)
+(note: variable unit_7 was str1, now str4 to accommodate using data's values)
+(note: variable unit_8 was str1, now str4 to accommodate using data's values)
+(note: variable unit_9 was str1, now str4 to accommodate using data's values)
+(note: variable unit_10 was str1, now str4 to accommodate using data's values)
+(note: variable cmbqty_10 was str1, now str15 to accommodate using data's values)
 Appending 2015May
+(note: variable case_price was str8, now str9 to accommodate using data's values)
 Appending 2015Jun
+(note: variable amount_9 was str5, now str6 to accommodate using data's values)
+(note: variable qty_10 was str1, now str2 to accommodate using data's values)
+(note: variable amount_10 was str4, now str5 to accommodate using data's values)
+(note: variable cmbitem_5 was str8, now str15 to accommodate using data's values)
+(note: variable cmbitem_6 was str8, now str15 to accommodate using data's values)
 Appending 2015Jul
+(note: variable distrib_id was str88, now str97 to accommodate using data's values)
+(note: variable qty_5 was str3, now str4 to accommodate using data's values)
 Appending 2015Aug
+(note: variable brand_name was str59, now str61 to accommodate using data's values)
 Appending 2015Sep
+(note: variable prod_name was str99, now str120 to accommodate using data's values)
+(note: variable cmbitem_3 was str19, now str20 to accommodate using data's values)
 Appending 2015Oct
+(note: variable proof was str5, now str6 to accommodate using data's values)
+(note: variable amount_7 was str5, now str6 to accommodate using data's values)
 Appending 2015Nov
 Appending 2015Dec
+(note: variable cmbitem_5 was str15, now str17 to accommodate using data's values)
 
 . 
 . 
@@ -138,22 +146,273 @@ Appending 2015Dec
   3.         append using `tmp2014`m''
   4. }
 Appending 2014May
+(note: variable qty_3 was str3, now str4 to accommodate using data's values)
+(note: variable cmbitem_5 was str17, now str20 to accommodate using data's values)
 Appending 2014Jun
+(note: variable brand_name was str61, now str62 to accommodate using data's values)
 Appending 2014Jul
+(note: variable um was str4, now str9 to accommodate using data's values)
 Appending 2014Aug
+(note: variable um was str9, now str10 to accommodate using data's values)
 Appending 2014Sep
 Appending 2014Oct
+(note: variable bev_type was str2, now str3 to accommodate using data's values)
 Appending 2014Nov
 Appending 2014Dec
 
 . 
 . gen record_num = _n
 
+. destring *_price amount_* qty_*, replace // converting to numeric
+bot_price has all characters numeric; replaced as double
+case_price has all characters numeric; replaced as double
+amount_1 contains nonnumeric characters; no replace
+amount_2 has all characters numeric; replaced as double
+(16 missing values generated)
+amount_3 has all characters numeric; replaced as double
+(16 missing values generated)
+amount_4 has all characters numeric; replaced as double
+(16 missing values generated)
+amount_5 has all characters numeric; replaced as double
+(16 missing values generated)
+amount_6 has all characters numeric; replaced as double
+(16 missing values generated)
+amount_7 has all characters numeric; replaced as double
+(16 missing values generated)
+amount_8 has all characters numeric; replaced as double
+(16 missing values generated)
+amount_9 has all characters numeric; replaced as double
+(16 missing values generated)
+amount_10 has all characters numeric; replaced as byte
+(16 missing values generated)
+qty_1 contains nonnumeric characters; no replace
+qty_2 has all characters numeric; replaced as int
+(16 missing values generated)
+qty_3 has all characters numeric; replaced as int
+(16 missing values generated)
+qty_4 has all characters numeric; replaced as int
+(16 missing values generated)
+qty_5 has all characters numeric; replaced as int
+(16 missing values generated)
+qty_6 has all characters numeric; replaced as int
+(16 missing values generated)
+qty_7 has all characters numeric; replaced as int
+(16 missing values generated)
+qty_8 has all characters numeric; replaced as int
+(16 missing values generated)
+qty_9 has all characters numeric; replaced as int
+(16 missing values generated)
+qty_10 has all characters numeric; replaced as byte
+(16 missing values generated)
+qty_discid contains nonnumeric characters; no replace
+
+. drop if amount_2 == . // set of 16 records appears to have garbled input. Can fix later if need be.
+(16 observations deleted)
+
+. 
+. destring *_price amount_* qty_*, replace // trying again
+bot_price already numeric; no replace
+case_price already numeric; no replace
+amount_1 has all characters numeric; replaced as double
+amount_2 already numeric; no replace
+amount_3 already numeric; no replace
+amount_4 already numeric; no replace
+amount_5 already numeric; no replace
+amount_6 already numeric; no replace
+amount_7 already numeric; no replace
+amount_8 already numeric; no replace
+amount_9 already numeric; no replace
+amount_10 already numeric; no replace
+qty_1 has all characters numeric; replaced as int
+qty_2 already numeric; no replace
+qty_3 already numeric; no replace
+qty_4 already numeric; no replace
+qty_5 already numeric; no replace
+qty_6 already numeric; no replace
+qty_7 already numeric; no replace
+qty_8 already numeric; no replace
+qty_9 already numeric; no replace
+qty_10 already numeric; no replace
+qty_discid contains nonnumeric characters; no replace
+
+. 
+. destring post_month post_year, replace
+post_month has all characters numeric; replaced as byte
+post_year has all characters numeric; replaced as int
+
+. 
+. // correcting item sizes
+. replace item_size = upper(item_size) // remove lower case
+(12479 real changes made)
+
+. replace item_size = "750ML" if item_size == "750"
+(62559 real changes made)
+
+. replace item_size = "750ML" if item_size == "750.00"
+(52401 real changes made)
+
+. replace item_size = "1L" if item_size == "1.00"
+(26929 real changes made)
+
+. replace item_size = "1.75L" if item_size == "1.75"
+(26578 real changes made)
+
+. replace item_size = "1L" if item_size == "1"
+(23298 real changes made)
+
+. replace item_size = "375ML" if item_size == "375"
+(13048 real changes made)
+
+. replace item_size = "375ML" if item_size == "375.00"
+(11353 real changes made)
+
+. replace item_size = "50ML" if item_size == "50"
+(9716 real changes made)
+
+. replace item_size = "50ML" if item_size == "50.00"
+(8774 real changes made)
+
+. replace item_size = "200ML" if item_size == "200"
+(6599 real changes made)
+
+. replace item_size = "200ML" if item_size == "200.00"
+(5575 real changes made)
+
+. replace item_size = "750ML" if item_size == "0.75"
+(2423 real changes made)
+
+. replace item_size = "750ML" if item_size == "0.75L"
+(2141 real changes made)
+
+. replace item_size = "1L" if item_size == "1LT"
+(2134 real changes made)
+
+. replace item_size = "100ML" if item_size == "100"
+(1201 real changes made)
+
+. replace item_size = "1L" if item_size == "1.0L"
+(1055 real changes made)
+
+. replace item_size = "1.75L" if item_size == "1.75LT"
+(934 real changes made)
+
+. replace item_size = "100ML" if item_size == "100.00"
+(808 real changes made)
+
+. replace item_size = "1L" if item_size == "1.0"
+(612 real changes made)
+
+. replace item_size = "1L" if item_size == "1LIT"
+(379 real changes made)
+
+. replace item_size = "1.75L" if item_size == "1.75LIT"
+(359 real changes made)
+
+. replace item_size = "1L" if item_size == "1000ML"
+(327 real changes made)
+
+. replace item_size = "1L" if item_size == "1000"
+(295 real changes made)
+
+. 
+. keep if item_size == "750ML" | item_size == "1L" | item_size == "1.75L" | item_size == "375ML" // keeping only standa
+> rd sizes
+(110099 observations deleted)
+
+. 
+. // replace quantity == . if no disocunt is offered
+. 
+. foreach v of varlist qty_1 qty_2 qty_3 qty_4 qty_5 qty_6 qty_7 qty_8 qty_9 qty_10 {
+  2.         replace `v' = . if `v' == 0
+  3. }
+(135279 real changes made, 135279 to missing)
+(225910 real changes made, 225910 to missing)
+(365307 real changes made, 365307 to missing)
+(464000 real changes made, 464000 to missing)
+(497392 real changes made, 497392 to missing)
+(505793 real changes made, 505793 to missing)
+(508590 real changes made, 508590 to missing)
+(508889 real changes made, 508889 to missing)
+(508657 real changes made, 508657 to missing)
+(508934 real changes made, 508934 to missing)
+
+. 
+. foreach v of varlist unit_1 unit_2 unit_3 unit_4 unit_5 unit_6 unit_7 unit_8 unit_9 unit_10 {
+  2.         replace `v' = "C" if !(`v' == "B" | `v' == "")
+  3. }
+(1268 real changes made)
+(835 real changes made)
+(175 real changes made)
+(42 real changes made)
+(40 real changes made)
+(20 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+(0 real changes made)
+
+. 
+. /* Generating "price paid" at each quantity since discounts are given by the 
+> amount TAKEN OFF of the price per case */
+. rename qty_discid disc_descr
+
+. reshape long qty_ unit_ amount_ type_, i(record_num) j(option) string
+(note: j = 1 10 2 3 4 5 6 7 8 9)
+
+Data                               wide   ->   long
+-----------------------------------------------------------------------------
+Number of obs.                   508940   -> 5.1e+06
+Number of variables                  99   ->      64
+j variable (10 values)                    ->   option
+xij variables:
+                 qty_1 qty_10 ... qty_9   ->   qty_
+              unit_1 unit_10 ... unit_9   ->   unit_
+        amount_1 amount_10 ... amount_9   ->   amount_
+              type_1 type_10 ... type_9   ->   type_
+-----------------------------------------------------------------------------
+
+. 
+. gen actual_p = .
+(5089400 missing values generated)
+
+. replace actual_p = case_price*(1-amount) if unit == "C" & type == "%" & qty != .
+(26948 real changes made)
+
+. replace actual_p = bot_price*(1-amount) if unit == "B" & type == "%" & qty != .
+(21358 real changes made)
+
+. replace actual_p = case_price-amount if unit == "C" & type == "$" & qty != .
+(242938 real changes made)
+
+. replace actual_p = bot_price-amount if unit == "B" & type == "$" & qty != .
+(531383 real changes made)
+
+. 
+. reshape wide qty_ unit_ amount_ actual_p type, i(record_num) j(option) string
+(note: j = 1 10 2 3 4 5 6 7 8 9)
+
+Data                               long   ->   wide
+-----------------------------------------------------------------------------
+Number of obs.                  5.1e+06   ->  508940
+Number of variables                  65   ->     109
+j variable (10 values)           option   ->   (dropped)
+xij variables:
+                                   qty_   ->   qty_1 qty_10 ... qty_9
+                                  unit_   ->   unit_1 unit_10 ... unit_9
+                                amount_   ->   amount_1 amount_10 ... amount_9
+                               actual_p   ->   actual_p1 actual_p10 ... actual_p9
+                                  type_   ->   type_1 type_10 ... type_9
+-----------------------------------------------------------------------------
+
+. 
+. keep if post_year == 2015
+(219538 observations deleted)
+
 . 
 . save new_format_months, replace
-(note: dataset contains 0 observations)
-(note: file new_format_months.dta not found)
 file new_format_months.dta saved
 
 . 
 end of do-file
+
+. exit, clear

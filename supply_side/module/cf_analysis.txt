@@ -1,8 +1,8 @@
------------------------------------------------------------------------------------------------------------------------
+--------------------------------------------------------------------------------------------------------------
       name:  <unnamed>
        log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\supply_side\module\cf_analysis.txt
   log type:  text
- opened on:  21 Sep 2017, 08:48:56
+ opened on:  26 Nov 2017, 21:13:33
 
 . 
 . use cf_sum
@@ -43,6 +43,24 @@
 (8580 missing values generated)
 
 . gen delta_cs = lin_cs - base_cs
+(8580 missing values generated)
+
+. 
+. gen pct_delta_w_profit = (lin_w_profit - base_w_profit)/base_w_profit
+(8580 missing values generated)
+
+. gen pct_delta_r_profit = (lin_r_profit - base_r_profit)/base_r_profit
+(8580 missing values generated)
+
+. gen pct_delta_cs = (lin_cs - base_cs)/base_cs
+(8580 missing values generated)
+
+. gen pct_total_change = (lin_w_profit + lin_r_profit + lin_cs - base_w_profit - base_r_profit - base_cs ) / (
+> base_w_profit + base_r_profit + base_cs)
+(8580 missing values generated)
+
+. 
+. gen inv_b = 1/b_mode
 (8580 missing values generated)
 
 . 
@@ -94,43 +112,71 @@ total_optio |
 . 
 . // descriptive stats for estimted parameters
 . 
-. tabstat c_mode b_mode zeta_mid, statistics(mean sd p25 p50 p75) columns(statistics)
+. tabstat c_mode b_mode inv_b zeta_mid if good, statistics(mean sd p25 p50 p75) columns(statistics)
 
     variable |      mean        sd       p25       p50       p75
 -------------+--------------------------------------------------
-      c_mode |  13.59697  9.492976  6.942173  11.67576  18.01805
-      b_mode |  35.04098  8.684248  31.48447  39.97704  39.99398
-    zeta_mid |  28.12981  141.6072  .4963359  1.110598  3.923025
+      c_mode |   14.6068   9.11911  7.708355  12.83846  18.70443
+      b_mode |  35.20403  8.589921  31.61673  39.98027  39.99451
+       inv_b |  .0331194  .0250499  .0250034  .0250123  .0316289
+    zeta_mid |  7.956786  45.58187  .4611326  .9898828  3.028252
 ----------------------------------------------------------------
 
-. tabstat delta_w_profit delta_r_profit delta_cs total_change, statistics(mean sd p5 p25 p50 p75 p95) columns(statistic
-> s)
+. tabstat delta_w_profit delta_r_profit delta_cs total_change if good, statistics(mean sd p5 p25 p50 p75 p95) 
+> columns(statistics)
 
     variable |      mean        sd        p5       p25       p50       p75       p95
 -------------+----------------------------------------------------------------------
-delta_w_pr~t | -231.6019   1188.08 -442.8838 -143.0683 -56.42368 -24.72615 -2.348772
-delta_r_pr~t |  209.0813  902.0327  2.024269  18.60505  41.68831  112.2542  486.2858
-    delta_cs |  -186.321  1244.258 -422.9729 -125.9731 -52.33351 -19.77957  198.6248
-total_change | -208.8416  1608.633 -532.6263 -154.3424 -64.29851 -24.86064  316.2406
+delta_w_pr~t |  -100.306  143.7089  -369.886 -118.4797 -49.66177 -22.59015 -1.993279
+delta_r_pr~t |  75.43724  112.1555  1.880447  16.69414   37.3292  88.03889   267.603
+    delta_cs | -112.8576  163.5125 -406.4603 -132.3362 -56.47166 -25.42377  -2.78595
+total_change | -137.7263  194.3022  -503.584  -160.012 -69.41815 -31.93719 -3.103854
+------------------------------------------------------------------------------------
+
+. tabstat pct_delta_w_profit pct_delta_r_profit pct_delta_cs pct_total_change if good, statistics(mean sd p5 p
+> 25 p50 p75 p95) columns(statistics)
+
+    variable |      mean        sd        p5       p25       p50       p75       p95
+-------------+----------------------------------------------------------------------
+pct~w_profit | -.2503417  .0220111 -.2666872 -.2605617 -.2561258 -.2474493 -.1675446
+pct~r_profit |  .3141782  .0171445  .2808192  .3071667  .3208337  .3251234  .3286135
+pct_delta_cs | -.2652065  .0099391 -.2821297  -.267048 -.2645624 -.2637582 -.2359628
+pct_total_~e | -.1305517  .0144719 -.1483816 -.1350999 -.1327305 -.1290115 -.0763645
 ------------------------------------------------------------------------------------
 
 . 
+. 
 . kdensity c_mode, title("") ///
->         xtitle("Wholesaler Marginal Cost")
+>         xtitle("Wholesaler Marginal Cost") note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
 
 . graph export c_density.pdf, replace
 (file c_density.pdf written in PDF format)
 
 . 
 . kdensity b_mode, bwidth(2) title("") ///
->         xtitle("b in Beta(1,b)")
+>         xtitle("b in Beta(1,b)") note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
 
-. graph export b_density.pdf, replace 
+. graph export b_density.pdf, replace
 (file b_density.pdf written in PDF format)
 
 . 
+. kdensity inv_b, bwidth(.01) title("") ///
+>         xtitle("b in Beta(1,1/b)") note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
+
+. graph export b_density_inv.pdf, replace 
+(file b_density_inv.pdf written in PDF format)
+
+. 
 . kdensity b_mode if b_mode < 39, bwidth(2)title("") ///
->         xtitle("b in Beta(1,b)")
+>         xtitle("b in Beta(1,b)") note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
 
 . graph export b_mode_less.pdf, replace 
 (file b_mode_less.pdf written in PDF format)
@@ -138,7 +184,9 @@ total_change | -208.8416  1608.633 -532.6263 -154.3424 -64.29851 -24.86064  316.
 . 
 . kdensity zeta_mid if zeta_mid <= 50, bwidth(1.0) ///
 >         title("") ///
->         xtitle("Cost of Additional Option (Midpoint)")
+>         xtitle("Cost of Additional Option (Midpoint)") note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
 
 . graph export zeta_density.pdf, replace
 (file zeta_density.pdf written in PDF format)
@@ -148,7 +196,7 @@ total_change | -208.8416  1608.633 -532.6263 -154.3424 -64.29851 -24.86064  316.
 >         (scatter lin_avg_p base_wavg_p if !pos_change) ///
 >         (function y=x, range(10 60)), ///
 >         xtitle("With Quantity Discounts") ///
->         ytitle("Without Quantity Discoutns") ///
+>         ytitle("Without Quantity Discounts") ///
 >         title("Average Retailer Price") ///
 >         legend(order(1 2) ///
 >                 label(1 "Positive Total Change") ///
@@ -160,10 +208,12 @@ total_change | -208.8416  1608.633 -532.6263 -154.3424 -64.29851 -24.86064  316.
 . 
 . twoway (scatter lin_avg_p base_wavg_p if good) ///
 >         (function y=x, range(10 60)), ///
->         xtitle("With Quantity Discounts") ///
->         ytitle("Without Quantity Discoutns") ///
->         title("Average Retailer Price") ///
->         legend(off)
+>         xtitle("Average Retailer Price With Quantity Discounts") ///
+>         ytitle("Average Retailer PriceWithout Quantity Discounts") ///
+>         title("") ///
+>         legend(off) note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
 
 . graph export r_price_comp_good.pdf, replace
 (file r_price_comp_good.pdf written in PDF format)
@@ -189,8 +239,28 @@ pos_change |      mean        sd       p25       p50       p75
            |  28.12981  141.6072  .4963359  1.110598  3.923025
 --------------------------------------------------------------
 
-. tabstat delta_w_profit delta_r_profit delta_cs total_change, statistics(mean sd p5 p25 p50 p75 p95) columns(statistic
-> s) by(pos_change)
+. tabstat c_mode inv_b zeta_mid, statistics(mean sd p25 p50 p75) columns(statistics) by(pos_change)
+
+Summary for variables: c_mode inv_b zeta_mid
+     by categories of: pos_change 
+
+pos_change |      mean        sd       p25       p50       p75
+-----------+--------------------------------------------------
+         0 |  14.57144  9.079118  7.888519  12.72039  18.65922
+           |  .0331603  .0249265  .0250035  .0250126  .0318241
+           |  17.64724   115.504  .4647064  1.003318  3.182311
+-----------+--------------------------------------------------
+         1 |  .0429862  .0824279  .0009811  .0046846  .0318616
+           |  .0345744  .0179173  .0250233  .0250464  .0311807
+           |  173.9328  302.8524  4.610489  7.752578  162.2777
+-----------+--------------------------------------------------
+     Total |  13.59697  9.492976  6.942173  11.67576  18.01805
+           |  .0332552  .0245156  .0250038  .0250144  .0317617
+           |  28.12981  141.6072  .4963359  1.110598  3.923025
+--------------------------------------------------------------
+
+. tabstat delta_w_profit delta_r_profit delta_cs total_change, statistics(mean sd p5 p25 p50 p75 p95) columns(
+> statistics) by(pos_change)
 
 Summary for variables: delta_w_profit delta_r_profit delta_cs total_change
      by categories of: pos_change 
@@ -216,7 +286,9 @@ pos_change |      mean        sd        p5       p25       p50       p75       p
 . 
 . graph box total_change if good, over(total_options) noout ///
 >         ytitle("Total Welfare Change (Monthly $)") ///
->         title("Total Welfare Change by Number of Options")
+>         title("Total Welfare Change by Number of Options") note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
 
 . graph export change_by_parts.pdf,replace
 (file change_by_parts.pdf written in PDF format)
@@ -224,14 +296,18 @@ pos_change |      mean        sd        p5       p25       p50       p75       p
 . 
 . twoway (scatter total_change c_mode) ///
 >         (lowess total_change c_mode, bwidth(.5) lwidth(thick)) if good, ///
->         ytitle("Total Welfare Change") xtitle("Wholesaler Marginal Cost") //
+>         ytitle("Total Welfare Change") xtitle("Wholesaler Marginal Cost") note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
 
 . graph export welf_vs_c.pdf, replace
 (file welf_vs_c.pdf written in PDF format)
 
 . 
 . twoway (lowess total_change c_mode, bwidth(.5) lwidth(thick)) if good, ///
-> ytitle("Total Welfare Change") xtitle("Wholesaler Marginal Cost") yline(0) //
+> ytitle("Total Welfare Change") xtitle("Wholesaler Marginal Cost") yline(0) note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
 
 . graph export welf_vs_c_no_scatter.pdf, replace
 (file welf_vs_c_no_scatter.pdf written in PDF format)
@@ -239,14 +315,18 @@ pos_change |      mean        sd        p5       p25       p50       p75       p
 . 
 . twoway (scatter total_change b_mode) ///
 >         (lowess total_change b_mode, bwidth(.5) lwidth(thick)) if good, ///
->         ytitle("Total Welfare Change") xtitle("b in Beta(1,b)")
+>         ytitle("Total Welfare Change") xtitle("b in Beta(1,b)") note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
 
 . graph export welf_vs_b.pdf, replace
 (file welf_vs_b.pdf written in PDF format)
 
 . 
 . twoway (lowess total_change b_mode, bwidth(.5) lwidth(thick)) if good, ///
-> ytitle("Total Welfare Change") xtitle("b in Beta(1,b)") yline(0) //
+> ytitle("Total Welfare Change") xtitle("b in Beta(1,b)") yline(0) note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
 
 . graph export welf_vs_b_no_scatter.pdf, replace
 (file welf_vs_b_no_scatter.pdf written in PDF format)
@@ -254,15 +334,39 @@ pos_change |      mean        sd        p5       p25       p50       p75       p
 . 
 . twoway (lowess delta_w_profit b_mode) if good, ///
 >         ytitle("Change in Wholesaler Profits") ///
->         xtitle("b in Beta(1,b)")
+>         xtitle("b in Beta(1,b)") note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
 
 . graph export w_profit_vs_b_no_scatter.pdf, replace
 (file w_profit_vs_b_no_scatter.pdf written in PDF format)
 
 . 
+. twoway (lowess delta_w_profit b_mode) if good, ///
+>         ytitle("Change in Wholesaler Profits") ///
+>         xtitle("b in Beta(1,b)") xscale(reverse) note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
+
+. graph export w_profit_vs_b_no_scatter_rev.pdf, replace
+(file w_profit_vs_b_no_scatter_rev.pdf written in PDF format)
+
+. 
+. twoway (lowess delta_w_profit inv_b) if good, ///
+>         ytitle("Change in Wholesaler Profits") ///
+>         xtitle("b in Beta(1,1/b)") note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
+
+. graph export w_profit_vs_b_no_scatter_inv.pdf, replace
+(file w_profit_vs_b_no_scatter_inv.pdf written in PDF format)
+
+. 
 . twoway (lowess delta_r_profit b_mode) if good, ///
 >         ytitle("Change in Average Retailer Profits") ///
->         xtitle("b in Beta(1,b)")
+>         xtitle("b in Beta(1,b)") note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
 
 . graph export r_profit_vs_b_no_scatter.pdf, replace
 (file r_profit_vs_b_no_scatter.pdf written in PDF format)
@@ -270,7 +374,9 @@ pos_change |      mean        sd        p5       p25       p50       p75       p
 . 
 . twoway (lowess delta_w_profit c_mode) if good, ///
 >         ytitle("Change in Wholesaler Profits") ///
->         xtitle("Wholesaler Marginal Cost")
+>         xtitle("Wholesaler Marginal Cost") note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
 
 . graph export w_profit_vs_c_no_scatter.pdf, replace
 (file w_profit_vs_c_no_scatter.pdf written in PDF format)
@@ -278,7 +384,9 @@ pos_change |      mean        sd        p5       p25       p50       p75       p
 . 
 . twoway (lowess delta_r_profit c_mode) if good, ///
 >         ytitle("Change in Average Retailer Profits") ///
->         xtitle("Wholesaler Marginal Cost")
+>         xtitle("Wholesaler Marginal Cost") note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
 
 . graph export r_profit_vs_c_no_scatter.pdf, replace
 (file r_profit_vs_c_no_scatter.pdf written in PDF format)
@@ -286,23 +394,49 @@ pos_change |      mean        sd        p5       p25       p50       p75       p
 . 
 . twoway (lowess delta_cs b_mode) if good, ///
 >         ytitle("Change in Consumer Surplus") ///
->         xtitle("b in Beta(1,b)")
+>         xtitle("b in Beta(1,b)") note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
 
 . graph export cs_vs_b_no_scatter.pdf, replace
 (file cs_vs_b_no_scatter.pdf written in PDF format)
 
 . 
+. twoway (lowess delta_cs b_mode) if good, ///
+>         ytitle("Change in Consumer Surplus") ///
+>         xtitle("b in Beta(1,b)") xscale(reverse) note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
+
+. graph export cs_vs_b_no_scatter_rev.pdf, replace
+(file cs_vs_b_no_scatter_rev.pdf written in PDF format)
+
+. 
+. twoway (lowess delta_cs inv_b) if good, ///
+>         ytitle("Change in Consumer Surplus") ///
+>         xtitle("b in Beta(1,1/b)") note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
+
+. graph export cs_vs_b_no_scatter_inv.pdf, replace
+(file cs_vs_b_no_scatter_inv.pdf written in PDF format)
+
+. 
 . twoway (lowess delta_cs c_mode) if good, ///
 >         ytitle("Change in Consumer Surplus") ///
->         xtitle("Wholesaler Marginal Cost")
+>         xtitle("Wholesaler Marginal Cost") note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
 
 . graph export cs_vs_c_no_scatter.pdf, replace
 (file cs_vs_c_no_scatter.pdf written in PDF format)
 
 . 
 . graph box delta_w_profit if good, over(total_options) noout ///
->         ytitle("Change in Wholesaler Profits") ///
->         title("Wholesaler Profit Change by Number of Options")
+>         ytitle("Change in Wholesaler Profits") b1title("Number of Price Segments") ///
+>         note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
 
 . graph export w_change_by_parts.pdf,replace
 (file w_change_by_parts.pdf written in PDF format)
@@ -310,7 +444,9 @@ pos_change |      mean        sd        p5       p25       p50       p75       p
 . 
 . graph box delta_r_profit if good, over(total_options) noout ///
 >         ytitle("Change in Average Retailer Profits") ///
->         title("Change in Average Retailer Profits by Number of Options")
+>         title("Change in Average Retailer Profits by Number of Options") note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
 
 . graph export r_change_by_parts.pdf,replace
 (file r_change_by_parts.pdf written in PDF format)
@@ -318,17 +454,84 @@ pos_change |      mean        sd        p5       p25       p50       p75       p
 . 
 . graph box delta_cs if good, over(total_options) noout ///
 >         ytitle("Change in Consumer Surplus") ///
->         title("Change in Consumer Surplus by Number of Options")
+>         b1title("Number of Price Segments") note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
 
 . graph export cs_change_by_parts.pdf,replace
 (file cs_change_by_parts.pdf written in PDF format)
 
+. 
+. /* percent changes */
+. 
+. graph box pct_delta_w_profit if good, over(total_options) noout ///
+>         ytitle("Percent Change in Wholesaler Profits") ///
+>         title("Percent Wholesaler Profit Change by Number of Options") note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
+
+. graph export w_pct_change_by_parts.pdf,replace
+(file w_pct_change_by_parts.pdf written in PDF format)
+
+. 
+. twoway (lowess pct_delta_w_profit c_mode) if good, ///
+>         ytitle("Percent Change in Wholesaler Profits") ///
+>         xtitle("Wholesaler Marginal Cost") note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
+
+. graph export w_pct_profit_vs_c_no_scatter.pdf, replace
+(file w_pct_profit_vs_c_no_scatter.pdf written in PDF format)
+
+. 
+. twoway (lowess pct_delta_w_profit b_mode) if good, ///
+>         ytitle("Percent Change in Wholesaler Profits") ///
+>         xtitle("Retailer Heterogeneity") xscale(reverse) note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
+
+. graph export w_pct_profit_vs_b_no_scatter_rev.pdf, replace
+(file w_pct_profit_vs_b_no_scatter_rev.pdf written in PDF format)
+
+. 
+. twoway (lowess pct_delta_cs b_mode) if good, ///
+>         ytitle("Percent Change in Consumer Surplus") ///
+>         xtitle("Retailer Heterogeneity") xscale(reverse) note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
+
+. graph export cs_pct_vs_b_no_scatter_rev.pdf, replace
+(file cs_pct_vs_b_no_scatter_rev.pdf written in PDF format)
+
+. 
+. twoway (lowess pct_delta_cs c_mode) if good, ///
+>         ytitle("Percent Change in Consumer Surplus") ///
+>         xtitle("Wholesaler Marginal Cost") note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
+
+. graph export cs_pct_vs_c_no_scatter.pdf, replace
+(file cs_pct_vs_c_no_scatter.pdf written in PDF format)
+
+. 
+. graph box pct_delta_cs if good, over(total_options) noout ///
+>         ytitle("Percent Change in Consumer Surplus") ///
+>         title("Percent Change in Consumer Surplus by Number of Options") note("") ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
+
+. graph export cs_pct_change_by_parts.pdf,replace
+(file cs_pct_change_by_parts.pdf written in PDF format)
+
+. 
+. 
 . 
 . // renaming unnamed variables
 . egen r_t_prof_top = rowfirst(v*)
 (8567 missing values generated)
 
 . 
+. // Calculating heterogeneity effect graph for retailers
 . preserve
 
 .         keep if product == 64 & purchase_year == 2011 & purchase_month == 5 // Bacardi Rum
@@ -341,7 +544,7 @@ pos_change |      mean        sd        p5       p25       p50       p75       p
 Data                               wide   ->   long
 -----------------------------------------------------------------------------
 Number of obs.                        1   ->       9
-Number of variables                 208   ->     194
+Number of variables                 213   ->     199
 j variable (9 values)                     ->   option
 xij variables:
           t_cut_1 t_cut_2 ... t_cut_top   ->   t_cut_
@@ -418,10 +621,13 @@ obs was 4, now 1000
 .         gen scaled = ip_r_t_prof*betaden(1,18.66937,ip_t_cut )
 
 .         
-.         twoway (connected scaled ip_t_cut, msize(0)), title("Bacardi Superior 750ML, May 2011") ///
+.         twoway (connected scaled ip_t_cut, msize(0)), title("") ///
 >                 ytitle("Change in Type {&lambda} Retailer Profit") ///
 >                 xtitle("Type {&lambda}") ///
->                 note("Scaled by estimated density")
+>                 note("Bacardi Superior 750ML, May 2011. Scaled by estimated density. c=7.02, b=18.67") yline
+> (0, lcolor(black)) ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
 
 .         graph export r_change_by_type_smooth.pdf, replace
 (file r_change_by_type_smooth.pdf written in PDF format)
@@ -431,9 +637,131 @@ obs was 4, now 1000
 . restore
 
 . 
+. sum price proof imported d_s_* if good
+
+    Variable |       Obs        Mean    Std. Dev.       Min        Max
+-------------+--------------------------------------------------------
+       price |      1060    21.27352    8.988968        .49      60.99
+       proof |      1060     76.9983    12.21398         25        100
+    imported |      1060         .35    .4771947          0          1
+   d_s_375ML |      1060    .0113208     .105845          0          1
+   d_s_750ML |      1060    .0830189     .276041          0          1
+-------------+--------------------------------------------------------
+      d_s_1L |      1060    .2386792    .4264775          0          1
+    d_s_175L |      1060    .6669811    .4715157          0          1
+
+. 
+. reg c_mode d_g_gin-d_g_teq d_s_375ML d_s_750ML d_s_175L proof if good, robust
+
+Linear regression                                      Number of obs =    1060
+                                                       F( 11,  1048) =   41.99
+                                                       Prob > F      =  0.0000
+                                                       R-squared     =  0.1498
+                                                       Root MSE      =  8.4523
+
+------------------------------------------------------------------------------
+             |               Robust
+      c_mode |      Coef.   Std. Err.      t    P>|t|     [95% Conf. Interval]
+-------------+----------------------------------------------------------------
+     d_g_gin |  -1.929195   1.585403    -1.22   0.224    -5.040121    1.181732
+     d_g_vod |   -5.94322   1.336764    -4.45   0.000    -8.566258   -3.320182
+     d_g_rum |  -2.711149   1.273348    -2.13   0.033    -5.209751   -.2125469
+     d_g_sch |   5.418455   1.495809     3.62   0.000     2.483334    8.353576
+     d_g_brb |  -3.957867   1.398002    -2.83   0.005    -6.701069   -1.214665
+     d_g_whs |  -5.770637   1.394682    -4.14   0.000    -8.507324    -3.03395
+     d_g_teq |   -3.05179   1.971032    -1.55   0.122    -6.919409    .8158276
+   d_s_375ML |  -9.687872   .8593397   -11.27   0.000    -11.37409    -8.00165
+   d_s_750ML |  -1.294933   .9973293    -1.30   0.194    -3.251922     .662057
+    d_s_175L |   1.739375   .7008203     2.48   0.013     .3642038    3.114545
+       proof |   .0835154   .0368552     2.27   0.024     .0111969    .1558338
+       _cons |   9.878443   2.117751     4.66   0.000     5.722928    14.03396
+------------------------------------------------------------------------------
+
+. 
+. forvalues i = 0/7 {
+  2.         gen margin`i' = (actual_p`i' / bottles_per_case) / c_mode - 1
+  3.         cumul margin`i', gen(cum`i')
+  4. }
+(8580 missing values generated)
+(8580 missing values generated)
+(8666 missing values generated)
+(8867 missing values generated)
+(9127 missing values generated)
+(9466 missing values generated)
+(9655 missing values generated)
+(9717 missing values generated)
+
+. 
+. egen min_p = rowmin(actual_p*)
+(8567 missing values generated)
+
+. gen min_margin = min_p / bottles_per_case / c_mode - 1
+(8580 missing values generated)
+
+. 
+. tabstat margin* min_margin if good, stat(mean min p50 max) col(stat)
+
+    variable |      mean       min       p50       max
+-------------+----------------------------------------
+     margin0 |  .7988362  .1436883   .557049  9.119897
+     margin1 |  .6625085  .0000569   .436825  9.070339
+     margin2 |  .5571192  .0000384  .3632621  8.988119
+     margin3 |  .4351303  1.67e-06  .2984478  5.582727
+     margin4 |  .3826504  2.93e-06  .2350963  5.363303
+     margin5 |  .2974029  2.20e-06  .1859365  1.521119
+     margin6 |  .1415375  4.36e-06  .1584769  .6241903
+     margin7 |  .0767881  .0006767    .07383  .1270954
+  min_margin |  .4479873  1.67e-06  .2298598  8.988119
+------------------------------------------------------
+
+.         
+. twoway (function y=betaden(1,1,x),      lwidth(medthick)) ///
+>         (function y=betaden(1,6,x),     lwidth(medthick)) ///
+>         (function y=betaden(1,.5,x),    lwidth(medthick)), ///
+>         title("") ytitle("") xtitle("") ///
+>         legend(label(1 "Beta(1,1)") label(2 "Beta(1,6)") label(3 "Beta(1,0.5)") ///
+>         ring(0) bplacement(2) bmargin(large) col(1)) ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
+
+. graph export density_comp.pdf, replace
+(file density_comp.pdf written in PDF format)
+
+. 
+. local a = -0.4
+
+. local b = 1
+
+. 
+. twoway (function y=exp(`a'*x)/(`b' + exp(`a'*x))*1, range(0 10) lwidth(medthick)) ///
+>         (function y=exp(`a'*x)/(`b' + exp(`a'*x))*.75, range(0 10) lwidth(medthick)) ///
+>         (function y=exp(`a'*x)/(`b' + exp(`a'*x))*.5, range(0 10) lwidth(medthick)), ///
+>         title("") ytitle("Market Share") xtitle("Price") ///
+>         legend(label(1 "1.00s(p)") label(2 "0.75s(p)") label(3 "0.50s(p)") ///
+>         ring(0) bplacement(2) bmargin(large) col(1) off) ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+(note:  named style 0 not found in class margin, default attributes used)
+
+. 
+. /*
+> twoway (function y=-ln(1/x - `b')/`a', range(0 .5) lwidth(medthick)) ///
+>         (function y=-ln(1/x - `b')/`a'*.75, range(0 .5) lwidth(medthick)) ///
+>         (function y=-ln(1/x - `b')/`a'*.5, range(0 .5) lwidth(medthick)), ///
+>         title("") ytitle("Price") xtitle("Market Share") ///
+>         legend(label(1 "1.00s(p)") label(2 "0.75s(p)") label(3 "0.50s(p)") ///
+>         ring(0) bplacement(2) bmargin(large) col(1) off) ///
+>         graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0)) 
+> */
+.         
+. graph export single_crossing.pdf, replace
+(file single_crossing.pdf written in PDF format)
+
+. 
+. 
+. 
 . log close
       name:  <unnamed>
        log:  E:\Box\Box Sync\Snuffles Backup\gh8728\Projects\Liquor\supply_side\module\cf_analysis.txt
   log type:  text
- closed on:  21 Sep 2017, 08:49:10
------------------------------------------------------------------------------------------------------------------------
+ closed on:  26 Nov 2017, 21:13:48
+--------------------------------------------------------------------------------------------------------------
