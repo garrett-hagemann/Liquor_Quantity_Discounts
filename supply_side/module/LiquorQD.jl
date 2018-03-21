@@ -524,6 +524,7 @@ end
 
 
 function optimal_price_sched(params::WholesaleParams, N::Int64, product::Liquor,coefs::DemandCoefs,inc_dist::IncomeDist,mkt::Market)
+  return_dict = Dict{Int64,PriceSched}()
   #= params contains the parameters for the wholesaler. This means the marginal
   cost as well as the parameters of the Kumaraswamy distribution. =#
   function g1(x::Float64,n::Int64)
@@ -567,6 +568,7 @@ function optimal_price_sched(params::WholesaleParams, N::Int64, product::Liquor,
       ps_optim_res = Optim.optimize((x)->g1(x,hs_n),params.c,ub,show_trace=false)  # Optim still good for univariate minimization
       optim_rho = Optim.minimizer(ps_optim_res)
       res_ps = PriceSched([optim_rho],[0.0],hs_n) # constrained
+      return_dict[hs_n] = res_ps
       hs_rhos = [optim_rho,(optim_rho*.5 + params.c*.5)]
       hs_res = Optim.optimize((x)->g2([hs_rhos;x],(hs_n+1)),0.0,1,show_trace=false) # gettting good guess for lambda for n=3
       hs_types = Optim.minimizer(hs_res) # guess for n=3
@@ -593,6 +595,7 @@ function optimal_price_sched(params::WholesaleParams, N::Int64, product::Liquor,
         optim_rho = Optim.minimizer(ps_optim_res)[1:hs_n-1]
         optim_t = Optim.minimizer(ps_optim_res)[hs_n:end]
         res_ps = PriceSched(optim_rho,[0.0; optim_t],hs_n) # constrained
+        return_dict[hs_n] = res_ps
         # best guess for N+1
         hs_rhos = [optim_rho ; (optim_rho[end]*.5 + params.c*.5)]
         hs_res = Optim.optimize((x)->g2([hs_rhos;optim_t;x],(hs_n+1)),0.0,1,show_trace=false) # gettting good guess for lambda for n=3
@@ -601,7 +604,7 @@ function optimal_price_sched(params::WholesaleParams, N::Int64, product::Liquor,
         hs_x0 = [hs_rhos ; hs_types]
     end
   end
-  return res_ps
+  return return_dict
 end
 
 function recover_ff(ps::PriceSched,product::Liquor,coefs::DemandCoefs,inc::IncomeDist,mkt::Market)

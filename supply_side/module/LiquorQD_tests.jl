@@ -113,7 +113,7 @@ println("Numerical Hessian: ", (gtest1 - gtest2)/(2*step))
 println(htest[k,:])
 =#
 test_N = 5
-@time test_ps = optimal_price_sched(test_w_params,test_N,test_prod1,test_coefs,test_inc,test_mkt)
+@time test_ps = optimal_price_sched(test_w_params,test_N,test_prod1,test_coefs,test_inc,test_mkt)[test_N] # optimal_price_sched returns a dictionary
 println("Optimal price schedule: ", test_ps)
 println("Profit at optimal schedule: ", wholesaler_profit(test_ps,test_w_params,test_prod1,test_coefs,test_inc,test_mkt))
 
@@ -122,9 +122,9 @@ test_w_params_cmod = WholesaleParams(8.0,1.0,1.0)
 test_w_params_both = WholesaleParams(8.0,1.0,6.0)
 
 id_ps_base = test_ps
-id_ps_c = optimal_price_sched(test_w_params_cmod,test_N,test_prod1,test_coefs,test_inc,test_mkt)
-id_ps_b = optimal_price_sched(test_w_params_bmod,test_N,test_prod1,test_coefs,test_inc,test_mkt)
-id_ps_both = optimal_price_sched(test_w_params_both,test_N,test_prod1,test_coefs,test_inc,test_mkt)
+id_ps_c = optimal_price_sched(test_w_params_cmod,test_N,test_prod1,test_coefs,test_inc,test_mkt)[test_N]
+id_ps_b = optimal_price_sched(test_w_params_bmod,test_N,test_prod1,test_coefs,test_inc,test_mkt)[test_N]
+id_ps_both = optimal_price_sched(test_w_params_both,test_N,test_prod1,test_coefs,test_inc,test_mkt)[test_N]
 
 println("Price Schedules for identification graph")
 println("Base: ", id_ps_base)
@@ -161,6 +161,7 @@ optimize_moment(test_ps,test_devs,test_prod1,test_coefs,test_inc,test_mkt,1,test
 min_rho = minimum(test_ps.rhos)
 test_recovered_params,test_xtrace,test_ftrace = optimize_moment(test_ps,test_devs,test_prod1,test_coefs,test_inc,test_mkt,250,test_pre_calc,test_s_pre_calc,x0=[min_rho/2.0,1.0])
 println("Recovered Parameters: ", test_recovered_params)
+println("True Parameters: ", test_w_params)
 test_trace = [vcat(test_xtrace'...) test_ftrace]
 #test_trace = [test_recovered_params.c test_recovered_params.b test_ftrace]
 writedlm("test_dens.csv",test_trace)
@@ -168,9 +169,9 @@ writedlm("test_dens.csv",test_trace)
 # recovering bounds on zeta
 M = 2000000.0
 test_profit =  wholesaler_profit(test_ps,test_w_params,test_prod1,test_coefs,test_inc,test_mkt)*M
-test_ps_up = optimal_price_sched(test_w_params,test_N+1,test_prod1,test_coefs,test_inc,test_mkt)
+test_ps_up = optimal_price_sched(test_w_params,test_N+1,test_prod1,test_coefs,test_inc,test_mkt)[test_N+1]
 profit_up = wholesaler_profit(test_ps_up,test_w_params,test_prod1,test_coefs,test_inc,test_mkt)*M
-test_ps_dn = optimal_price_sched(test_w_params,test_N-1,test_prod1,test_coefs,test_inc,test_mkt)
+test_ps_dn = optimal_price_sched(test_w_params,test_N-1,test_prod1,test_coefs,test_inc,test_mkt)[test_N-1]
 profit_dn = wholesaler_profit(test_ps_dn,test_w_params,test_prod1,test_coefs,test_inc,test_mkt)*M
 
 println(test_ps_up)
@@ -186,7 +187,7 @@ zeta_mid = (zeta_lb + zeta_ub)/2.0
 println("Bounds on zeta: [",zeta_lb,",",zeta_ub,"]")
 
 # calculating linear PS and change in profits
-lin_ps = optimal_price_sched(test_w_params,2,test_prod1,test_coefs,test_inc,test_mkt)
+lin_ps = optimal_price_sched(test_w_params,2,test_prod1,test_coefs,test_inc,test_mkt)[2]
 println("Counterfactual Linear Price Schedule: ", lin_ps)
 lin_profit = wholesaler_profit(lin_ps,test_w_params,test_prod1,test_coefs,test_inc,test_mkt)*M
 delta_profit = (lin_profit - 2*zeta_mid) - (test_profit - zeta_mid*test_N)
