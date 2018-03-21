@@ -12,6 +12,18 @@ foreach var of varlist c_* b_* zeta_* base_* base_avg_p base_wavg_p lin_avg_p {
 	replace `var' = . if no_steps
 }
 
+// calculating number of steps in price schedule
+egen total_options = rownonmiss(actual_p*) if _merge_ps == 3 & !no_steps
+
+gen month = month(dofm(date_m))
+
+/* 
+CORRECTION
+removing impact of complexity  cost here. Already subtracted off in CF,
+but easier to handle it here */
+replace lin_w_profit = lin_w_profit + 2*zeta_mid
+replace base_w_profit = base_w_profit + total_options*zeta_mid
+
 gen delta_w_profit = lin_w_profit - base_w_profit
 gen delta_r_profit = lin_r_profit - base_r_profit
 gen delta_cs = lin_cs - base_cs
@@ -27,7 +39,6 @@ gen total_change = delta_w_profit + delta_r_profit + delta_cs
 gen pos_change = (total_change > 0) if total_change != .
 gen q_weight = exp(-Q_mode)
 gen p_diff = base_wavg_p - lin_avg_p
-egen total_options = rownonmiss(actual_p*) if _merge_ps == 3 & !no_steps
 gen big_change = (abs(total_change) > 10000) if total_change != .
 gen good = (_merge_ps == 3) & !big_change & !pos_change
 
@@ -89,7 +100,6 @@ graph export r_price_comp_good.pdf, replace
 
 tabstat c_mode b_mode zeta_mid, statistics(mean sd p25 p50 p75) columns(statistics) by(pos_change)
 tabstat c_mode inv_b zeta_mid, statistics(mean sd p25 p50 p75) columns(statistics) by(pos_change)
-tabstat delta_w_profit delta_r_profit delta_cs total_change, statistics(mean sd p5 p25 p50 p75 p95) columns(statistics) by(pos_change)
 
 graph box total_change if good, over(total_options) noout ///
 	ytitle("Total Welfare Change (Monthly $)") ///
@@ -235,6 +245,27 @@ graph box pct_delta_cs if good, over(total_options) noout ///
 	graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
 graph export cs_pct_change_by_parts.pdf,replace
 
+/* FOREGONE PROFIT CALCS */
+
+gen foregone_prof_pct = zeta_lb / (base_w_profit)*100 // want (prof(N+1) - prof(N))/prof(N). This is that.
+
+tabstat zeta_lb if good, stat(count mean sd p25 p50 p75) by(total_options) col(stats)
+tabstat foregone_prof_pct if good, stat(count mean sd p25 p50 p75) by(total_options) col(stats)
+
+graph box zeta_lb if good, over(total_options) noout ///
+	ytitle("Foregone Profits") ///
+	title("Foregone Profits by Not Offering Additional Segment") ///
+	graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+graph export foregone_prof_by_parts.pdf, replace
+
+graph box foregone_prof_pct if good, over(total_options) ///
+	ytitle("Percent of Current Profits") ///
+	title("Foregone Profits by Not Offering Additional Segment") ///
+	graphregion(color(white)) ylabel(,nogrid) plotregion(margin(0))
+graph export foregone_prof_by_parts_pct.pdf, replace
+
+reg zeta_lb proof d_g_gin-d_g_teq d_s_750-d_s_175L i.month i.total_options if good, vce(robust) cformat(%9.3f) pformat(%5.3f)
+reg foregone_prof_pct proof d_g_gin-d_g_teq d_s_750-d_s_175L i.month i.total_options if good, vce(robust) cformat(%9.3f) pformat(%5.3f)
 
 
 // renaming unnamed variables

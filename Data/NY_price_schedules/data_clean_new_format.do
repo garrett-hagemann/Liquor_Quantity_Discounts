@@ -99,6 +99,4 @@ replace actual_p = bot_price-amount if unit == "B" & type == "$" & qty != .
 
 reshape wide qty_ unit_ amount_ actual_p type, i(record_num) j(option) string
 
-keep if post_year == 2015
-
 save new_format_months, replace
