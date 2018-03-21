@@ -17,13 +17,6 @@ egen total_options = rownonmiss(actual_p*) if _merge_ps == 3 & !no_steps
 
 gen month = month(dofm(date_m))
 
-/* 
-CORRECTION
-removing impact of complexity  cost here. Already subtracted off in CF,
-but easier to handle it here */
-replace lin_w_profit = lin_w_profit + 2*zeta_mid
-replace base_w_profit = base_w_profit + total_options*zeta_mid
-
 gen delta_w_profit = lin_w_profit - base_w_profit
 gen delta_r_profit = lin_r_profit - base_r_profit
 gen delta_cs = lin_cs - base_cs

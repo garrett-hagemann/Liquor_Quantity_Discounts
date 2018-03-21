@@ -22,6 +22,7 @@ for row in eachrow(ss_coefs_df)
 end
 
 @everywhere function cf_calcs(tup::Tuple{Market,Liquor},coefs_dict::Dict{Tuple{Int64,Int64,Int64},Tuple{Float64,Float64}})
+    max_seg = 15
     m = tup[1]
     j = tup[2]
     out = Dict{Tuple{Market,Liquor},Array{Float64,1}}()
@@ -34,15 +35,23 @@ end
             obs_ps = get(j.ps) # because it's nullable
             println("Observed N: ",obs_ps.N)
             println("Estimated parameters: ", wp)
-            #finding zeta
-            ps_dict = optimal_price_sched(wp,(obs_ps.N+1),j,nested_coefs,obs_inc_dist,m) # calculating all necessary price schedules
+
+            ps_dict = optimal_price_sched(wp,max_seg,j,nested_coefs,obs_inc_dist,m) # calculating all necessary price schedules
+
+            # convergence to max profit check
+            prof_diff_rel = (wholesaler_profit(ps_dict[max_seg],wp,j,nested_coefs,obs_inc_dist,m) - wholesaler_profit(ps_dict[max_seg-1],wp,j,nested_coefs,obs_inc_dist,m))/wholesaler_profit(ps_dict[max_seg-1],wp,j,nested_coefs,obs_inc_dist,m)
+            println("Relative difference in profit between $max_seg and $(max_seg-1) segments: ", prof_diff_rel)
+
             base_ps = ps_dict[obs_ps.N] # this ensures inequality defining zeta is true. Can't use observed
             ps_up = ps_dict[obs_ps.N+1]
             ps_dn = ps_dict[obs_ps.N-1]
+            ps_max = ps_dict[max_seg]
 
+            #finding zeta
             base_w_profit =  wholesaler_profit(base_ps,wp,j,nested_coefs,obs_inc_dist,m)*cf_M
             profit_up = wholesaler_profit(ps_up,wp,j,nested_coefs,obs_inc_dist,m)*cf_M
             profit_dn = wholesaler_profit(ps_dn,wp,j,nested_coefs,obs_inc_dist,m)*cf_M
+            profit_max = wholesaler_profit(ps_max,wp,j,nested_coefs,obs_inc_dist,m)*cf_M
 
             print("Recovering zeta. ")
             zeta_lb = profit_up - base_w_profit
@@ -93,7 +102,7 @@ end
             last_t_r_prof = 1.0*cf_M*((lin_r_p_star - lin_ps.rhos[1])*lin_r_share - (last_t_p_star - base_ps.rhos[end])*share(last_t_p_star,j,nested_coefs,obs_inc_dist,m)) - base_ff[end]*cf_M
             push!(t_r_prof_array,last_t_r_prof)
 
-            res_array = [zeta_lb; zeta_ub; zeta_mid; (base_w_profit - zeta_mid*obs_ps.N) ; (lin_w_profit - 2*zeta_mid);
+            res_array = [zeta_lb; zeta_ub; zeta_mid; (base_w_profit) ; (lin_w_profit); profit_max; 
                 base_r_profit ; lin_r_profit ; base_cs ; lin_cs ; base_avg_p ; lin_avg_p ; base_wavg_p ; base_ps.t_cuts; t_r_prof_array]
             out[(m,j)] = res_array
         end
@@ -108,7 +117,7 @@ res = pmap((x)->cf_calcs(x,est_coefs),mkts_for_est)
 
 #outfile = open("counter_fact_calcs.csv","w")
 #write(outfile,"year,month,prod,zeta_lb,zeta_ub,zeta_mid,delta_w_profit,delta_r_profit,delta_cs,base_avg_p,lin_avg_p,base_wavg_p","\n")
-col_heads = "year,month,prod,zeta_lb,zeta_ub,zeta_mid,base_w_profit,lin_w_profit,base_r_profit,lin_r_profit,base_cs,lin_cs,base_avg_p,lin_avg_p,base_wavg_p"
+col_heads = "year,month,prod,zeta_lb,zeta_ub,zeta_mid,base_w_profit,lin_w_profit,max_w_profit,base_r_profit,lin_r_profit,base_cs,lin_cs,base_avg_p,lin_avg_p,base_wavg_p"
 for d in res
     for (key,v) in d # should only be single element, but just in case
         m = key[1]
