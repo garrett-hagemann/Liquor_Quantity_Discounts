@@ -35,9 +35,10 @@ end
             println("Observed N: ",obs_ps.N)
             println("Estimated parameters: ", wp)
             #finding zeta
-            base_ps = optimal_price_sched(wp,(obs_ps.N),j,nested_coefs,obs_inc_dist,m) # this ensures inequality defining zeta is true. Can't use observed
-            ps_up = optimal_price_sched(wp,(obs_ps.N+1),j,nested_coefs,obs_inc_dist,m)
-            ps_dn = optimal_price_sched(wp,(obs_ps.N-1),j,nested_coefs,obs_inc_dist,m)
+            ps_dict = optimal_price_sched(wp,(obs_ps.N+1),j,nested_coefs,obs_inc_dist,m) # calculating all necessary price schedules
+            base_ps = ps_dict[obs_ps.N] # this ensures inequality defining zeta is true. Can't use observed
+            ps_up = ps_dict[obs_ps.N+1]
+            ps_dn = ps_dict[obs_ps.N-1]
 
             base_w_profit =  wholesaler_profit(base_ps,wp,j,nested_coefs,obs_inc_dist,m)*cf_M
             profit_up = wholesaler_profit(ps_up,wp,j,nested_coefs,obs_inc_dist,m)*cf_M
@@ -50,7 +51,7 @@ end
             println("Bounds on zeta: [",zeta_lb,",",zeta_ub,"].")
 
             # change in  wholesaler profit
-            lin_ps = optimal_price_sched(wp,2,j,nested_coefs,obs_inc_dist,m)
+            lin_ps = ps_dict[2]
             lin_w_profit = wholesaler_profit(lin_ps,wp,j,nested_coefs,obs_inc_dist,m)*cf_M
             delta_w_profit = (lin_w_profit - 2*zeta_mid) - (base_w_profit - zeta_mid*obs_ps.N)
             println("Change in wholesaler profits under linear price: ", delta_w_profit)

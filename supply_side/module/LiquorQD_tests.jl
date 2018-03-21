@@ -117,6 +117,22 @@ test_N = 5
 println("Optimal price schedule: ", test_ps)
 println("Profit at optimal schedule: ", wholesaler_profit(test_ps,test_w_params,test_prod1,test_coefs,test_inc,test_mkt))
 
+### Foregone Profit Tests
+test_ps_dict = optimal_price_sched(test_w_params,20,test_prod1,test_coefs,test_inc,test_mkt)
+test_profit_dict = Dict{Int64,Float64}()
+for i = 2:20
+  test_profit_dict[i] = wholesaler_profit(test_ps_dict[i],test_w_params,test_prod1,test_coefs,test_inc,test_mkt)
+end
+
+for i = 3:20
+  test_pct_change = (test_profit_dict[i] - test_profit_dict[i-1])/test_profit_dict[i-1]*100
+  println("Percent Change from going from $(i-1) to $i parts: $test_pct_change")
+end
+
+for i = 2:20
+    println("Percent of maxmimum profit from offering $i parts: ", test_profit_dict[i]/test_profit_dict[20]*100)
+end
+
 test_w_params_bmod = WholesaleParams(4.0,1.0,6.0)
 test_w_params_cmod = WholesaleParams(8.0,1.0,1.0)
 test_w_params_both = WholesaleParams(8.0,1.0,6.0)
